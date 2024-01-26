@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
 
         $result = mysqli_fetch_assoc($result); // Fetching the row directly
         if (!$result) {
-            echo "User doesn't exist"; // Notify if user doesn't exist
+            // echo "User doesn't exist"; // Notify if user doesn't exist
         } else {
             $pwd = $result['Password']; // Corrected variable name
         
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
         echo "Error finding student: " . $e->getMessage(); // Echo instead of return
     }
 } else {
-    echo "Email and password are required fields"; // Handling case where email or password is not provided
+    // echo "Email and password are required fields"; // Handling case where email or password is not provided
 }
 ?>
 

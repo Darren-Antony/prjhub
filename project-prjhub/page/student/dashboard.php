@@ -6,6 +6,7 @@ $user_id = $_SESSION['user_id'];
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style/global.css">
@@ -32,45 +33,44 @@ $user_id = $_SESSION['user_id'];
   </div>
 
   <?php
-// $slQry = "SELECT * FROM Student WHERE Guide_Id = 0 AND U_Id = $user_id";
-// $slresult = mysqli_query($conn, $slQry);
+    $slQry1 = "SELECT * FROM student Where Guide_Id=0 and U_Id = '$user_id'";
+    $slresult1 = mysqli_query($conn,$slQry1) or die(mysqli_error($slresult1));
+    if(mysqli_num_rows($slresult1)>0){
+         $slQry2 = "SELECT * FROM guide WHERE No_of_Students < 4";
+         $slresult2 = mysqli_query($conn, $slQry2)or die(mysqli_error($slresult2));
 
-// if(mysqli_num_rows($slresult) > 0) {
-    // Select guides with fewer than 4 students
-    $slQry2 = "SELECT * FROM guide WHERE No_of_Students < 4";
-    $slresult2 = mysqli_query($conn, $slQry2)or die(mysqli_error($slresult2));
-
-    // Check if the query was successful
-    if ($slresult2) {
-        // Check if there are guides found
-        if (mysqli_num_rows($slresult2) > 0) {
-            // Output the guide's names
-            while ($row = mysqli_fetch_assoc($slresult2)) {
+         // Check if the query was successful
+         if ($slresult2) {
+             // Check if there are guides found
+             if (mysqli_num_rows($slresult2) > 0) {
+                 // Output the guide's names
+                 while ($row = mysqli_fetch_assoc($slresult2)) {
                 
-                echo'<div class="g-card">';
-                  echo'<div class="g-card-inner">';
-                     echo'<div class="g-card-left">';
-                         echo '<img src="../../asset/image/' . $row['pfp'] . '">';
+                     echo'<div class="g-card">';
+                       echo'<div class="g-card-inner">';
+                          echo'<div class="g-card-left">';
+                              echo '<img src="../../asset/image/' . $row['pfp'] . '">';
+                          echo'</div>';
+                          echo '<div class="g-card-right">';
+                              echo $row['G_Name'] . "<br>";
+                              echo'<button id="'.$row['Guide_Id'].'">select</button>';
+                          echo'</div>';
+                        echo'</div>';
                      echo'</div>';
-                     echo '<div class="g-card-right">';
-                         echo $row['G_Name'] . "<br>";
-                         echo'<button id="'.$row['Guide_Id'].'">select</button>';
-                     echo'</div>';
-                   echo'</div>';
-                echo'</div>';
-            }
+                 }
             
-        } else {
-            echo "No suitable guide found."; // Handle case where no suitable guide is found
-        }
-    } else {
+             } else {
+                 echo "No suitable guide found."; // Handle case where no suitable guide is found
+             }
+         } else {
         // Handle query error
-        echo "Error: " . mysqli_error($conn);
+             echo "Error: " . mysqli_error($conn);
+         }
+    } else {
+        echo'<div class="add-prj-cont">';
+           echo'<button><img src="../../asset/image/addPrjBtn.png" alt="add Project"></button>';
+        echo'</div>';
     }
-// } else {
-//     // No rows found, you may exit or perform other actions
-//     exit();
-// }
 
 ?>
 

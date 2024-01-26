@@ -15,18 +15,21 @@ form{
 }
 
 input{
-    margin:0px 0px 10px 0px;
+    margin:0px 0px 10px 19px;
+    outline: none;
    
 }
 
 input[type="text"],input[type="email"],input[type="password"]{
     width: 300px;
     height: 50px;
-    
+    border:none;
+    border-bottom: 3px solid #002754;
 }
 
 label{
     font-size: 20px;
+    margin: 0px 0px 0px 21px;
 }
 
 .form{

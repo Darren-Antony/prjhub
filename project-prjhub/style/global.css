@@ -1,0 +1,28 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Julius Sans One';
+    src: local('Julius Sans One'), url('../asset/font/Julius_Sans_One/JuliusSansOne-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.nav{
+   background-color:  #002754;
+   font-family: 'Julius Sans One', sans-serif;
+   color:#fff;
+   display: flex;
+   padding: 20px;
+}
+
+.logo-img img{
+    width: 50px;
+}
+
+.logo-text{
+    font-size: 30px;
+}

@@ -1,0 +1,20 @@
+.g-card{
+    display:flex;
+    justify-content: center;
+    text-align: center;
+    color:#FDC800;
+    margin: 10px 0px 0px 0px;
+    font-size: 30px;
+
+   
+}
+.g-card-inner{
+    background-color: #002754;
+    padding: 10px;
+    width:500px;
+    display: flex;
+    justify-content: space-around;
+}
+.g-card-right {
+    margin: 50px 0px 0px 0px; /* top right bottom left */
+}

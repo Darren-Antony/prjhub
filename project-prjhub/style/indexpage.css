@@ -1,0 +1,48 @@
+@font-face {
+    font-family: 'Julius Sans One';
+    src: local('Julius Sans One'), url('../asset/font/Julius_Sans_One/JuliusSansOne-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'League Spartan';
+    src: local('League Spartan'), url('../asset/font/League_Spartan/LeagueSpartan-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.logo{
+    font-family: 'Julius Sans One', sans-serif;
+    color: #FFFF;
+    font-size: 67px;
+    width: 160px;
+    margin:40px 0px 0px 70px;
+}
+body{
+    background-color: #002754;
+}
+.indx-mid-cont{
+    font-family: 'League Spartan', sans-serif;
+    color: #FFFF;
+    margin:112px 0px 0px 70px;
+    font-size: 30px;
+    display: flex;
+}
+.gtw-btn-cont{
+    display: flex;
+    flex-direction: column;
+    margin:40px 0px 0px 261px;     
+}
+.gtw-btn1 button,.gtw-btn2 button{
+    width:200px;
+    height: 50px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: #002754;;
+}
+.right img {
+   position: absolute;
+   top:100px;
+   left: 900px;
+}
+

@@ -11,6 +11,7 @@ $user_id = $_SESSION['user_id'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
+    <script src="../../script/student/dashboard/dashboard.js"></script>
    
     <script src="/dependancies/jquery.js"></script>
    
@@ -67,13 +68,14 @@ $user_id = $_SESSION['user_id'];
              echo "Error: " . mysqli_error($conn);
          }
     } else {
-        echo'<div class="add-prj-cont">';
-           echo'<button><img src="../../asset/image/addPrjBtn.png" alt="add Project"></button>';
-        echo'</div>';
+        echo '<div class="add-prj-cont">';
+        echo '<button class="add-btn" onclick="addInputField()"><img src="../../asset/image/plus.png" alt="add Project"></button>';
+        echo '<h1>Add Project</h1>';
+        echo '</div>';
     }
 
 ?>
-
+<div id="inputContainer"></div>
 </body>
 
 </html>

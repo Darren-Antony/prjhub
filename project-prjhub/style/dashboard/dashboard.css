@@ -1,3 +1,12 @@
+
+@font-face {
+    font-family: 'kadwa';
+    src: local('Kadwa'), url('../../asset/font/Kadwa/Kadwa-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 .g-card{
     display:flex;
     justify-content: center;
@@ -17,4 +26,23 @@
 }
 .g-card-right {
     margin: 50px 0px 0px 0px; /* top right bottom left */
+
+}
+.add-btn{
+ border: none;
+ background-color:white;
+}
+
+.add-prj-cont img{
+    width: 50px;
+}
+.add-prj-cont{
+    width:250px;
+    padding: 30px 0px 0px 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'kadwa', sans-serif;
+    font-size: 10px;
+
 }

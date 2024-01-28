@@ -11,9 +11,6 @@ $user_id = $_SESSION['user_id'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
-    <script src="../../script/student/dashboard/dashboard.js"></script>
-   
-    <script src="/dependancies/jquery.js"></script>
    
     
     <title>dashboard</title>
@@ -75,7 +72,15 @@ $user_id = $_SESSION['user_id'];
     }
 
 ?>
-<div id="inputContainer"></div>
+<div id="inputContainer">
+    <label for="prjName">Project Name</label><br>
+    <input type="text" name="prjName" id="prjName">
+    <button class="submitBtn">Submit</button><button class="cancelBtn">Cancel</button>
+</div>
+<script src="../../script/student/dashboard/dashboard.js"></script>
+   
+   <script src="/dependancies/jquery.js"></script>
+
 </body>
 
 </html>

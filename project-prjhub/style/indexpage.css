@@ -4,45 +4,96 @@
     font-weight: normal;
     font-style: normal;
 }
-@font-face {
-    font-family: 'League Spartan';
-    src: local('League Spartan'), url('../asset/font/League_Spartan/LeagueSpartan-VariableFont_wght.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+*{
+    font-family: 'Julius Sans One', sans-serif;
 }
 .logo{
     font-family: 'Julius Sans One', sans-serif;
-    color: #FFFF;
-    font-size: 67px;
+    color: #FFFCE4;
+    font-size: 100px;
     width: 160px;
-    margin:40px 0px 0px 70px;
+    margin:100px 0px 0px 100px;
+}
+.sub-logo{
+  color: #FBCD46;
+  position: absolute;
+  top:230px;
+  left:320px;
+  width:200px;
+  font-size: 1.1em;
+  line-height: 30px;
 }
 body{
     background-color: #002754;
 }
-.indx-mid-cont{
-    font-family: 'League Spartan', sans-serif;
-    color: #FFFF;
-    margin:112px 0px 0px 70px;
-    font-size: 30px;
-    display: flex;
-}
-.gtw-btn-cont{
-    display: flex;
-    flex-direction: column;
-    margin:40px 0px 0px 261px;     
-}
-.gtw-btn1 button,.gtw-btn2 button{
-    width:200px;
+.progress-bar-container {
+    width: 1200px;
     height: 50px;
-    margin-top: 10px;
-    border-radius: 10px;
-    font-size: 20px;
-    color: #002754;;
-}
-.right img {
-   position: absolute;
-   top:100px;
-   left: 900px;
+    border: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+    background-color: #FFFCE4;
+    border-radius: 20px;
+    margin: 60px 0px 0px 100px;
 }
 
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #5F91F0;
+    border-radius: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: progressAnimation 5s linear infinite; /* Increase animation duration */
+}
+
+@keyframes progressAnimation {
+    0% { width: 0%; }
+    25% { width: 50%; } /* Slowly fill up to 50% */
+    50% { width: 100%; } /* Slowly fill up to 100% */
+    75% { width: 50%; } /* Slowly empty to 50% */
+    100% { width: 0%; } /* Empty back to 0% */
+}
+.indx-img{
+    position: absolute;
+    top: 80px;
+    left:1000px;
+}
+.indx-img img{
+    width: 350px;
+}
+.log-btn-cont{
+ 
+    padding: 10px 0px 0px 200px;
+}
+ button{
+    width:200px;
+    height: 70px;
+    margin: 10px 0px 0px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #002754;
+    border: none;
+    border-radius: 20px;
+ }
+ .std-log-btn{
+    background-color: #FFFCE4;
+
+
+ }
+ .stf-log-btn{
+    background-color: #FBCD46;
+ }
+ 
+ .std-log-btn, .stf-log-btn {
+    transition: color 0.3s ease; /* Adjust transition duration and timing function */
+}
+
+/* Change button color on hover */
+.std-log-btn:hover  {
+    background-color: #e7e6e0;
+}
+.stf-log-btn:hover{
+    background-color: #ffd760;
+}

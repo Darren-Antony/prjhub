@@ -12,23 +12,47 @@
     <div class="logo">
         Project Hub
     </div>
-    <div class="indx-mid-cont">
-        <div class="left">
-            <h1>ACADEMIC PROJECT TRACKER</h1>
-            <div class="gtw-btn-cont">
-              <div class="gtw-btn1">
-                 <button onclick="student()">STUDENT</button>
-              </div>
-              <div class="gtw-btn2">
-                 <button onclick="staff()">STAFF</button>
-              </div>   
-            </div>
-        </div>
-
-        <div class="right">
-            <img src="../asset/image/indx1.png" alt="logo1" >
-        </div>
-       
+    <div class="sub-logo">
+        ACADEMIC PROJECT <br>TRACKER
     </div>
+    <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+        
+    </div>
+    <div class="indx-img"><img id ="image"src="../asset/image/student.png" alt=""></div>
+    <div class="log-btn-cont">
+       <button class="std-log-btn" onclick="student()">STUDENT LOGIN</button>
+       <button class="stf-log-btn">STAFF LOGIN</button>
+    </div>
+    <script>
+const progressBar = document.querySelector('.progress-bar');
+const image = document.getElementById('image');
+
+let isStaffImageDisplayed = false; // Keep track of which image is currently displayed
+let intervalId; // Variable to store the interval ID for clearing later
+
+// Function to toggle between images
+function toggleImages() {
+    if (isStaffImageDisplayed) {
+        image.src = '../asset/image/student.png';
+    } else {
+        image.src = '../asset/image/male-teacher.png';
+    }
+    isStaffImageDisplayed = !isStaffImageDisplayed; // Toggle image display status
+}
+
+// Start updating images every second
+intervalId = setInterval(toggleImages, 3000);
+
+// Stop updating images when animation ends (optional)
+progressBar.addEventListener('animationend', function() {
+    clearInterval(intervalId); // Stop the interval when the animation ends
+});
+
+
+
+    </script>
+    
+    
 </body>
 </html>

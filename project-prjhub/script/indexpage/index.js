@@ -1,6 +1,6 @@
 function student(){
-    window.location.href = "../page/student/studentReg.html";
+    window.location.href = "../../../../prjhub/project-prjhub/page/student/studentlogin.php";
 }
 function staff(){
-    window.location.href = "../page/staff/staffReg.html";
+    window.location.href = "../../page/staff/staffReg.html";
 }

@@ -1,47 +1,58 @@
 form{
-    border: 2px solid #002754;
-    margin: 10px 0px 0px 0px;;
+    border: 1px solid black;
+    margin: 100px 0px 0px 0px;;
+    border-radius:5px;
 }
 .form-cont{
     padding: 10px;
+    
 }
 .form-title{
-    background-color: #002754;
-    color:#fff;
-    font-size: 15px;
-    width:376px;
-    text-align: center;
+  
+    color:black;
+    font-size: 0.9em;
     padding: 10px;
 }
 
 input{
-    margin:0px 0px 10px 19px;
-    outline: none;
+    margin:0px 0px 10px 5px;
+    border-radius:5px;
+}
+
+input{
+    width: 300px;
+    height: 30px;
+    padding: 5px;
+}
+select{
+    margin:0px 0px 10px 5px; 
+    width: 300px;
+    height: 30px;
    
 }
-
-input[type="text"],input[type="email"],input[type="password"]{
-    width: 300px;
-    height: 50px;
-    border:none;
-    border-bottom: 3px solid #002754;
-}
-
 label{
-    font-size: 20px;
-    margin: 0px 0px 0px 21px;
+    font-size: 0.7em;
+    margin: 0px 0px 0px 4px;
+    
 }
 
 .form{
    display: flex;
    align-items: center;
    flex-direction: column;
+   height: 900px;
+
+  
 }
 
 input[type="submit"]{
-   background-color:  #002754;
-   color:white;
-   font-size:20px;
-   padding:10px;
-   width:200px
+    margin: 0px 0px 15px 0px;
+}
+.frg-pwd p{
+    float: right;
+    color:rebeccapurple;
+    
+}
+.frg-pwd{
+    margin: 0px 0px 15px 0px;
 }

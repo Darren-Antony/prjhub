@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
         
         <form action="" method="post">
             <div class="form-title">
-                <h1>Student Login</h1>
+                <h1>Guide Login</h1>
             </div>
             <div class="form-cont">
                 <label for="emailId"> Email ID</label><br>

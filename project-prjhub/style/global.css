@@ -5,24 +5,41 @@
 }
 
 @font-face {
-    font-family: 'Julius Sans One';
-    src: local('Julius Sans One'), url('../asset/font/Julius_Sans_One/JuliusSansOne-Regular.ttf') format('truetype');
+    font-family: 'Lexend';
+    src: local('Lexend'), url('../asset/font/Lexend/Lexend-VariableFont_wght.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
-
-.nav{
-   background-color:  #002754;
-   font-family: 'Julius Sans One', sans-serif;
-   color:#fff;
-   display: flex;
-   padding: 20px;
+*{
+    font-family: 'Lexend', sans-serif;
 }
-
-.logo-img img{
+.logo-cont{
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid black;
+    padding: 15px;
+}
+.logo-cont img{
     width: 50px;
-}
 
-.logo-text{
-    font-size: 30px;
+}
+.blue-btn{
+    padding: 5px;
+    width:100px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    background-color: #1C91F2;
+    color: #fff;
+    margin: 10px 0px 0px 10px;
+}
+.cancel-btn{
+    padding: 5px;
+    width:100px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: #fff;
+   
+    margin: 10px 0px 0px 10px;
 }

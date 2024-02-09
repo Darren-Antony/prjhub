@@ -3,56 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../asset/image/Logo.png">
     <link rel="stylesheet" href="../style/global.css">
     <link rel="stylesheet" href="../style/indexpage.css">
     <script src="../script/indexpage/index.js"></script>
-    <title>Project Hub</title>
+    <title>Academic Project Tracker</title>
 </head>
 <body>
-    <div class="logo">
-        Project Hub
+    <div class="logo-cont">
+        <img src="../asset/image/Logo.png" alt="" srcset="">
+        <h1>Academic Project Tracker</h1>
     </div>
-    <div class="sub-logo">
-        ACADEMIC PROJECT <br>TRACKER
+    <div class="indx-body">
+        <div class="indx-body-left">
+            <img src="../asset/image/logo.jpg" alt="">
+        </div>
+        <div class="indx-body-right">
+            <div class="indx-body-right-top">
+                <h1>Manage Your Academic Projects with Confidence</h1>
+            </div>
+            <div class="indx-body-right-middle">
+                <h3>Get instant visibility into your academic projects, track their progress, and collaborate with your Guide.</h3>
+            </div>
+            <div class="indx-body-right-bottom">
+                <button class="blue-btn" onclick="student()">
+                    Student
+                </button>
+                <button class="blue-btn" onclick="staff()">
+                    Guide
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="progress-bar-container">
-        <div class="progress-bar"></div>
-        
-    </div>
-    <div class="indx-img"><img id ="image"src="../asset/image/student.png" alt=""></div>
-    <div class="log-btn-cont">
-       <button class="std-log-btn" onclick="student()">STUDENT LOGIN</button>
-       <button class="stf-log-btn">STAFF LOGIN</button>
-    </div>
-    <script>
-const progressBar = document.querySelector('.progress-bar');
-const image = document.getElementById('image');
 
-let isStaffImageDisplayed = false; // Keep track of which image is currently displayed
-let intervalId; // Variable to store the interval ID for clearing later
-
-// Function to toggle between images
-function toggleImages() {
-    if (isStaffImageDisplayed) {
-        image.src = '../asset/image/student.png';
-    } else {
-        image.src = '../asset/image/male-teacher.png';
-    }
-    isStaffImageDisplayed = !isStaffImageDisplayed; // Toggle image display status
-}
-
-// Start updating images every second
-intervalId = setInterval(toggleImages, 3000);
-
-// Stop updating images when animation ends (optional)
-progressBar.addEventListener('animationend', function() {
-    clearInterval(intervalId); // Stop the interval when the animation ends
-});
-
-
-
-    </script>
-    
-    
 </body>
 </html>

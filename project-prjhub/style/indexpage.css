@@ -1,99 +1,44 @@
 @font-face {
-    font-family: 'Julius Sans One';
-    src: local('Julius Sans One'), url('../asset/font/Julius_Sans_One/JuliusSansOne-Regular.ttf') format('truetype');
+    font-family: 'Lexend';
+    src: local('Lexend'), url('../asset/font/Lexend/Lexend-VariableFont_wght.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
+
 *{
-    font-family: 'Julius Sans One', sans-serif;
-}
-.logo{
-    font-family: 'Julius Sans One', sans-serif;
-    color: #FFFCE4;
-    font-size: 100px;
-    width: 160px;
-    margin:100px 0px 0px 100px;
-}
-.sub-logo{
-  color: #FBCD46;
-  position: absolute;
-  top:230px;
-  left:320px;
-  width:200px;
-  font-size: 1.1em;
-  line-height: 30px;
-}
-body{
-    background-color: #002754;
-}
-.progress-bar-container {
-    width: 1200px;
-    height: 50px;
-    border: 1px solid #ccc;
-    position: relative;
-    overflow: hidden;
-    background-color: #FFFCE4;
-    border-radius: 20px;
-    margin: 60px 0px 0px 100px;
+    font-family: 'Lexend', sans-serif;
 }
 
-.progress-bar {
-    width: 0%;
-    height: 100%;
-    background-color: #5F91F0;
-    border-radius: 20px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    animation: progressAnimation 5s linear infinite; /* Increase animation duration */
+.logo-cont{
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid black;
+    padding: 15px;
+}
+.logo-cont img{
+    width: 50px;
 }
 
-@keyframes progressAnimation {
-    0% { width: 0%; }
-    25% { width: 50%; } /* Slowly fill up to 50% */
-    50% { width: 100%; } /* Slowly fill up to 100% */
-    75% { width: 50%; } /* Slowly empty to 50% */
-    100% { width: 0%; } /* Empty back to 0% */
-}
-.indx-img{
-    position: absolute;
-    top: 80px;
-    left:1000px;
-}
-.indx-img img{
-    width: 350px;
-}
-.log-btn-cont{
- 
-    padding: 10px 0px 0px 200px;
-}
- button{
-    width:200px;
-    height: 70px;
-    margin: 10px 0px 0px 40px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #002754;
-    border: none;
-    border-radius: 20px;
- }
- .std-log-btn{
-    background-color: #FFFCE4;
-
-
- }
- .stf-log-btn{
-    background-color: #FBCD46;
- }
- 
- .std-log-btn, .stf-log-btn {
-    transition: color 0.3s ease; /* Adjust transition duration and timing function */
+.indx-body-left img{
+    width:797px; 
 }
 
-/* Change button color on hover */
-.std-log-btn:hover  {
-    background-color: #e7e6e0;
+.indx-body-right-top{
+    width: 687px;
+    font-size: 1.9em; 
+    margin:0px 0px 30px 0px;
 }
-.stf-log-btn:hover{
-    background-color: #ffd760;
+.indx-body-right {
+    width:797px;
+    margin:50px 0px 0px 0px;
+}
+.indx-body-right-middle{
+    width: 477px;
+}
+.indx-body{
+    display: flex;  
+}
+
+.indx-body-right-bottom{
+    margin: 10px 0px 0px 0px;
 }

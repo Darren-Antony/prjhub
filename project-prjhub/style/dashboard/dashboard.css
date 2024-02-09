@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'kadwa';
     src: local('Kadwa'), url('../../asset/font/Kadwa/Kadwa-Regular.ttf') format('truetype');
@@ -6,28 +5,27 @@
     font-style: normal;
 }
 
-
 .g-card{
     display:flex;
     justify-content: center;
     text-align: center;
-    color:#FDC800;
     margin: 10px 0px 0px 0px;
-    font-size: 30px;
-    
-   
+    font-size: 30px; 
 }
+
 .g-card-inner{
-    background-color: #002754;
+    border: 2px solid black;
     padding: 10px;
-    width:500px;
+    width:700px;
     display: flex;
     justify-content: space-around;
+    border-radius: 10px;
 }
-.g-card-right {
-    margin: 50px 0px 0px 0px; /* top right bottom left */
 
+.g-card-right {
+    margin: 50px 0px 0px 0px;
 }
+
 .add-btn{
  border: none;
  background-color:white;
@@ -44,8 +42,14 @@
     justify-content: space-between;
     font-family: 'kadwa', sans-serif;
     font-size: 10px;
-
 }
+
 #inputContainer {
-    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin:10px 0px 0px 200px;
+}
+.chs-gud-ttl{
+    margin:50px 0px 0px 50px;
 }

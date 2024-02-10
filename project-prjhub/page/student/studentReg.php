@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = mysqli_real_escape_string($conn, $_POST['pwd']);
     $confirmPassword = mysqli_real_escape_string($conn, $_POST['cpwd']);
     
-    $emailQuery = "SELECT * FROM user_credentials WHERE Email = '$email'";
+    $emailQuery = "SELECT * FROM user_credentials WHERE Email = '$email' and User_Type='Student'";
     $emailResult = mysqli_query($conn, $emailQuery);
     if (mysqli_num_rows($emailResult) > 0) {
         echo "Email already exists. Please choose a different email.";
@@ -56,8 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
+    <link rel="stylesheet" href="../../style/reg.css">
     <script src="/dependancies/jquery.js"></script>
     <script src="/script/student/registrationPge/reg-ajx.js"></script>
+    
     <title>Student Registration</title>
 </head>
 <body>

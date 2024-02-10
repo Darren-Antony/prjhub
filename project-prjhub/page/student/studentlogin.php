@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
     $Pwd = $_POST['pwd']; // Added a semicolon here
 
     try {
-        $lgnQry = "SELECT * FROM user_credentials WHERE Email ='$Email'"; // Corrected the variable usage in the query
+        $lgnQry = "SELECT * FROM user_credentials WHERE Email ='$Email' and User_Type='Student'" ; // Corrected the variable usage in the query
         $result = mysqli_query($conn, $lgnQry);
 
         if (!$result) {
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
 
         $result = mysqli_fetch_assoc($result); // Fetching the row directly
         if (!$result) {
-            // echo "User doesn't exist"; // Notify if user doesn't exist
+            echo "User doesn't exist"; // Notify if user doesn't exist
         } else {
             $pwd = $result['Password']; // Corrected variable name
         
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
                 $_SESSION['email'] = $result['Email'];
         
                 // Redirect to the dashboard
-                header("Location: dashboard.php");
+                header("Location: studashboard.php");
                 exit(); // Ensure that subsequent code is not executed after redirection
             } else {
                 echo "Invalid credentials"; // Notify invalid credentials

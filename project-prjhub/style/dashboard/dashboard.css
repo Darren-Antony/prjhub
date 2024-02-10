@@ -1,9 +1,4 @@
-@font-face {
-    font-family: 'kadwa';
-    src: local('Kadwa'), url('../../asset/font/Kadwa/Kadwa-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
+
 
 .g-card{
     display:flex;

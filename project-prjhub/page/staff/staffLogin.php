@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
     $Pwd = $_POST['pwd']; // Added a semicolon here
 
     try {
-        $lgnQry = "SELECT * FROM user_credentials WHERE Email ='$Email'"; // Corrected the variable usage in the query
+        $lgnQry = "SELECT * FROM user_credentials WHERE Email ='$Email' and User_Type='Guide'"; // Corrected the variable usage in the query
         $result = mysqli_query($conn, $lgnQry);
 
         if (!$result) {

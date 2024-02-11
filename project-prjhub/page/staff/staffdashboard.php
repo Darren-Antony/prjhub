@@ -39,7 +39,7 @@ if (mysqli_num_rows($stuRes) > 0) {
     while ($stuRow = mysqli_fetch_assoc($stuRes)) {
         echo '<div class="project-details">';
         echo $stuRow['Prj_Name']; // Use $stuRow instead of $stuRes
-        echo 'button '
+        echo 'button ';
         echo '</div>';
     }
 } else {

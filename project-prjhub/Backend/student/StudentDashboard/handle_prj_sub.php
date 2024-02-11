@@ -4,16 +4,31 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['user_id'];
     $projectName = $_POST['prjName'];
+    $selectQry = "SELECT * FROM student WHERE U_Id=$user_id";
+    $sresult= mysqli_query($conn,$selectQry);
+    $Row = mysqli_fetch_assoc($sresult);
+    $guide_Id = $Row['Guide_Id'];
+    $Stu_Id = $Row['Dept_No'];
     $projectDescription = $_POST['prj_Desc'];
-    
-    // Validate form data (you can add more validation as needed)
+    $currentDate = date('Y-m-d');
+    $currentTime = date('H:i:s');
     if (!empty($projectName) && !empty($projectDescription)) {
-        // Process the form data (for demonstration, we'll just echo back the submitted data)
-        echo "Project Name: $projectName\n";
-        echo "Description: $projectDescription\n";
+        $ChkForDupliacte = "SELECT * FROM project WHERE Prj_Id='$projectName' or Prj_Desc='$projectDescription' ";
+        $result = mysqli_query($conn,$ChkForDupliacte);
+        if(mysqli_num_rows($result)>0){
+            echo"Prj exist";
 
-        // You can perform further actions here, such as saving the data to a database
-        // Replace this with your actual database operations
+        } else {
+            $insrtQuery = "INSERT INTO project (Stu_Id,Guide_Id,Prj_Name,Prj_Desc,Prj_Status,Date_of_Submission,Time_of_Submission) VALUES ('$Stu_Id','$guide_Id','$projectName','$projectDescription','Pending-Approval','$currentDate','$currentTime')";
+
+            $result =mysqli_query($conn,$insrtQuery);
+            if ($result) {
+                echo "Project added successfully.";
+            } else {
+                echo "Error: " . mysqli_error($conn);
+            }
+        }
+    
     } else {
         // Handle empty or invalid form data
         echo "Please fill in all fields.";

@@ -12,7 +12,6 @@ $user_id = $_SESSION['user_id'];
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
     <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
- 
     
     <title>dashboard</title>
 </head>
@@ -28,7 +27,7 @@ $user_id = $_SESSION['user_id'];
      $slresult1 = mysqli_query($conn,$slQry1) or die(mysqli_error($slresult1));
      $sRow = mysqli_fetch_assoc($slresult1);
 
-     $ChkPrjQry = "SELECT * FROM project Where Prj_Status='pending-approval'or Prj_Status='Progress'";
+     $ChkPrjQry = "SELECT * FROM project Where Prj_Status='pending-approval'or Prj_Status='in-progress'";
      $ChkPrjQryRes = mysqli_query($conn,$ChkPrjQry);
      $ssRow = mysqli_fetch_assoc($ChkPrjQryRes);
      if (mysqli_num_rows($slresult1) > 0) {
@@ -89,8 +88,53 @@ $user_id = $_SESSION['user_id'];
             echo "Error preparing statement: " . mysqli_error($conn);
         }
      } else if(mysqli_num_rows($ChkPrjQryRes) > 0){
- echo"Prj";
-     }
+        $selectQry = "SELECT * FROM student WHERE U_Id='$user_id'";
+$sresult = mysqli_query($conn, $selectQry);
+$Row = mysqli_fetch_assoc($sresult);
+$guide_Id = $Row['Guide_Id'];
+$Stu_Id = $Row['Dept_No'];
+
+$Prjstatus1 = "SELECT * FROM project WHERE Stu_Id='$Stu_Id' AND Prj_Status = 'In-Progress'";
+$result1 = mysqli_query($conn, $Prjstatus1);
+
+$Prjstatus2 = "SELECT * FROM project WHERE Stu_Id='$Stu_Id' AND Prj_Status = 'pending-approval'";
+$result2 = mysqli_query($conn, $Prjstatus2);
+echo'<h1 class="heading">Your Projects</h1>';
+echo '<div class="main-prj-cont">';
+
+if (mysqli_num_rows($result1) > 0) {
+    $PrjPrgsrow = mysqli_fetch_assoc($result1); 
+    echo'<div class="inner-prj-cont">';
+    echo '<div class="Progress-bar-cont">';
+    echo "progress";
+    echo "</div>";
+    echo '<div class="Project-name-cont">';
+    echo $PrjPrgsrow['Prj_Name']; // Assuming 'Prj_title' is the column name
+    echo "</div>";
+    echo '<div class="view-btn">';
+    echo '<button class="cancel-btn">view</button>';
+    echo "</div>";
+    echo "</div>";    
+} else if (mysqli_num_rows($result2) > 0) {
+    $PrjAprrow = mysqli_fetch_assoc($result2); 
+    echo '<div class="Progress-bar-cont">';
+    echo "Pending Approval";
+    echo "</div>";
+    echo '<div class="Project-name-cont">';
+    echo $PrjAprrow['Prj_Name']; // Assuming 'Prj_title' is the column name
+    echo "</div>";
+    echo '<div class="view-btn">';
+    echo '<button class="cancel-btn">view</button>';
+    echo "</div>";
+    echo "</div>";
+}
+echo "</div>";    
+echo "</div>"; // Close the main-prj-cont div
+ 
+        }
+            
+    
+    
     else  {
         echo '<div class="form">';
         echo '<form id="projectForm" action="#" method="post">';

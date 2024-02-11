@@ -48,3 +48,20 @@
 .chs-gud-ttl{
     margin:50px 0px 0px 50px;
 }
+.main-prj-cont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+.inner-prj-cont{
+border: 1px solid black;
+width: 500px;
+padding: 10px;
+border-radius: 10px;
+}
+.heading{
+    margin:10px 0px 0px 30px;
+    font-size: 1.9em;
+}

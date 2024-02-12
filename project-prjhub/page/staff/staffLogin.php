@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
                 $_SESSION['email'] = $result['Email'];
         
                 // Redirect to the dashboard
-                header("Location: dashboard.php");
+                header("Location: staffdashboard.php");
                 exit(); // Ensure that subsequent code is not executed after redirection
             } else {
                 echo "Invalid credentials"; // Notify invalid credentials
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
     <script src="/dependancies/jquery.js"></script>
-    <script src="/"></script>
+    <script src="../../script/staff/dashboard/dashboard.js"></script>
 
     <title>Login</title>
 </head>
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
                 <input type="password" name="pwd" id="pwd"><br>
                 <div class="frg-pwd"><p>forgot Password</p></div>
             </div>
-            <center><input class="blue-btn"type="submit" value="submit" name="submit"></center>  
+            <center><input class="blue-btn"type="submit" value="submit" name="submit" onclick=""></center>  
         </form>
        
     </div>

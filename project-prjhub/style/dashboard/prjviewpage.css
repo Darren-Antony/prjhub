@@ -1,0 +1,14 @@
+.prj-cont{
+    display: flex;
+    border: 2px solid black;
+    padding: 10px;
+    justify-content: space-between;
+}
+.prj-cont-left-top,.prj-cont-left-bottom,.prj-cont-right{
+    border: 2px solid black;
+    padding: 5px;
+
+}
+.prj-cont-left-bottom{
+    margin: 20px 0px 0px 0px;
+}

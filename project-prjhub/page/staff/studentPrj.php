@@ -3,7 +3,6 @@ require_once('../config.php');
 session_start();
 $user_id = $_SESSION['user_id'];
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,12 +36,10 @@ $guide_Id = $guideRow['Guide_Id'];
 $stuQuery = "SELECT * FROM project WHERE Guide_Id = '$guide_Id' AND Prj_Status = 'pending-approval'";
 $stuRes = mysqli_query($conn, $stuQuery);
 
-
 if (mysqli_num_rows($stuRes) > 0) {
     while ($stuRow = mysqli_fetch_assoc($stuRes)) {
         echo '<div class="project-details">';
         echo $stuRow['Prj_Name']; 
-        
         echo '<button class="blue-btn" onclick="viewPrj(' . $stuRow['Prj_Id'] . ')">View</button>';
         echo '</div>';
     }
@@ -54,14 +51,22 @@ if (mysqli_num_rows($stuRes) > 0) {
  
  
 ?>
-  
- 
-<script>
-    function viewPrj(prjId) {
-        console.log('Clicked on View button. Project ID:', prjId);
-        window.open('../../../../../prjhub/project-prjhub/Backend/staff/viewPrj.php?prjId=' + prjId, '_blank');
+  <script>
+    function viewPrj(prjId){
+        $.ajax({
+            url:'../../Backend/staff/viewPrj.php',
+            method:'POST',
+            data:{prjId:prjId},
+            success:function(response){
+                console.log('viewPrj request is succesfully sent')
+            },
+            error:function(xhr,status,error){
+                alert('Error : ' + error);
+            }
+        })
     }
-</script>
+  </script>
+
 
 </body>
 

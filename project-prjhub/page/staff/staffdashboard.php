@@ -34,7 +34,7 @@ $guideRes = mysqli_query($conn, $guideQuery);
 $guideRow = mysqli_fetch_assoc($guideRes);
 $guide_Id = $guideRow['Guide_Id'];
 
-$stuQuery = "SELECT * FROM project WHERE Guide_Id = '$guide_Id' AND Prj_Status = 'pending-approval'";
+$stuQuery = "SELECT * FROM project WHERE Guide_Id = '$guide_Id' AND Prj_Status = 'pending-approval' or Prj_Status='In-progress'";
 $stuRes = mysqli_query($conn, $stuQuery);
 
 

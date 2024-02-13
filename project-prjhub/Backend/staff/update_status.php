@@ -19,13 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["project_id"]) && isset
         if ($stmt->execute()) {
             // Return a success message (you can customize this response as needed)
             echo "Project status updated successfully to '$status'!";
+            $insRvRec="INSERT INTO review (Prj_Id) VALUES($project_id)";
+            $exqry = mysqli_query($conn,$insRvRec); 
         } else {
             echo "Error updating project status: " . $stmt->error;
         }
     } elseif ($status == 'rejected' && isset($_POST["reason"])) {
         $reason = $_POST["reason"];
         // Update project status and reason for rejection based on the provided data
-        $sql = "UPDATE project SET Prj_Status = 'reje', rej = ? WHERE Prj_Id = ?";
+        $sql = "UPDATE project SET Prj_Status = 'rejected', rejection_reason	 = ? WHERE Prj_Id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("si", $reason, $project_id);
         if ($stmt->execute()) {

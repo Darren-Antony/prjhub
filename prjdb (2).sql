@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2024 at 02:35 PM
+-- Generation Time: Feb 13, 2024 at 05:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -86,15 +86,16 @@ CREATE TABLE `project` (
   `Prj_Desc` varchar(300) DEFAULT NULL,
   `Prj_Status` varchar(20) DEFAULT NULL,
   `Date_of_Submission` date DEFAULT NULL,
-  `Time_of_Submission` time DEFAULT NULL
+  `Time_of_Submission` time DEFAULT NULL,
+  `rejection_reason` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project`
 --
 
-INSERT INTO `project` (`Prj_Id`, `Stu_Id`, `Guide_Id`, `Prj_Name`, `Prj_Desc`, `Prj_Status`, `Date_of_Submission`, `Time_of_Submission`) VALUES
-('', 'Computer S', 's11', 'nj', 'mk', 'pending-approval', '2024-02-11', '08:08:50');
+INSERT INTO `project` (`Prj_Id`, `Stu_Id`, `Guide_Id`, `Prj_Name`, `Prj_Desc`, `Prj_Status`, `Date_of_Submission`, `Time_of_Submission`, `rejection_reason`) VALUES
+('1', 'Computer S', 's11', 'nj', 'mk', 'In-Progress', '2024-02-11', '08:08:50', 'no ne');
 
 -- --------------------------------------------------------
 
@@ -106,12 +107,19 @@ CREATE TABLE `review` (
   `Review_Id` int(11) NOT NULL,
   `Prj_id` varchar(10) DEFAULT NULL,
   `Guide_Id` varchar(30) DEFAULT NULL,
-  `Date_of_Review` date NOT NULL,
-  `Time_of_Review` time NOT NULL,
+  `Date_of_Review` date DEFAULT NULL,
+  `Time_of_Review` time DEFAULT NULL,
   `Review1_Mark` float DEFAULT NULL,
   `Review2_Mark` float DEFAULT NULL,
   `Review3_Mark` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `review`
+--
+
+INSERT INTO `review` (`Review_Id`, `Prj_id`, `Guide_Id`, `Date_of_Review`, `Time_of_Review`, `Review1_Mark`, `Review2_Mark`, `Review3_Mark`) VALUES
+(6, '1', NULL, NULL, NULL, 109, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -240,7 +248,7 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `Review_Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Review_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_credentials`

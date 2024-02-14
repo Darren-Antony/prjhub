@@ -6,17 +6,21 @@ $user_id = $_SESSION['user_id'];
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
     <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
+    <title>Student Dashboard</title>
+    <script src="../../script/student/dashboard/dashboard.js"></script>
+    <script src="../../dependancies/jquery.js"></script>
+    <script src="../../script/student/dashboard/ajax/selectingGuideajax.js"></script>
+    <script src="../../script/student/dashboard/ajax/submitProjectAjax.js"></script>
     
-    <title>dashboard</title>
+
 </head>
 
-<body >
+<body>
 <div class="logo-cont">
         <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
@@ -56,8 +60,7 @@ $user_id = $_SESSION['user_id'];
             // Execute the query
             if (mysqli_stmt_execute($stmt)) {
                 // Get result
-                $slresult2 = mysqli_stmt_get_result($st*-
-                mt);
+                $slresult2 = mysqli_stmt_get_result($stmt);
     
                 // Check if there are guides found
                 if (mysqli_num_rows($slresult2) > 0) {
@@ -112,7 +115,7 @@ if (mysqli_num_rows($result1) > 0) {
     echo $PrjPrgsrow['Prj_Name']; // Assuming 'Prj_title' is the column name
     echo "</div>";
     echo '<div class="view-btn">';
-    echo '<button class="cancel-btn">view</button>';
+    echo '<button class="blue-btn" onclick="viewPrj(' . $PrjPrgsrow['Prj_Id'] . ')">view</button>';
     echo "</div>";
     echo "</div>";    
 } else if (mysqli_num_rows($result2) > 0) {
@@ -124,7 +127,7 @@ if (mysqli_num_rows($result1) > 0) {
     echo $PrjAprrow['Prj_Name']; // Assuming 'Prj_title' is the column name
     echo "</div>";
     echo '<div class="view-btn">';
-    echo '<button class="cancel-btn">view</button>';
+    echo '<button class="cancel-btn>view</button>';
     echo "</div>";
     echo "</div>";
 }
@@ -154,59 +157,9 @@ echo "</div>"; // Close the main-prj-cont div
     }  
 ?>
  
-<script src="../../script/student/dashboard/dashboard.js"></script>
-<script src="../../dependancies/jquery.js"></script>
 
-    <script>
-    function SelectGuide(guideId) {
-        // Prompt the user for confirmation
-        var confirmation = confirm("Are you sure you want to select this guide?");
-        console.log(guideId);
-        // If the user confirms, proceed with the operation
-        if (confirmation) {
-           
-            $.ajax({
-                url: '../../Backend/student/StudentDashboard/process_select_guide.php', // URL to your PHP script
-                method: 'POST',
-                data: { guideId: guideId }, // Pass the guide ID as data
-                success: function(response) {
-                    // Handle success response
-                    alert('Guide selected successfully!');
-                    // You can add more actions here if needed
-                },
-                error: function(xhr, status, error) {
-                    // Handle error response
-                    alert('Error selecting guide: ' + error);
-                }
-            });
-        } else {
-            // If the user cancels, do nothing or provide feedback
-            alert('Selection canceled.');
-        }
-    }
-    function submitProject() {
-        // Get form data
-        var formData = new FormData(document.getElementById('projectForm'));
 
-        // Make AJAX call
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '../../Backend/student/StudentDashboard/handle_prj_sub.php', true);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                // Handle successful response here
-                alert(xhr.responseText);
-            } else {
-                // Handle errors here
-                alert('Error: ' + xhr.status);
-            }
-        };
-        xhr.onerror = function () {
-            // Handle network errors here
-            alert('Network Error');
-        };
-        xhr.send(formData);
-    }
-</script>
+  
 
 
 </body>

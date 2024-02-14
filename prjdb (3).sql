@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 13, 2024 at 05:50 AM
+-- Generation Time: Feb 13, 2024 at 07:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -33,8 +33,18 @@ CREATE TABLE `comment` (
   `Receiver_Id` int(11) DEFAULT NULL,
   `Comment` varchar(255) DEFAULT NULL,
   `Date` date DEFAULT NULL,
-  `Time` time DEFAULT NULL
+  `Time` time DEFAULT NULL,
+  `prj_Id` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `comment`
+--
+
+INSERT INTO `comment` (`Cmt_Id`, `Sender_Id`, `Receiver_Id`, `Comment`, `Date`, `Time`, `prj_Id`) VALUES
+(1, 123, 1215, 'hi', '2024-02-13', '18:59:18', NULL),
+(2, 123, 1215, 'bhbfh', '2024-02-13', '19:03:46', '1'),
+(3, 123, 1215, 'bye', '2024-02-13', '00:00:19', '1');
 
 -- --------------------------------------------------------
 
@@ -119,7 +129,7 @@ CREATE TABLE `review` (
 --
 
 INSERT INTO `review` (`Review_Id`, `Prj_id`, `Guide_Id`, `Date_of_Review`, `Time_of_Review`, `Review1_Mark`, `Review2_Mark`, `Review3_Mark`) VALUES
-(6, '1', NULL, NULL, NULL, 109, NULL, NULL);
+(6, '1', NULL, NULL, NULL, 45, 1112, 1024);
 
 -- --------------------------------------------------------
 
@@ -179,7 +189,8 @@ INSERT INTO `user_credentials` (`U_Id`, `Email`, `Password`, `OTP`, `User_Type`,
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`Cmt_Id`),
   ADD KEY `sender_id` (`Sender_Id`),
-  ADD KEY `receiver_id` (`Receiver_Id`);
+  ADD KEY `receiver_id` (`Receiver_Id`),
+  ADD KEY `fk_prj_id` (`prj_Id`);
 
 --
 -- Indexes for table `guide`
@@ -236,7 +247,7 @@ ALTER TABLE `user_credentials`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `Cmt_Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Cmt_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `notification`
@@ -265,7 +276,8 @@ ALTER TABLE `user_credentials`
 --
 ALTER TABLE `comment`
   ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`Sender_Id`) REFERENCES `user_credentials` (`U_Id`),
-  ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`Receiver_Id`) REFERENCES `user_credentials` (`U_Id`);
+  ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`Receiver_Id`) REFERENCES `user_credentials` (`U_Id`),
+  ADD CONSTRAINT `fk_prj_id` FOREIGN KEY (`prj_Id`) REFERENCES `project` (`Prj_Id`);
 
 --
 -- Constraints for table `guide`

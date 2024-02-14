@@ -1,7 +1,8 @@
 <?php
 require_once('../../page/config.php');
-
+session_start();
 $prjId = $_GET['prjId'];
+$user_id = $_SESSION['user_id'];
 
 // Query the database to get the project details based on the project ID
 // Assuming you have a database connection established
@@ -104,72 +105,163 @@ $getReviewDetails = "SELECT * FROM review WHERE Prj_Id = '$prjId'";
 // Execute the query
 $getReviewRes = mysqli_query($conn, $getReviewDetails);
 
-// Check if the query was successful
 if ($getReviewRes) {
     // Check if there are rows returned
     if (mysqli_num_rows($getReviewRes) > 0) {
-        echo "<table border='1'>";
-        echo "<tr><th>Review</th><th>Mark Review</th><th>Action</th></tr>";
-        while ($RvRow = mysqli_fetch_assoc($getReviewRes)) {
-            echo "<tr>";
-            echo "<td>{$RvRow['Review1_Mark']}</td>";
-            echo "<td>";
-            if (isset($_POST['submit'])) {
-                $mark = $_POST['mark'][$RvRow['Review_Id']];
-                // Update the marks in the database
-                $updateQuery = "UPDATE review SET Review1_Mark = '$mark' WHERE Review_Id = '{$RvRow['Review_Id']}'";
-                mysqli_query($conn, $updateQuery);
-                echo "<input type='number' name='mark[{$RvRow['Review_Id']}]' value='$mark'>";
-            } else {
-                echo "<input type='number' name='mark[{$RvRow['Review_Id']}]' value='{$RvRow['Review1_Mark']}'>";
-            }
-            echo "</td>";
-            echo "<td><button name='submit'>Submit</button></td>";
-            echo "</tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "No review found.";
+                 
     }
-} else {
-    // Handle query error
-    echo "Error: " . mysqli_error($conn);
+}
+if ($getReviewRes) {
+    
+    echo "<form method='post' action=''>"; 
+    echo "<table border='1'>";
+    echo "<tr><th>Review</th><th>Mark Review</th><th>Action</th></tr>";
+$RvRow = mysqli_fetch_assoc($getReviewRes); 
+        $rvId = $RvRow['Review_Id'];
+        echo "<tr>";
+        echo "<td>{$rvId}</td>";
+        echo "<td>";
+        if (isset($_POST['submit1'])) {
+            $mark = intval($_POST['mark'][$rvId]); // Convert mark to integer
+            // Update the marks in the database
+            $updateQuery = "UPDATE review SET Review1_Mark = $mark WHERE Review_Id = $rvId";
+            mysqli_query($conn, $updateQuery);
+            echo "<input type='number' name='mark[{$rvId}]' value='$mark'>"; // Reflect the submitted mark value in the input field
+        } else {
+            $review1Mark = intval($RvRow['Review1_Mark']); // Convert existing mark to integer
+            echo "<input type='number' name='mark[{$rvId}]' value='$review1Mark'>"; // Display existing mark value
+        }
+        echo "</td>";
+        echo "<td><button type='submit' name='submit1'>Submit</button></td>"; // Moved the submit button into the form
+        echo "</tr>";
+   
+    echo "</form>"; // Closing form tag
+
+    echo "<form method='post' action=''>"; 
+    echo "<table border='1'>";
+    echo "<tr><th>Review</th><th>Mark Review</th><th>Action</th></tr>";
+
+        echo "<tr>";
+        echo "<td>{$rvId}</td>";
+        echo "<td>";
+        if (isset($_POST['submit2'])) {
+            $mark = intval($_POST['mark'][$rvId]); // Convert mark to integer
+            // Update the marks in the database
+            $updateQuery = "UPDATE review SET Review2_Mark = $mark WHERE Review_Id = $rvId";
+            mysqli_query($conn, $updateQuery);
+            echo "<input type='number' name='mark[{$rvId}]' value='$mark'>"; // Reflect the submitted mark value in the input field
+        } else {
+            $review2Mark = intval($RvRow['Review2_Mark']); // Convert existing mark to integer
+            echo "<input type='number' name='mark[{$rvId}]' value='$review2Mark'>"; // Display existing mark value
+        }
+        echo "</td>";
+        echo "<td><button type='submit' name='submit2' >Submit</button></td>"; // Moved the submit button into the form
+        echo "</tr>";
+   
+    echo "</form>"; // Closing form tag
+    echo "<form method='post' action=''>"; 
+    echo "<table border='1'>";
+    echo "<tr><th>Review</th><th>Mark Review</th><th>Action</th></tr>";
+
+        echo "<tr>";
+        echo "<td>{$rvId}</td>";
+        echo "<td>";
+        if (isset($_POST['submit3'])) {
+            $mark = intval($_POST['mark'][$rvId]); // Convert mark to integer
+            // Update the marks in the database
+            $updateQuery = "UPDATE review SET Review3_Mark = $mark WHERE Review_Id = $rvId";
+            mysqli_query($conn, $updateQuery);
+            echo "<input type='number' name='mark[{$rvId}]' value='$mark'>"; // Reflect the submitted mark value in the input field
+        } else {
+            $review3Mark = intval($RvRow['Review3_Mark']); // Convert existing mark to integer
+            echo "<input type='number' name='mark[{$rvId}]' value='$review3Mark'>"; // Display existing mark value
+        }
+        echo "</td>";
+        echo "<td><button type='submit' name='submit3'>Submit</button></td>"; // Moved the submit button into the form
+        echo "</tr>";
+   
+    echo "</form>"; // Closing form tag
+   
+   
+}
+
+    echo "</table>";
+   
+  
+?>
+
+    </div>
+    <div class="comment-div">
+        
+    <form id="commentForm" action="submit_comment.php" method="post">
+        <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+        <input name="prjid" id="prjid" value=<?php echo$prjId?>> <!-- Add the project ID as a hidden input field -->
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+<div class="comment">
+<?php
+// Assuming you have already connected to the database and started the session
+
+// Fetch comments from the database based on the project ID
+$getCommentsQuery = "SELECT * FROM COMMENT WHERE prj_Id = $prjId ORDER BY Date ASC, Time ASC";
+$getCommentsResult = mysqli_query($conn, $getCommentsQuery);
+
+// Display comments with appropriate formatting
+while ($commentRow = mysqli_fetch_assoc($getCommentsResult)) {
+    $senderId = $commentRow['Sender_Id'];
+    $receiverId = $commentRow['Receiver_Id'];
+    $commentText = $commentRow['Comment'];
+    $commentDate = $commentRow['Date'];
+    $commentTime = $commentRow['Time'];
+
+    // Determine the format based on the sender and receiver IDs
+    $commentFormat = "";
+    if ($senderId == $user_id) {
+        $commentFormat = "You";
+    } elseif ($receiverId == $user_id) {
+        $commentFormat = "Your student";
+    } else {
+        // Handle other cases if needed
+    }
+
+    // Output the comment with appropriate formatting
+    echo "<div>{$commentFormat} ({$commentDate} {$commentTime}): {$commentText}</div>";
 }
 ?>
-</form>
-    </div>
-   
+
+</div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    var form = document.getElementById("markForm");
-    var submitButtons = form.getElementsByClassName("submitBtn");
-    for (var i = 0; i < submitButtons.length; i++) {
-        submitButtons[i].addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent default form submission
-            var row = this.closest("tr");
-            var markInput = row.querySelector("input[type='number']");
-            var markValue = markInput.value;
-            var formData = new FormData();
-            formData.append('mark[' + markInput.name.split('[')[1], markValue + ']');
-            fetch(window.location.href, {
-                method: 'POST',
-                body: formData
-            }).then(function(response) {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            }).then(function(data) {
-                console.log(data);
-            }).catch(function(error) {
-                console.error('There was a problem with the fetch operation:', error);
-            });
-        });
-    }
+    document.getElementById("commentForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get the comment and project ID from the form
+    var comment = document.getElementById("comment").value;
+    var prjid = document.getElementById("prjid").value;
+
+    // Send the comment and project ID to submit_comment.php using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "submit_comment.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Handle the response from submit_comment.php
+            var responseHTML = xhr.responseText;
+
+            // Update the comment section with the new comment HTML
+            var commentSection = document.querySelector(".comment");
+            commentSection.innerHTML += responseHTML;
+        }
+    };
+    xhr.send("comment=" + encodeURIComponent(comment) + "&prjid=" + encodeURIComponent(prjid));
 });
+
+
+        
     function acceptProject() {
-        // Perform AJAX request to update project status to accepted
-        // Assuming jQuery for AJAX ease
+       
         $.ajax({
             url: 'update_status.php',
             method: 'POST',
@@ -194,11 +286,11 @@ if ($getReviewRes) {
                 method: 'POST',
                 data: { project_id: <?php echo $project['Prj_Id']; ?>, status: 'rejected', reason: reason },
                 success: function(response) {
-                    // Handle success response
+                   
                     console.log(response);
                 },
                 error: function(xhr, status, error) {
-                    // Handle error
+                    
                     console.error(error);
                 }
             });

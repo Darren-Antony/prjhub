@@ -12,7 +12,7 @@ if (isset($_GET['date'])) {
     $prjId = $_GET['prjId'];
 
     // Query to fetch timesheet data for the selected date
-    $sql = "SELECT * FROM timesheet WHERE startDate = '$selected_date' and Proj_Id = '$prjId'";
+    $sql = "SELECT * FROM timesheet WHERE startDate = '$selected_date' and Proj_Id = $prjId";
 
     // Execute query
     $result = mysqli_query($conn, $sql);

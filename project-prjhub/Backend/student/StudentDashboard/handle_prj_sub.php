@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $currentDate = date('Y-m-d');
     $currentTime = date('H:i:s');
     if (!empty($projectName) && !empty($projectDescription)) {
-        $ChkForDupliacte = "SELECT * FROM project WHERE Prj_Id='$projectName' or Prj_Desc='$projectDescription' ";
+        $ChkForDupliacte = "SELECT * FROM project WHERE Prj_Name='$projectName' or Prj_Desc='$projectDescription' ";
         $result = mysqli_query($conn,$ChkForDupliacte);
         if(mysqli_num_rows($result)>0){
             echo"Prj exist";

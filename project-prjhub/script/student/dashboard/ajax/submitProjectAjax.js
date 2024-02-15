@@ -9,6 +9,7 @@ function submitProject() {
         if (xhr.status === 200) {
             // Handle successful response here
             alert(xhr.responseText);
+            window.location.reload();
         } else {
             // Handle errors here
             alert('Error: ' + xhr.status);

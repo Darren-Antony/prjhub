@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Bind parameters to the statement
-    $stmt->bind_param("sssssssss", $startDate, $mondayActivity, $tuesdayActivity, $wednesdayActivity, $thursdayActivity, $fridayActivity, $saturdayActivity, $status, $prjId);
+    $stmt->bind_param("ssssssssi", $startDate, $mondayActivity, $tuesdayActivity, $wednesdayActivity, $thursdayActivity, $fridayActivity, $saturdayActivity, $status, $prjId);
 
     // Execute the prepared statement
     $stmt->execute();

@@ -83,14 +83,14 @@ if (date('D') != 'Mon') {
     $start_date = date('Y-m-d');
 }
 echo "The start date of the current week is $start_date";
-
-$chkCurrDate = "SELECT * FROM timesheet WHERE startDate = '$start_date' AND Proj_Id = $prjId";
+$chkCurrDate = "SELECT * FROM timesheet WHERE startDate = '$start_date' AND STATUS ='pending-approval' AND Proj_Id = $prjId ";
 $res1 = mysqli_query($conn, $chkCurrDate);
+
 $row = mysqli_fetch_assoc($res1);
-
-if (mysqli_num_rows($res1) == 0) {
+if (mysqli_num_rows($res1) > 0 && $row['STATUS'] != 'approved') {
+    // Display the update form
     ?>
-    <form id="timesheetForm" method="post" action="../../Backend/student/StudentDashboard/timesheetInsert.php">
+    <form id="timesheetForm" method="post" action="timesheetUpdate.php">
         <table border="1">
             <input type="text" name="prj_Id" value="<?php echo $prjId?>">
             <input type="text" name="start_date" value="<?php echo $start_date?>">
@@ -99,29 +99,7 @@ if (mysqli_num_rows($res1) == 0) {
                 <th>Activity</th>
             </tr>
             <?php
-            // Define days of the week
-            $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
-
-            // Loop through each day
-            foreach ($days as $day) {
-                echo "<tr><td>$day</td><td><input type='text' name='" . strtolower($day) . "_activity'></td></tr>";
-            }
-            ?>
-        </table>
-        <button type="submit">Submit</button>
-    </form>
-<?php } elseif (mysqli_num_rows($res1) > 0 && $row['STATUS'] != 'approved') { ?>
-    <form id="timesheetForm" method="post" action="../../Backend/student/StudentDashboard/timesheetUpdate.php">
-        <table border="1">
-            <input type="text" name="prj_Id" value="<?php echo $prjId?>">
-            <input type="text" name="start_date" value="<?php echo $start_date?>">
-            <tr>
-                <th>Day</th>
-                <th>Activity</th>
-            </tr>
-            <?php
-            // Define days of the week
-            $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+                $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
             // Loop through each day
             foreach ($days as $day) {
@@ -131,12 +109,12 @@ if (mysqli_num_rows($res1) == 0) {
             }
             ?>
         </table>
-        <button type="submit">Submit</button>
+        <button type="submit">Approve</button>
     </form>
 <?php } else {
-    echo "no need";
-} ?>
-<h2>Select Week Starting Date:</h2>
+    // Display message if timesheet is approved or doesn't exist
+    echo "No timesheet data found for the current week or it has been approved.";
+} ?><h2>Select Week Starting Date:</h2>
 <input type="date" id="weekStartDatePicker">
 <div id="timesheetDataDisplay"></div>
 <script>

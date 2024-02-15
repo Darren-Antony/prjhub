@@ -62,8 +62,24 @@ if ($getStuDetailsRes) {
 </head>
 <body>
    <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+    <div>
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
+        <?php
+if ($project['Prj_Status'] == 'In-Progress') {
+    ?>
+    <button onclick="viewtmsht(<?php echo $prjId ?>)">
+        timesheet
+    </button>
+    <button>
+        marks
+    </button>
+    <?php
+}
+?>
+
+    </div>
+       
     </div>
     <div class="prj-cont">
         <div class="prj-cont-left">
@@ -82,7 +98,7 @@ if ($getStuDetailsRes) {
        
              <?php
            
-              if($project['Prj_Status'] == 'pending-approval') {
+              if($project['Prj_Status'] == 'Pending-Approval') {
                   echo '
                       <button onclick="acceptProject()">Accept</button>
                       <button onclick="rejectProject()">Reject</button>
@@ -100,7 +116,7 @@ if ($getStuDetailsRes) {
     <form id="markForm" method="post">
 <?php
 
-$getReviewDetails = "SELECT * FROM review WHERE Prj_Id = '$prjId'";
+$getReviewDetails = "SELECT * FROM review WHERE Prj_Id = $prjId";
 
 // Execute the query
 $getReviewRes = mysqli_query($conn, $getReviewDetails);

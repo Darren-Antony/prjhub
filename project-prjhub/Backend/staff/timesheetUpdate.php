@@ -1,5 +1,5 @@
 <?php
-require_once('../../../page/config.php');
+require_once('../../page/config.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Assuming the form fields are sanitized before processing
     $start_date = $_POST["start_date"];
@@ -9,8 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
-    
-    // Define days of the week
+    $prjId = $_POST['prj_Id'];
     $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
     
     // Update each day's activity
@@ -18,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $activity_field_name = strtolower($day) . "Activity";
         $activity_value = $_POST[$activity_field_name];
         $prjId = $_POST['prj_Id'];
-        $sql = "UPDATE timesheet SET $activity_field_name = '$activity_value' WHERE startDate = '$start_date' and Proj_Id=$prjId";
+        $sql = "UPDATE timesheet SET $activity_field_name = '$activity_value', STATUS = 'approved' WHERE startDate = '$start_date' AND Proj_Id = $prjId";
         if (!mysqli_query($conn, $sql)) {
             echo "Error updating record: " . mysqli_error($conn);
         }
@@ -32,6 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 } else {
     // Redirect to the form page if accessed directly without submission
-    header("Location: ../../../page/student/stuTimesheet.php");
+    header("Location: viewPrjTmsht.php");
     exit();
 }

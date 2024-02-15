@@ -90,9 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <label for="curYear">Current Year</label><br>
                 <select id="curYear" name="curYear" required>
-                    <option value="I">I</option>
-                    <option value="II">II</option>
-                    <option value="III">III</option>
+                    <option value="1">I</option>
+                    <option value="2">II</option>
+                    <option value="3">III</option>
                 </select><br>
 
                 <label for="degree">Degree</label><br>

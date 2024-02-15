@@ -65,12 +65,18 @@ if ($getStuDetailsRes) {
         <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
         <div class="btn-nav-cont">
-            <button onclick="timesheetPage(<?php echo $prjId?>)">
-                timesheet
-            </button>
-            <button>
-                marks
-            </button>
+            <?php
+           if ($project['Prj_Status'] == 'In-Progress') {
+    ?>
+    <button onclick="timesheetPage(<?php echo $prjId ?>)">
+        timesheet
+    </button>
+    <button>
+        marks
+    </button>
+    <?php
+}?>
+
         </div>
     </div>
     <div class="prj-cont">

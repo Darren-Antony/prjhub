@@ -12,7 +12,7 @@ function SelectGuide(guideId) {
             success: function(response) {
                 // Handle success response
                 alert('Guide selected successfully!');
-                // You can add more actions here if needed
+                window.location.reload();
             },
             error: function(xhr, status, error) {
                 // Handle error response

@@ -5,7 +5,7 @@ $user_id = $_SESSION['user_id'];
 if (isset($_POST['comment']) && isset($_POST['prjid'])) {
     $comment = htmlspecialchars($_POST['comment']);
     $prjid = $_POST['prjid'];
-    $getPrjDetails = "SELECT * FROM project WHERE Prj_Id='$prjid'";
+    $getPrjDetails = "SELECT * FROM project WHERE Prj_Id=$prjid";
     $getPrjDetailsRes = mysqli_query($conn, $getPrjDetails);
     $prjRow = mysqli_fetch_assoc($getPrjDetailsRes);
     $PrjstuNo = $prjRow['Stu_Id'];

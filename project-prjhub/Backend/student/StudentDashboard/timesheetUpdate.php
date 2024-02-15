@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_close($conn);
     
     // Redirect back to the form or to a success page
-    header("Location:../../../page/student/stuTimesheet.php");
+    echo "<script>window.history.back();</script>";
     exit();
 } else {
     // Redirect to the form page if accessed directly without submission

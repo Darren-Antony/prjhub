@@ -41,7 +41,7 @@ if ($getStuDetailsRes) {
 
 
 // Construct the SQL query with the escaped value
-echo "<script>const prjId = " . json_encode($prjId) . ";</script>";
+
 
 
 
@@ -140,18 +140,15 @@ if (mysqli_num_rows($res1) == 0) {
 <input type="date" id="weekStartDatePicker">
 <div id="timesheetDataDisplay"></div>
 <script>
+    const prjId =" <?php echo $prjId?>";
+    console.log(prjId)
     // Function to fetch and display timesheet data for the selected date
-// Function to fetch and display timesheet data for the selected date
-// Function to fetch and display timesheet data for the selected date
-function displayTimesheetData(selectedDate, projectId) {
-    // AJAX request to fetch data for the selected date
+    function displayTimesheetData(selectedDate, prjId) {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            // Handle response here
             const responseData = JSON.parse(this.responseText);
             if (responseData.exists) {
-                // Display timesheet data in a table format
                 const timesheetData = responseData.data;
                 const table = document.createElement('table');
                 table.border = '1';
@@ -168,24 +165,26 @@ function displayTimesheetData(selectedDate, projectId) {
                     tbody.appendChild(row);
                 });
                 table.appendChild(tbody);
-                // Clear previous data and append the new table
                 const displayContainer = document.getElementById('timesheetDataDisplay');
                 displayContainer.innerHTML = '';
                 displayContainer.appendChild(table);
             } else {
-                // If no data found for the selected date, clear the display
-                document.getElementById('timesheetDataDisplay').innerHTML = '';
+                document.getElementById('timesheetDataDisplay').innerHTML = 'No data found for the selected date.';
             }
         }
     };
-    xhr.open("GET", "../../Backend/student/StudentDashboard/fetch_timesheet_data.php?date=" + selectedDate + "&prjId=" + projectId, true);
+    console.log('test3',prjId)
+
+    xhr.open("GET", "../../Backend/student/StudentDashboard/fetch_timesheet_data.php?date=" + selectedDate + "&prjId=" + prjId.trim(), true);
     xhr.send();
 }
 
-// Get the project ID from the URL parameter
-const projectId = <?php echo $prjId ?>;
-const formattedCurrentDate = today.toISOString().split('T')[0];
-displayTimesheetData(formattedCurrentDate, projectId);
+// Function to get the starting date of the current week (Monday)
+function getStartOfWeek(date) {
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+    return new Date(date.setDate(diff));
+}
 
 window.addEventListener('DOMContentLoaded', function() {
     const datePicker = document.getElementById('weekStartDatePicker');
@@ -195,77 +194,30 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Display timesheet data for the current date by default
     const formattedCurrentDate = today.toISOString().split('T')[0];
-    displayTimesheetData(formattedCurrentDate);
+    displayTimesheetData(formattedCurrentDate, prjId);
 
     datePicker.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
-        const startOfWeek = getStartOfWeek(selectedDate);
-        this.valueAsDate = startOfWeek;
-
-        // Display timesheet data for the selected date
-        const formattedDate = selectedDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-        displayTimesheetData(formattedDate);
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+        displayTimesheetData(formattedDate, prjId);
+        console.log('test2',prjId)
     });
 
-    // Rest of your code...
+    datePicker.addEventListener('keydown', function(e) {
+        // Prevent manual input
+        e.preventDefault();
+    });
+
+    datePicker.addEventListener('click', function(e) {
+        // Prevent manual input via calendar
+        this.blur();
+    });
+
+    datePicker.addEventListener('focus', function() {
+        // Prevent manual input via calendar
+        this.blur();
+    });
 });
-
-    // Function to get the starting date of the current week
-    function getStartOfWeek(date) {
-        const day = date.getDay();
-        const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-        return new Date(date.setDate(diff));
-    }
-
-    window.addEventListener('DOMContentLoaded', function() {
-        const datePicker = document.getElementById('weekStartDatePicker');
-        // Get the current date
-const today = new Date();
-
-        const startOfWeek = getStartOfWeek(today);
-        datePicker.valueAsDate = startOfWeek;
-
-        datePicker.addEventListener('change', function() {
-            const selectedDate = new Date(this.value);
-            const startOfWeek = getStartOfWeek(selectedDate);
-            this.valueAsDate = startOfWeek;
-
-            // Upon date change, check if the selected date is present in the database
-            const formattedDate = selectedDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-            // AJAX request to check if the date exists in the database
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    // Handle response here, display related rows if date exists
-                    const response = JSON.parse(this.responseText);
-                    if (response.exists) {
-                        // Display related rows
-                        console.log("Related rows exist for the selected date.");
-                    } else {
-                        console.log("No related rows found for the selected date.");
-                    }
-                }
-            };
-            xhr.open("GET", "check_date.php?date=" + formattedDate, true);
-           xhr.send();
-          
-        });
-
-        datePicker.addEventListener('keydown', function(e) {
-            // Prevent manual input
-            e.preventDefault();
-        });
-
-        datePicker.addEventListener('click', function(e) {
-            // Prevent manual input via calendar
-            this.blur();
-        });
-
-        datePicker.addEventListener('focus', function() {
-            // Prevent manual input via calendar
-            this.blur();
-        });
-    });
 </script>
   </body>
 </html>

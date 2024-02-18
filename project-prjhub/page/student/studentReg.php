@@ -1,54 +1,3 @@
-<?php
-require_once('../config.php');
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-
-    $email = mysqli_real_escape_string($conn, $_POST['emailId']);
-    $fullName = mysqli_real_escape_string($conn, $_POST['FlName']);
-    $departmentName = mysqli_real_escape_string($conn, $_POST['deptName']);
-    $departmentNumber = mysqli_real_escape_string($conn, $_POST['deptNo']);
-    $currentYear = mysqli_real_escape_string($conn, $_POST['curYear']);
-    $degree = mysqli_real_escape_string($conn, $_POST['degree']);
-    $section = mysqli_real_escape_string($conn, $_POST['section']);
-    $gender = mysqli_real_escape_string($conn,$_POST['gender']);
-    $password = mysqli_real_escape_string($conn, $_POST['pwd']);
-    $confirmPassword = mysqli_real_escape_string($conn, $_POST['cpwd']);
-    
-    $emailQuery = "SELECT * FROM user_credentials WHERE Email = '$email' and User_Type='Student'";
-    $emailResult = mysqli_query($conn, $emailQuery);
-    if (mysqli_num_rows($emailResult) > 0) {
-        echo "Email already exists. Please choose a different email.";
-        exit; 
-    }
-
-    if ($password !== $confirmPassword) {
-        echo "Password and confirm password do not match.";
-        exit; 
-    }
-
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $insrtQry = "INSERT INTO user_credentials (Email, Password, user_Type) VALUES ('$email', '$hashedPassword', 'student')";
-
-    if (mysqli_query($conn, $insrtQry)) {
-      $user_id = mysqli_insert_id($conn);
-      $sql = "INSERT INTO student (U_Id, Dept_No,Stu_Name,Dept_Name,Cur_Year,Section,Degree,Gender)
-              VALUES ('$user_id','$departmentNumber','$fullName','$departmentName','$currentYear','$section', '$degree','$gender')";
-
-      if (mysqli_query($conn, $sql)) {
-        echo "Record inserted successfully";
-      } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-      }
-
-    }
-
-    mysqli_close($conn);
-} 
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,14 +6,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
     <link rel="stylesheet" href="../../style/reg.css">
-    <script src="/dependancies/jquery.js"></script>
-    <script src="/script/student/registrationPge/reg-ajx.js"></script>
-    
+    <script src="../../dependancies/jquery.js"></script>
+<script src="../../dependancies/sweetalert.js"></script>
     <title>Student Registration</title>
 </head>
 <body>
    <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+        <img src="../../asset/image/Logo.png" alt="logo" srcset="">
         <h1>Academic Project Tracker</h1>
     </div>
     
@@ -79,9 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
                 <label for="emailId">Email Address</label><br>
                 <input type="email" name="emailId" id="emailId" required><br>
+                 
+                <label for="dob">Date of Birth</label><br>
+                <input type="date" name="dob" id="dob" required><br>
 
                 <label for="deptName">Department Name</label><br>
-                <select name="deptName" id="deptName">
+                <select name="deptName" id="deptName" required>
                    <option value="Computer Science">Computer Science</option>
                    <option value="Computer Application">Computer Application</option>  
                 </select><br>
@@ -108,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option value="B">B</option>
                 </select><br>
 
-                <label for="gender">Gender</label><br>
-                <select name="gender" id="gender">
+                <label for="gender" >Gender</label><br>
+                <select name="gender" id="gender" required>
                    <option value="Male">Male</option>
                    <option value="Female">Female</option>  
                 </select><br>
@@ -130,3 +81,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 </body>
 </html>
+<?php
+require_once('../config.php');
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $email = mysqli_real_escape_string($conn, $_POST['emailId']);
+    $fullName = mysqli_real_escape_string($conn, $_POST['FlName']);
+    $date = $_POST['dob'];
+    $departmentName = mysqli_real_escape_string($conn, $_POST['deptName']);
+    $departmentNumber = mysqli_real_escape_string($conn, $_POST['deptNo']);
+    $currentYear = mysqli_real_escape_string($conn, $_POST['curYear']);
+    $degree = mysqli_real_escape_string($conn, $_POST['degree']);
+    $section = mysqli_real_escape_string($conn, $_POST['section']);
+    $gender = mysqli_real_escape_string($conn,$_POST['gender']);
+    $password = mysqli_real_escape_string($conn, $_POST['pwd']);
+    $confirmPassword = mysqli_real_escape_string($conn, $_POST['cpwd']);
+    
+    $emailQuery = "SELECT * FROM user_credentials WHERE Email = '$email' and User_Type='Student'";
+    $emailResult = mysqli_query($conn, $emailQuery);
+    if (mysqli_num_rows($emailResult) > 0) {
+        echo"<script>Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Email already exists!',
+          });</script>";        exit; 
+    }
+
+    if ($password !== $confirmPassword) {
+        echo"<script>Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Passwords do not match!',
+          });</script>";
+        exit; 
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $insrtQry = "INSERT INTO user_credentials (Email, Password, User_Type, `D.O.B`) VALUES ('$email', '$hashedPassword', 'student', '$date')";
+
+    if (mysqli_query($conn, $insrtQry)) {
+      $user_id = mysqli_insert_id($conn);
+      $sql = "INSERT INTO student (U_Id, Dept_No,Stu_Name,Dept_Name,Cur_Year,Section,Degree,Gender)
+              VALUES ('$user_id','$departmentNumber','$fullName','$departmentName','$currentYear','$section', '$degree','$gender')";
+
+if (mysqli_query($conn, $sql)) {
+    echo '<script>
+    Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      
+          </script>';
+  } else {
+    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+  }
+
+}
+
+mysqli_close($conn);
+} 
+?>

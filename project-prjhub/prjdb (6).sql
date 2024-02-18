@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2024 at 06:21 AM
+-- Generation Time: Feb 17, 2024 at 08:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -96,9 +96,7 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`Prj_Id`, `Stu_Id`, `Guide_Id`, `Prj_Name`, `Prj_Desc`, `Prj_Status`, `Date_of_Submission`, `Time_of_Submission`, `rejection_reason`) VALUES
-(1, '146', 's11', 'fare friendly pass generator', 'This is a past generation application that is going to group students', 'In-Progress', '2024-02-15', '18:09:42', NULL),
-(2, '108', 's11', 'Academic project tracker', 'it is a website academic projects', 'In-Progress', '2024-02-15', '18:20:11', NULL),
-(3, '147', 's11', 'Give life organ donor', 'Civel life is an organ donation website', 'rejected', '2024-02-15', '19:01:30', 'change the topic');
+(2, '108', 's11', 'Academic project tracker', 'it is a website academic projects', 'In-Progress', '2024-02-15', '18:20:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -115,16 +113,40 @@ CREATE TABLE `review` (
   `Review3_Mark` float DEFAULT NULL,
   `Review1_Date` date DEFAULT NULL,
   `Review2_Date` date DEFAULT NULL,
-  `Review3_Date` date DEFAULT NULL
+  `Review3_Date` date DEFAULT NULL,
+  `Rv1_fdback` varchar(255) NOT NULL,
+  `Rv2_fdback` varchar(255) NOT NULL,
+  `Rv3_fdback` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `review`
 --
 
-INSERT INTO `review` (`Review_Id`, `Prj_id`, `Guide_Id`, `Review1_Mark`, `Review2_Mark`, `Review3_Mark`, `Review1_Date`, `Review2_Date`, `Review3_Date`) VALUES
-(7, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `review` (`Review_Id`, `Prj_id`, `Guide_Id`, `Review1_Mark`, `Review2_Mark`, `Review3_Mark`, `Review1_Date`, `Review2_Date`, `Review3_Date`, `Rv1_fdback`, `Rv2_fdback`, `Rv3_fdback`) VALUES
+(8, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'vghfcfcfgfcg', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `review_doc`
+--
+
+CREATE TABLE `review_doc` (
+  `Doc_Id` int(10) NOT NULL,
+  `rv_Id` int(11) DEFAULT NULL,
+  `Prj_Id` int(10) DEFAULT NULL,
+  `Doc_Name` varchar(255) DEFAULT NULL,
+  `Doc_Path` varchar(255) NOT NULL,
+  `review_no` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `review_doc`
+--
+
+INSERT INTO `review_doc` (`Doc_Id`, `rv_Id`, `Prj_Id`, `Doc_Name`, `Doc_Path`, `review_no`) VALUES
+(24, 8, 2, '../../../uploads/1st REVIEW  REPORT.pdf', '1st REVIEW  REPORT.pdf', 1);
 
 -- --------------------------------------------------------
 
@@ -150,8 +172,15 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`U_Id`, `Dept_No`, `Stu_Name`, `Dept_Name`, `Cur_Year`, `Section`, `Guide_Id`, `Degree`, `Gender`) VALUES
 (1220, '108', 'darren antony', 'Computer Science', 3, 'B', 's11', 'Bsc', 'M'),
+(1229, '12121', 'wqdyqy', 'Computer Science', 1, 'A', NULL, 'Bsc', 'M'),
+(1226, '1213131', 'jkhaskh', 'Computer Science', 1, 'A', NULL, 'Bsc', 'M'),
+(1225, '12212', 'hdkje', 'Computer Science', 1, 'A', NULL, 'Bsc', 'M'),
+(1227, '123123', 'dqhjdhj', 'Computer Science', 1, 'A', NULL, 'Bsc', 'M'),
 (1219, '146', 'john Bilkeds', 'Computer Science', 3, 'B', 's11', 'Bsc', 'M'),
 (1221, '147', 'Gladson', 'Computer Science', 3, 'B', 's11', 'Bsc', 'M'),
+(1222, '152', 'karthik', 'Computer Science', 3, 'B', NULL, 'Bsc', 'M'),
+(1224, '21323', 'xsx', 'Computer Science', 1, 'A', NULL, 'Bsc', 'M'),
+(1228, '231232', 'dhk', 'Computer Science', 1, 'A', NULL, 'Bsc', 'M'),
 (1215, 'Computer S', 'Darren Christopher Antony', 'Computer Science', 3, 'B', 's11', 'Bsc', 'M');
 
 -- --------------------------------------------------------
@@ -178,8 +207,7 @@ CREATE TABLE `timesheet` (
 --
 
 INSERT INTO `timesheet` (`tsId`, `startDate`, `mondayActivity`, `tuesdayActivity`, `wednesdayActivity`, `thursdayActivity`, `fridayActivity`, `saturdayActivity`, `STATUS`, `Proj_Id`) VALUES
-(7, '2024-02-12', '1', '1', '1', '1', '1', '1', 'approved', 2),
-(8, '2024-02-12', '122', '12', '12', '1', '12', '12', 'approved', 1);
+(9, '2024-02-12', '1', '1', '1', '11', '1', '1', 'approved', 2);
 
 -- --------------------------------------------------------
 
@@ -205,7 +233,16 @@ INSERT INTO `user_credentials` (`U_Id`, `Email`, `Password`, `OTP`, `User_Type`,
 (1215, 'darrenca007@gmail.com', '$2y$10$4mQMJj8aEluxTT3/pc4WyeImIwTcD9QcFnbjeoUy02v2EygUrjePi', NULL, 'student', NULL),
 (1219, 'jb@g.com', '$2y$10$qf2wZ4xr1uOwuGVANWKwo.1Vx7u4qY332yxputoOXt5js/1hiznFi', NULL, 'student', NULL),
 (1220, 'darren@g.com', '$2y$10$iU7r89UoFkNJFgK8BgHzbOX0Uj6rzyK5nvfB/vi./k5MHZE2qS4fC', NULL, 'student', NULL),
-(1221, 'glad@g.com', '$2y$10$oThKPuPNF5ANK9kBd6q2xOny1OYvbAezFILPn.l8uzlF3R1t86oSi', NULL, 'student', NULL);
+(1221, 'glad@g.com', '$2y$10$oThKPuPNF5ANK9kBd6q2xOny1OYvbAezFILPn.l8uzlF3R1t86oSi', NULL, 'student', NULL),
+(1222, 'karthik1@gmail.com', '$2y$10$QUf8MKw9uKUTjx3UVt9sxuDU/AcnoIGfmTqurFZA1jUaBt6nQDPhq', NULL, 'student', NULL),
+(1223, 'karthik12@gmail.com', '$2y$10$gtwZ9xd/rRGoI.XuLZWFduOwQffgAR6uHbMDypSFDZd3fMC1eSejK', NULL, 'student', NULL),
+(1224, 'darren1@fh.com', '$2y$10$Jgp.lM9YHSgnNXqVb7Zi4eNL8SdKWMAi8MDAs1l6s7h5IEbA2PkbW', NULL, 'student', NULL),
+(1225, 'dijdklfjl@h.com', '$2y$10$gjGa8DNzm/z4vdTUJahay.Duxg3dWi8WgTEEh7PyJgEwF5/acAstG', NULL, 'student', NULL),
+(1226, 'darren1@12.com', '$2y$10$10ilUesZHgFi5W5zQOLC7ujucjrSAxu5kui6Xh1SeBOM/6zRVKJsS', NULL, 'student', NULL),
+(1227, 'darren1@1212.com', '$2y$10$1EstuiRZ3ShQy8EeBJOkBeOSLRa4SFINgLiNRe4R6tMtu4hWoECBK', NULL, 'student', NULL),
+(1228, 'darren1@hdagshdj.com', '$2y$10$aJSAd9Y5a9DerrcedshQGej.VJ3SKEn57cMBL6rNL7tuhsDASMysW', NULL, 'student', NULL),
+(1229, 'darren1@ssjdj.com', '$2y$10$sDwVPQBoMJMNYvobUEVCIOPou/kQmVqRjzb1GijO8RRzbw0mY4SC.', NULL, 'student', NULL),
+(1230, 'darren1@g.com', '$2y$10$vwfEG6NuTrX6WgRC6X/96eXGenLPz4/uHL3DzbDt70WaMa2qGheDG', NULL, 'student', NULL);
 
 --
 -- Indexes for dumped tables
@@ -250,6 +287,14 @@ ALTER TABLE `review`
   ADD PRIMARY KEY (`Review_Id`),
   ADD KEY `Guide_Id` (`Guide_Id`),
   ADD KEY `Prj_id` (`Prj_id`);
+
+--
+-- Indexes for table `review_doc`
+--
+ALTER TABLE `review_doc`
+  ADD PRIMARY KEY (`Doc_Id`),
+  ADD KEY `rv_Id` (`rv_Id`),
+  ADD KEY `Prj_Id` (`Prj_Id`);
 
 --
 -- Indexes for table `student`
@@ -303,16 +348,22 @@ ALTER TABLE `review`
   MODIFY `Review_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `review_doc`
+--
+ALTER TABLE `review_doc`
+  MODIFY `Doc_Id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
 -- AUTO_INCREMENT for table `timesheet`
 --
 ALTER TABLE `timesheet`
-  MODIFY `tsId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `tsId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_credentials`
 --
 ALTER TABLE `user_credentials`
-  MODIFY `U_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1222;
+  MODIFY `U_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1231;
 
 --
 -- Constraints for dumped tables
@@ -352,6 +403,13 @@ ALTER TABLE `project`
 ALTER TABLE `review`
   ADD CONSTRAINT `review_ibfk_2` FOREIGN KEY (`Guide_Id`) REFERENCES `guide` (`Guide_Id`),
   ADD CONSTRAINT `review_ibfk_3` FOREIGN KEY (`Prj_id`) REFERENCES `project` (`Prj_Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `review_doc`
+--
+ALTER TABLE `review_doc`
+  ADD CONSTRAINT `review_doc_ibfk_1` FOREIGN KEY (`rv_Id`) REFERENCES `review` (`Review_Id`),
+  ADD CONSTRAINT `review_doc_ibfk_2` FOREIGN KEY (`Prj_Id`) REFERENCES `project` (`Prj_Id`);
 
 --
 -- Constraints for table `student`

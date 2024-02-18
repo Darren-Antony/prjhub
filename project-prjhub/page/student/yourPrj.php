@@ -57,7 +57,6 @@ if ($getStuDetailsRes) {
     <link rel="stylesheet" href="../../style/dashboard/prjviewpage.css">
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/student/dashboard/dashboard.js"></script>
-
     <title>Login</title>
 </head>
 <body>
@@ -71,7 +70,7 @@ if ($getStuDetailsRes) {
     <button onclick="timesheetPage(<?php echo $prjId ?>)">
         timesheet
     </button>
-    <button>
+    <button onclick="Mark(<?php echo $prjId ?>)">
         marks
     </button>
     <?php

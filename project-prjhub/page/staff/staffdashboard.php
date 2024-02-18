@@ -37,10 +37,12 @@ $guide_Id = $guideRow['Guide_Id'];
 $stuQuery = "SELECT * FROM project WHERE Guide_Id = '$guide_Id' AND Prj_Status = 'pending-approval' or Prj_Status='In-progress'";
 $stuRes = mysqli_query($conn, $stuQuery);
 
-
+?>
+<div class="main-prj-cont">
+<?php
 if (mysqli_num_rows($stuRes) > 0) {
     while ($stuRow = mysqli_fetch_assoc($stuRes)) {
-        echo '<div class="project-details">';
+        echo '<div class="inner-prj-cont">';
         echo $stuRow['Prj_Name']; 
         
         echo '<button class="blue-btn" onclick="viewPrj(' . $stuRow['Prj_Id'] . ')">View</button>';
@@ -54,7 +56,7 @@ if (mysqli_num_rows($stuRes) > 0) {
  
  
 ?>
-  
+  </div>
  
 <script>
     function viewPrj(prjId) {

@@ -1,9 +1,15 @@
 <?php
-require_once('../config.php');
-session_start();
-$user_id = $_SESSION['user_id'];
-echo $user_id;
+  require_once('../config.php');
+  session_start();
+  $user_id = $_SESSION['user_id'];
+
+  $slQry2 = "SELECT * FROM student WHERE U_Id = $user_id";
+  $slresult2 = mysqli_query($conn, $slQry2) or die(mysqli_error($conn));
+  
+  $sRow = mysqli_fetch_assoc($slresult2);
+  $Stu_Id = $sRow['Dept_No'];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,20 +23,32 @@ echo $user_id;
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/student/dashboard/ajax/selectingGuideajax.js"></script>
     <script src="../../script/student/dashboard/ajax/submitProjectAjax.js"></script>
-    
-
 </head>
-
 <body>
 <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+    <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
+    </div>
+    <div class="right">
+    <div class="notif-cont">
+        <button ><img src="../../asset/image/notification.png" alt=""></button>
+       </div>
+       <div class="user-cont">
+        <button class="User" onclick="toggleDropdown()"><img src="../../asset/image/user.png" alt="" srcset=""></button>
+       </div>
+       <div class="dropdown-menu" id="dropdownMenu">
+            <span class="username">Hi <?php echo  $sRow['Stu_Name']?></span>
+            <a href="personal-details">Personal Details</a>
+            <a href="change-password">Change Password</a>
+            <a href="logout">Logout</a>
+        </div>
+    </div>
+       
     </div>
     
     <?php
-// Your PHP code goes here
 
-// Check if the student is not assigned a guide
 $slQry1 = "SELECT * FROM student WHERE Guide_Id IS NULL AND U_Id = '$user_id'";
 $slresult1 = mysqli_query($conn, $slQry1) or die(mysqli_error($conn));
 
@@ -40,11 +58,9 @@ $slresult2 = mysqli_query($conn, $slQry2) or die(mysqli_error($conn));
 $sRow = mysqli_fetch_assoc($slresult2);
 $Stu_Id = $sRow['Dept_No'];
 
-// Check if there are projects pending approval or in progress
 $ChkPrjQry = "SELECT * FROM project WHERE (Prj_Status='Pending-Approval' OR Prj_Status='In-Progress') AND Stu_Id='$Stu_Id'";
 $ChkPrjQryRes = mysqli_query($conn, $ChkPrjQry) or die(mysqli_error($ChkPrjQryRes));
 if (mysqli_num_rows($slresult1) >0) {
-    // Display guide selection options
     $sRow = mysqli_fetch_assoc($slresult1);
     $sYear = mysqli_real_escape_string($conn, $sRow['Cur_Year']);
     $sSection = mysqli_real_escape_string($conn, $sRow['Section']);

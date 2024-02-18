@@ -1,52 +1,33 @@
 <?php
-require_once('../../page/config.php');
-session_start();
-$prjId = $_GET['prjId'];
-$user_id = $_SESSION['user_id'];
+   require_once('../../page/config.php');
+   session_start();
+   $prjId = $_GET['prjId'];
+   $user_id = $_SESSION['user_id'];
+   $query = "SELECT * FROM project WHERE Prj_Id = $prjId";
+   $result = mysqli_query($conn, $query);
 
-// Query the database to get the project details based on the project ID
-// Assuming you have a database connection established
-$query = "SELECT * FROM project WHERE Prj_Id = $prjId";
-$result = mysqli_query($conn, $query);
-
-// Check if the query executed successfully
-if ($result) {
-    // Fetch the project details
-    $project = mysqli_fetch_assoc($result);
+   if ($result) {
+       $project = mysqli_fetch_assoc($result);
     
-    // Display the project name
    
-} else {
-    // Handle errors if any
-    echo "Error: " . mysqli_error($conn);
-}
+   } else {
+       echo "Error: " . mysqli_error($conn);
+   }
 
-$Stu_No = mysqli_real_escape_string($conn, $project['Stu_Id']);
+   $Stu_No = mysqli_real_escape_string($conn, $project['Stu_Id']);
 
-// Construct the SQL query with the escaped value
-$getStuDetails = "SELECT * FROM student WHERE Dept_NO = '$Stu_No'";
+   $getStuDetails = "SELECT * FROM student WHERE Dept_NO = '$Stu_No'";
 
-// Execute the query
-$getStuDetailsRes = mysqli_query($conn, $getStuDetails);
+   $getStuDetailsRes = mysqli_query($conn, $getStuDetails);
 
-// Check if the query was successful
-if ($getStuDetailsRes) {
-    // Fetch the row
-    $StuRow = mysqli_fetch_assoc($getStuDetailsRes);
-    // Use $StuRow as needed
-} else {
-    // Handle query error
-    echo "Error: " . mysqli_error($conn);
-}
-
-
-// Construct the SQL query with the escaped value
-
-
-
-
+   if ($getStuDetailsRes) {
+       $StuRow = mysqli_fetch_assoc($getStuDetailsRes);
+   } else {
+       echo "Error: " . mysqli_error($conn);
+   }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +38,7 @@ if ($getStuDetailsRes) {
     <link rel="stylesheet" href="../../style/dashboard/prjviewpage.css">
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/staff/dashboard/dashboard.js"></script>
-
+    <link rel="stylesheet" href="../../style/dashboard/timsheet.css">
     <title>Login</title>
 </head>
 <body>
@@ -82,18 +63,19 @@ if (date('D') != 'Mon') {
 } else {
     $start_date = date('Y-m-d');
 }
-echo "The start date of the current week is $start_date";
+// echo "The start date of the current week is $start_date";
 
 $chkCurrDate = "SELECT * FROM timesheet WHERE startDate = '$start_date' AND Proj_Id = $prjId";
 $res1 = mysqli_query($conn, $chkCurrDate);
 $row = mysqli_fetch_assoc($res1);
-
-if (mysqli_num_rows($res1) == 0) {
+echo'<div class="main-tms-cont">';
+echo'<div class="inner-tms-cont">';
+  if (mysqli_num_rows($res1) == 0) {
     ?>
     <form id="timesheetForm" method="post" action="../../Backend/student/StudentDashboard/timesheetInsert.php">
-        <table border="1">
-            <input type="text" name="prj_Id" value="<?php echo $prjId?>">
-            <input type="text" name="start_date" value="<?php echo $start_date?>">
+        <table >
+            <input type="hidden" name="prj_Id" value="<?php echo $prjId?>">
+            <input type="hidden" name="start_date" value="<?php echo $start_date?>">
             <tr>
                 <th>Day</th>
                 <th>Activity</th>
@@ -110,11 +92,11 @@ if (mysqli_num_rows($res1) == 0) {
         </table>
         <button type="submit">Submit</button>
     </form>
-<?php } elseif (mysqli_num_rows($res1) > 0 && $row['STATUS'] != 'approved') { ?>
+    <?php } elseif (mysqli_num_rows($res1) > 0 && $row['STATUS'] != 'approved') { ?>
     <form id="timesheetForm" method="post" action="../../Backend/student/StudentDashboard/timesheetUpdate.php">
-        <table border="1">
-            <input type="text" name="prj_Id" value="<?php echo $prjId?>">
-            <input type="text" name="start_date" value="<?php echo $start_date?>">
+        <table >
+            <input type="hidden" name="prj_Id" value="<?php echo $prjId?>">
+            <input type="hidden" name="start_date" value="<?php echo $start_date?>">
             <tr>
                 <th>Day</th>
                 <th>Activity</th>
@@ -131,11 +113,14 @@ if (mysqli_num_rows($res1) == 0) {
             }
             ?>
         </table>
-        <button type="submit">Submit</button>
+        <button type="submit" class="blue-btn">Update</button>
     </form>
+    </div>
+    </div>     
 <?php } else {
-    echo "no need";
+    echo "This weeks timesheet has been approved</br>";
 } ?>
+
 <h2>Select Week Starting Date:</h2>
 <input type="date" id="weekStartDatePicker">
 <div id="timesheetDataDisplay"></div>
@@ -151,19 +136,45 @@ if (mysqli_num_rows($res1) == 0) {
             if (responseData.exists) {
                 const timesheetData = responseData.data;
                 const table = document.createElement('table');
-                table.border = '1';
+                const thead = document.createElement('thead'); // Create thead element
                 const tbody = document.createElement('tbody');
-                const keys = Object.keys(timesheetData);
-                keys.forEach(key => {
+
+                // Create headers for "Days" and "Activities"
+                const daysHeader = document.createElement('th');
+                daysHeader.textContent = 'Days';
+                const activitiesHeader = document.createElement('th');
+                activitiesHeader.textContent = 'Activities';
+                const headerRow = document.createElement('tr');
+                headerRow.appendChild(daysHeader);
+                headerRow.appendChild(activitiesHeader);
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Custom keys for Monday to Saturday
+                const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+                // Loop through each day and display its corresponding activity
+                for (let i = 0; i < days.length; i++) {
+                    const day = days[i];
+                    const activityKey = day.toLowerCase() + 'Activity';
                     const row = document.createElement('tr');
                     const cell1 = document.createElement('td');
                     const cell2 = document.createElement('td');
-                    cell1.textContent = key;
-                    cell2.textContent = timesheetData[key];
+                    cell1.textContent = day;
+
+                    // Display text content only for indices 2 to 8
+                    if (i >= 0 && i <= 8) {
+                        cell2.textContent = timesheetData[activityKey];
+                    } else {
+                        // For other indices, display a custom key
+                        cell2.textContent = "Custom Key";
+                    }
+                    
                     row.appendChild(cell1);
                     row.appendChild(cell2);
                     tbody.appendChild(row);
-                });
+                }
+
                 table.appendChild(tbody);
                 const displayContainer = document.getElementById('timesheetDataDisplay');
                 displayContainer.innerHTML = '';
@@ -173,11 +184,12 @@ if (mysqli_num_rows($res1) == 0) {
             }
         }
     };
-    console.log('test3',prjId)
 
     xhr.open("GET", "../../Backend/student/StudentDashboard/fetch_timesheet_data.php?date=" + selectedDate + "&prjId=" + prjId.trim(), true);
     xhr.send();
 }
+
+
 
 // Function to get the starting date of the current week (Monday)
 function getStartOfWeek(date) {

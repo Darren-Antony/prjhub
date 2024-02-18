@@ -53,14 +53,16 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    
 }
-.inner-prj-cont{
-border: 1px solid black;
-width: 500px;
-padding: 10px;
-border-radius: 10px;
+.inner-prj-cont {
+  
+    width: 500px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4); /* Use rgba for opacity */
+    background-color: white; /* Ensure the background color is not fully opaque */
 }
+
 .heading{
     margin:10px 0px 0px 30px;
     font-size: 1.9em;

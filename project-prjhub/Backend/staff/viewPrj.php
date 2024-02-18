@@ -4,43 +4,32 @@ session_start();
 $prjId = $_GET['prjId'];
 $user_id = $_SESSION['user_id'];
 
-// Query the database to get the project details based on the project ID
-// Assuming you have a database connection established
+
 $query = "SELECT * FROM project WHERE Prj_Id = $prjId";
 $result = mysqli_query($conn, $query);
 
-// Check if the query executed successfully
-if ($result) {
-    // Fetch the project details
-    $project = mysqli_fetch_assoc($result);
+if ($result) { 
     
-    // Display the project name
-   
-} else {
-    // Handle errors if any
+    $project = mysqli_fetch_assoc($result);
+
+} else {   
+    
     echo "Error: " . mysqli_error($conn);
 }
 
 $Stu_No = mysqli_real_escape_string($conn, $project['Stu_Id']);
 
-// Construct the SQL query with the escaped value
 $getStuDetails = "SELECT * FROM student WHERE Dept_NO = '$Stu_No'";
 
-// Execute the query
 $getStuDetailsRes = mysqli_query($conn, $getStuDetails);
 
-// Check if the query was successful
 if ($getStuDetailsRes) {
-    // Fetch the row
+
     $StuRow = mysqli_fetch_assoc($getStuDetailsRes);
-    // Use $StuRow as needed
 } else {
-    // Handle query error
+
     echo "Error: " . mysqli_error($conn);
 }
-
-
-// Construct the SQL query with the escaped value
 
 
 
@@ -57,7 +46,6 @@ if ($getStuDetailsRes) {
     <link rel="stylesheet" href="../../style/dashboard/prjviewpage.css">
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/staff/dashboard/dashboard.js"></script>
-
     <title>Login</title>
 </head>
 <body>
@@ -71,7 +59,7 @@ if ($project['Prj_Status'] == 'In-Progress') {
     <button onclick="viewtmsht(<?php echo $prjId ?>)">
         timesheet
     </button>
-    <button>
+    <button onclick="viewMarks(<?php echo $prjId ?>)">
         marks
     </button>
     <?php

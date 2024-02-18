@@ -18,6 +18,7 @@
     align-items: center;
     border-bottom: 2px solid black;
     padding: 15px;
+    justify-content: space-between;
 }
 .logo-cont img{
     width: 50px;
@@ -42,4 +43,39 @@
     background-color: #fff;
    
     margin: 10px 0px 0px 10px;
+}
+.logo{
+display: flex;
+align-items: center;
+}
+.right{
+    display: flex;
+    justify-content: space-between;
+    width: 151px;
+}
+
+.notif-cont button,.user-cont button{
+  background-color: #fff;
+  border:none;
+}
+.user-cont {
+    position: relative;
+}
+
+.dropdown-menu{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top:100px;
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4); /* Use rgba for opacity */
+    padding: 10px;
+    display: none; /* Initially hidden */
+    border-radius: 5px;
+
+}
+.dropdown-menu.show {
+    display: block; /* Displayed when 'show' class is applied */
+}
+.dropdown-menu a{
+text-decoration: none;
 }

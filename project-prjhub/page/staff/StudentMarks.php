@@ -21,13 +21,13 @@ $prjId = $_GET['prjId'];
     <title>dashboard</title>
     <style>
         .progress-circle {
-  width: 100px;
-  height: 100px;
-  position: relative;
-  border-radius: 50%;
-  background-color: #f3f3f3;
-  overflow: hidden; /* Hide overflow to keep center transparent */
-}
+            width: 100px;
+            height: 100px;
+            position: relative;
+            border-radius: 50%;
+            background-color: #f3f3f3;
+            overflow: hidden; 
+        }
 
 .progress {
   position: absolute;
@@ -60,8 +60,11 @@ $prjId = $_GET['prjId'];
 
 <body >
 <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+    <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
+    </div>
+       
     </div>
 
 <?php

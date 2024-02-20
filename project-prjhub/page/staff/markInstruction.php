@@ -45,7 +45,7 @@ $Rv_Path = "../../uploads/".$Rv_Row['Doc_Path'];echo $Rv_Path;
     </style>
 </head>
 <body>
-
+''
     <h1>Review Evaluation Instructions</h1>
 
     <div class="instructions">

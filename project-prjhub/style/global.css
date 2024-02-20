@@ -79,3 +79,14 @@ align-items: center;
 .dropdown-menu a{
 text-decoration: none;
 }
+.goback-cont{
+    padding: 10px;
+}
+.goback-cont button{
+    color:#1C91F2 ;
+background-color: #fff;
+font-size: 1.9em;
+border: none;
+
+
+}

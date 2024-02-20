@@ -1,14 +1,39 @@
 .prj-cont{
     display: flex;
-    border: 2px solid black;
     padding: 10px;
     justify-content: space-between;
+    border-radius: 30px;
 }
 .prj-cont-left-top,.prj-cont-left-bottom,.prj-cont-right{
-    border: 2px solid black;
-    padding: 5px;
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4);
 
 }
 .prj-cont-left-bottom{
     margin: 20px 0px 0px 0px;
+    font-size: 1.1em;
+    height: 200px;
+}
+
+.prj-cont-left-top,.prj-cont-left-bottom{
+    width:900px;
+    padding: 50px; 
+    border-radius: 10px;
+}
+.prj-cont-right{
+    width:500px;
+    height:345px;
+    padding: 10px;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 1.5em;
+}
+.right{
+    width: 400px;
+}
+.dropdown-menu{
+    width: 200px;
+    left:1300px;
+}
+.nav-btn{
+    display: flex;
 }

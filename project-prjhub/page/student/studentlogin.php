@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../style/global.css">
+<link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
     <script src="/dependancies/jquery.js"></script>
     <script src="../../dependancies/sweetalert.js"></script>
@@ -13,8 +13,10 @@
 </head>
 <body>
    <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+   <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
+    </div>
     </div>
     
     <div class="form">

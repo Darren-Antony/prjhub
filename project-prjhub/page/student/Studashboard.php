@@ -23,8 +23,10 @@
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/student/dashboard/ajax/selectingGuideajax.js"></script>
     <script src="../../script/student/dashboard/ajax/submitProjectAjax.js"></script>
+    <script src="../../script/global.js"></script>
+    <script src="../../dependancies/sweetalert.js"></script>
 </head>
-<body>
+<body>'
 <div class="logo-cont">
     <div class="logo">
     <img src="../../asset/image/Logo.png" alt="" srcset="">
@@ -39,14 +41,13 @@
        </div>
        <div class="dropdown-menu" id="dropdownMenu">
             <span class="username">Hi <?php echo  $sRow['Stu_Name']?></span>
-            <a href="personal-details">Personal Details</a>
+            <a href="./StupersonalDetail.php">Personal Details</a>
             <a href="change-password">Change Password</a>
-            <a href="logout">Logout</a>
+            <a href="logout" onclick="confirmLogout(event)" >Logout</a>
         </div>
     </div>
-       
-    </div>
-    
+</div>
+
     <?php
 
 $slQry1 = "SELECT * FROM student WHERE Guide_Id IS NULL AND U_Id = '$user_id'";
@@ -149,6 +150,7 @@ if (mysqli_num_rows($slresult1) >0) {
   
 
 
+</script>
 </body>
 
 </html>

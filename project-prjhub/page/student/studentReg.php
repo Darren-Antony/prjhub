@@ -9,6 +9,88 @@
     <script src="../../dependancies/jquery.js"></script>
 <script src="../../dependancies/sweetalert.js"></script>
     <title>Student Registration</title>
+    <script>
+          function validateForm() {
+            var email = document.getElementById("emailId").value;
+            var fullName = document.getElementById("FlName").value;
+            var dob = document.getElementById("dob").value;
+            var departmentNumber = document.getElementById("deptNo").value;
+            var password = document.getElementById("pwd").value;
+            var confirmPassword = document.getElementById("cpwd").value;
+
+            // Email validation
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid email address!',
+                    text: 'Please enter a valid email address.'
+                });
+                return false;
+            }
+
+            // Full name validation
+            if (fullName.trim() === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing full name!',
+                    text: 'Please enter your full name.'
+                });
+                return false;
+            }
+
+            // Date of Birth validation
+            if (dob.trim() === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing date of birth!',
+                    text: 'Please enter your date of birth.'
+                });
+                return false;
+            }
+
+            // Department Number validation
+            if (departmentNumber.trim() === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing department number!',
+                    text: 'Please enter your department number.'
+                });
+                return false;
+            }
+
+            // Password validation
+            if (password.trim() === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing password!',
+                    text: 'Please enter a password.'
+                });
+                return false;
+            }
+
+            // Confirm Password validation
+            if (confirmPassword.trim() === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing confirmation password!',
+                    text: 'Please confirm your password.'
+                });
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Passwords do not match!',
+                    text: 'Please make sure your passwords match.'
+                });
+                return false;
+            }
+
+            return true; // Form is valid
+        }
+    </script>
 </head>
 <body>
    <div class="logo-cont">
@@ -17,60 +99,60 @@
     </div>
     
     <div class="form" id="stdreg">
-        <form action="#" method="post">
+        <form action="#" method="post" onsubmit="return validateForm()">
             <div class="form-title">
                 <h1>Student Registration Form</h1>
             </div>
             <div class="form-cont">
                 <label for="FlName">Full Name</label><br>
-                <input type="text" name="FlName" id="FlName" required><br>
+                <input type="text" name="FlName" id="FlName" ><br>
         
                 <label for="emailId">Email Address</label><br>
-                <input type="email" name="emailId" id="emailId" required><br>
+                <input type="email" name="emailId" id="emailId" ><br>
                  
                 <label for="dob">Date of Birth</label><br>
-                <input type="date" name="dob" id="dob" required><br>
+                <input type="date" name="dob" id="dob"><br>
 
                 <label for="deptName">Department Name</label><br>
-                <select name="deptName" id="deptName" required>
+                <select name="deptName" id="deptName" >
                    <option value="Computer Science">Computer Science</option>
                    <option value="Computer Application">Computer Application</option>  
                 </select><br>
                 <label for="deptNo">Department Number</label><br>
-                <input type="text" name="deptNo" id="deptNo" required><br>
+                <input type="text" name="deptNo" id="deptNo" ><br>
 
                 <label for="curYear">Current Year</label><br>
-                <select id="curYear" name="curYear" required>
+                <select id="curYear" name="curYear" >
                     <option value="1">I</option>
                     <option value="2">II</option>
                     <option value="3">III</option>
                 </select><br>
 
                 <label for="degree">Degree</label><br>
-                <select id="degree" name="degree" required>
+                <select id="degree" name="degree" >
                     <option value="Bsc">Bsc</option>
                     <option value="Bca">Bca</option>
                     <option value="Msc">Msc</option>
                 </select><br>
 
                 <label for="section">Section</label><br>
-                <select id="section" name="section" required>
+                <select id="section" name="section" >
                     <option value="A">A</option>
                     <option value="B">B</option>
                 </select><br>
 
                 <label for="gender" >Gender</label><br>
-                <select name="gender" id="gender" required>
+                <select name="gender" id="gender" >
                    <option value="Male">Male</option>
                    <option value="Female">Female</option>  
                 </select><br>
                 
 
                 <label for="pwd">Password</label><br>
-                <input type="password" name="pwd" id="pwd" required><br>
+                <input type="password" name="pwd" id="pwd" ><br>
 
                 <label for="cpwd">Confirm Password</label><br>
-                <input type="password" name="cpwd" id="cpwd" required><br>
+                <input type="password" name="cpwd" id="cpwd" ><br>
                 
             </div> 
             <center>

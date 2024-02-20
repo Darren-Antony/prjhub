@@ -2,9 +2,17 @@
    require_once('../../page/config.php');
    session_start();
    $prjId = $_GET['prjId'];
+
    $user_id = $_SESSION['user_id'];
+ 
+   $slQry2 = "SELECT * FROM student WHERE U_Id = $user_id";
+   $slresult2 = mysqli_query($conn, $slQry2) or die(mysqli_error($conn));
+   
+   $sRow = mysqli_fetch_assoc($slresult2);
+   $Stu_Id = $sRow['Dept_No'];
    $query = "SELECT * FROM project WHERE Prj_Id = $prjId";
    $result = mysqli_query($conn, $query);
+   
 
    if ($result) {
        $project = mysqli_fetch_assoc($result);
@@ -35,42 +43,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
-    <link rel="stylesheet" href="../../style/dashboard/prjviewpage.css">
     <script src="../../dependancies/jquery.js"></script>
-    <script src="../../script/staff/dashboard/dashboard.js"></script>
+    <script src="../../script/student/dashboard/dashboard.js"></script>
     <link rel="stylesheet" href="../../style/dashboard/timsheet.css">
     <title>Login</title>
 </head>
 <body>
    <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+    <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
-        <div class="btn-nav-cont">
-            <button>
-                timesheet
-            </button>
-            <button>
-                marks
-            </button>
-        </div>
+    </div>
+      
+   
+    </div>
+    <div class="goback-cont">
+        <button onclick="goBack()">&lt Go Back</button>
     </div>
     <?php
 
-// Check the current day
 if (date('D') != 'Mon') {
-    // Take the last Monday
     $start_date = date('Y-m-d', strtotime('last Monday'));
 } else {
     $start_date = date('Y-m-d');
 }
-// echo "The start date of the current week is $start_date";
 
 $chkCurrDate = "SELECT * FROM timesheet WHERE startDate = '$start_date' AND Proj_Id = $prjId";
 $res1 = mysqli_query($conn, $chkCurrDate);
 $row = mysqli_fetch_assoc($res1);
 echo'<div class="main-tms-cont">';
-echo'<div class="inner-tms-cont">';
-  if (mysqli_num_rows($res1) == 0) {
+   echo'<div class="inner-tms-cont">';
+      if (mysqli_num_rows($res1) == 0) {
     ?>
     <form id="timesheetForm" method="post" action="../../Backend/student/StudentDashboard/timesheetInsert.php">
         <table >
@@ -86,7 +89,7 @@ echo'<div class="inner-tms-cont">';
 
             // Loop through each day
             foreach ($days as $day) {
-                echo "<tr><td>$day</td><td><input type='text' name='" . strtolower($day) . "_activity'></td></tr>";
+                echo "<tr><td>$day</td><td><input type='text' name='" . strtolower($day) . "_activity' required></td></tr>";
             }
             ?>
         </table>
@@ -109,7 +112,7 @@ echo'<div class="inner-tms-cont">';
             foreach ($days as $day) {
                 $activity_field_name = strtolower($day) . "Activity";
                 $activity_value = $row[$activity_field_name]; // Get value from the database
-                echo "<tr><td>$day</td><td><input type='text' name='$activity_field_name' value='$activity_value'></td></tr>";
+                echo "<tr><td>$day</td><td><input type='text' name='$activity_field_name' value='$activity_value' required></td></tr>";
             }
             ?>
         </table>
@@ -117,13 +120,16 @@ echo'<div class="inner-tms-cont">';
     </form>
     </div>
     </div>     
+        
 <?php } else {
     echo "This weeks timesheet has been approved</br>";
 } ?>
-
+<div class="date-p">
 <h2>Select Week Starting Date:</h2>
 <input type="date" id="weekStartDatePicker">
 <div id="timesheetDataDisplay"></div>
+</div>
+
 <script>
     const prjId =" <?php echo $prjId?>";
     console.log(prjId)
@@ -230,6 +236,40 @@ window.addEventListener('DOMContentLoaded', function() {
         this.blur();
     });
 });
+        
+ // Function to validate the input year
+function validateYear(year) {
+    // Check if the input is not null or empty
+    if (year.trim() === '') {
+        return false;
+    }
+    // Check if the input is a valid year (e.g., between 1900 and the current year)
+    const currentYear = new Date().getFullYear();
+    const inputYear = parseInt(year);
+    if (isNaN(inputYear) || inputYear < 1900 || inputYear > currentYear) {
+        return false;
+    }
+    return true;
+}
+
+// Function to submit the form
+function submitForm() {
+    // Get the input value
+    const yearInput = document.getElementById('yearInput').value;
+
+    // Validate the input
+    if (!validateYear(yearInput)) {
+        // If the input is invalid, display a SweetAlert
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Year',
+            text: 'Please enter a valid year between 1900 and the current year.',
+        });
+        return false; // Prevent form submission
+    }
+    return true; // Allow form submission
+}
+
 </script>
   </body>
 </html>

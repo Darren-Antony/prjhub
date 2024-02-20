@@ -14,15 +14,21 @@ $prjId = $_GET['prjId'];
     <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
     <link rel="stylesheet" href="../../style/dashboard/stdashboard.css">
     <link rel="stylesheet" href="../../style/dashboard/markDisp.css">
+    <script src="../../script/student/dashboard/dashboard.js"></script>
     <title>dashboard</title>
 </head>
 
 <body>
 <div class="logo-cont">
+    <div class="logo">
     <img src="../../asset/image/Logo.png" alt="" srcset="">
     <h1>Academic Project Tracker</h1>
+    </div>
+    
 </div>
-
+<div class="goback-cont">
+        <button onclick="goBack()">&lt Go Back</button>
+    </div>
 <?php
 // Query to fetch review details
 $ReviewQuery = "SELECT * FROM review WHERE Prj_id= $prjId";
@@ -88,15 +94,11 @@ if ($ReviewRow) {
 </div>
 
 <?php
-    // Display Review 2 details
     ?>
-    <!-- Review 2 -->
 <div class="div-review2">
     <div class="rv-mark">
         <?php
-        // Check if Review 2 mark is available
         if ($ReviewRow['Review2_Mark'] == NULL) {
-            // Check if Review 2 date is available
             if ($ReviewRow['Review2_Date'] == NULL) {
                 echo 'Review 2 date not available';
             } else {
@@ -109,16 +111,13 @@ if ($ReviewRow) {
     </div>
     <div class="rv-date">
         <?php
-        // Check if Review 2 document submission is allowed
         $review2Date = $ReviewRow['Review2_Date'];
         if ($review2Date != NULL) {
             $allowSubmissionDate = date("Y-m-d", strtotime('-1 day', strtotime($review2Date)));
             if ($currentDate >= $allowSubmissionDate) {
                
-                // Check if Review 1 document is submitted
                 if (mysqli_num_rows($RvdocRes2) == 0) {
                     echo "No document submitted for Review 2";
-                    // Add file upload form for Review 1
                     ?>
                     <form action="../../Backend/student/StudentDashboard/upload_review_document.php/" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="prjId" value="<?php echo $prjId; ?>">
@@ -140,15 +139,11 @@ if ($ReviewRow) {
 </div>
 
     <?php
-    // Display Review 3 details
     ?>
-    <!-- Review 3 -->
     <div class="div-review3">
     <div class="rv-mark">
         <?php
-        // Check if Review 2 mark is available
         if ($ReviewRow['Review3_Mark'] == NULL) {
-            // Check if Review 2 date is available
             if ($ReviewRow['Review3_Date'] == NULL) {
                 echo 'Review 3 date not available';
             } else {
@@ -161,16 +156,13 @@ if ($ReviewRow) {
     </div>
     <div class="rv-date">
         <?php
-        // Check if Review 3 document submission is allowed
         $review3Date = $ReviewRow['Review3_Date'];
         if ($review3Date != NULL) {
             $allowSubmissionDate = date("Y-m-d", strtotime('-1 day', strtotime($review3Date)));
             if ($currentDate >= $allowSubmissionDate) {
                
-                // Check if Review 1 document is submitted
                 if (mysqli_num_rows($RvdocRes3) == 0) {
                     echo "No document submitted for Review 3";
-                    // Add file upload form for Review 1
                     ?>
                     <form action="../../Backend/student/StudentDashboard/upload_review_document.php/" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="prjId" value="<?php echo $prjId; ?>">
@@ -192,7 +184,6 @@ if ($ReviewRow) {
 </div>
     <?php
 } else {
-    // Display message if review details are not available
     echo "Review details not available for this project";
 }
 ?>

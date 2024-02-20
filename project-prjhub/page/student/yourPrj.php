@@ -41,7 +41,11 @@ if ($getStuDetailsRes) {
 
 
 // Construct the SQL query with the escaped value
+$slQry2 = "SELECT * FROM student WHERE U_Id = $user_id";
+$slresult2 = mysqli_query($conn, $slQry2) or die(mysqli_error($conn));
 
+$sRow = mysqli_fetch_assoc($slresult2);
+$Stu_Id = $sRow['Dept_No'];
 
 
 
@@ -61,22 +65,33 @@ if ($getStuDetailsRes) {
 </head>
 <body>
    <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+    <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
-        <div class="btn-nav-cont">
-            <?php
+    </div>
+       
+        <div class="right">
+          <div class="nav-btn">
+          <?php
            if ($project['Prj_Status'] == 'In-Progress') {
     ?>
-    <button onclick="timesheetPage(<?php echo $prjId ?>)">
+    <button class="blue-btn" onclick="timesheetPage(<?php echo $prjId ?>)">
         timesheet
     </button>
-    <button onclick="Mark(<?php echo $prjId ?>)">
+    <button class="blue-btn" onclick="Mark(<?php echo $prjId ?>)">
         marks
     </button>
     <?php
 }?>
+          </div>
 
-        </div>
+          
+
+
+    </div>
+    </div>
+    <div class="goback-cont">
+        <button onclick="goBack()">&lt Go Back</button>
     </div>
     <div class="prj-cont">
         <div class="prj-cont-left">
@@ -87,7 +102,7 @@ if ($getStuDetailsRes) {
             </div>
              <div class="prj-cont-left-bottom">
              <?php
-              echo "Project Name: " . $project['Prj_Desc'];
+              echo "Decription:<br> " . $project['Prj_Desc'];
              ?> 
              </div>
         </div>

@@ -12,6 +12,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $projectDescription = $_POST['prj_Desc'];
     $currentDate = date('Y-m-d');
     $currentTime = date('H:i:s');
+    $getGuideUid = "SELECT U_Id FROM guide WHERE Guide_Id = '$guide_Id' ";
+    $getGuideUidRes = mysqli_query($conn, $getGuideUid);
+            $guideUidRow = mysqli_fetch_assoc($getGuideUidRes);
+            $guideUid = $guideUidRow['U_Id'];
+
+            $StuName = "SELECT Stu_Name from student WHERE U_Id = $user_id";
+            $StuNameRes = mysqli_query($conn, $StuName);
+            $Sname = mysqli_fetch_assoc($StuNameRes)['Stu_Name'];
+
+            $message = $Sname.' Added a Project ';
     if (!empty($projectName) && !empty($projectDescription)) {
         $ChkForDupliacte = "SELECT * FROM project WHERE Prj_Name='$projectName' or Prj_Desc='$projectDescription' ";
         $result = mysqli_query($conn,$ChkForDupliacte);
@@ -20,9 +30,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } else {
             $insrtQuery = "INSERT INTO project (Stu_Id,Guide_Id,Prj_Name,Prj_Desc,Prj_Status,Date_of_Submission,Time_of_Submission) VALUES ('$Stu_Id','$guide_Id','$projectName','$projectDescription','Pending-Approval','$currentDate','$currentTime')";
-
+            
             $result =mysqli_query($conn,$insrtQuery);
+          
             if ($result) {
+                $notif = "INSERT INTO notification (Sender_Id,Receiver_Id,Message,Date,Time) VALUES ($user_id,$guideUid,'$message','$currentDate','$currentTime')";
+                $notiRes = mysqli_query($conn, $notif);
                 echo "Project added successfully.";
             } else {
                 echo "Error: " . mysqli_error($conn);
@@ -30,11 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     
     } else {
-        // Handle empty or invalid form data
         echo "Please fill in all fields.";
     }
 } else {
-    // If the request method is not POST, handle accordingly
     echo "Invalid request method.";
 }
 ?>

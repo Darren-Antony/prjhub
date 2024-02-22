@@ -2,6 +2,12 @@
 require_once('../config.php');
 session_start();
 $user_id = $_SESSION['user_id'];
+ 
+$slQry2 = "SELECT * FROM guide WHERE U_Id = $user_id";
+$slresult2 = mysqli_query($conn, $slQry2) or die(mysqli_error($conn));
+
+$sRow = mysqli_fetch_assoc($slresult2);
+$G_Name = $sRow['G_Name'];
 ?>
 
 <!DOCTYPE html>
@@ -14,17 +20,38 @@ $user_id = $_SESSION['user_id'];
     <link rel="stylesheet" href="../../style/form.css">
     <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
     <link rel="stylesheet" href="../../style/dashboard/stdashboard.css">
+    <link rel="stylesheet" href="../../style/dashboard/staffdb.css">
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/staff/dashboard/dashboard.js"></script>
-    
+    <script src="../../script/global.js"></script>
+    <script src="../../dependancies/sweetalert.js"></script>
     <title>dashboard</title>
 </head>
 
 <body >
 <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+    <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
-        <button class='blue-btn' onclick="StudentPage()">Student</button> 
+    </div>
+        
+        <div class="right">
+       <button class='blue-btn' onclick="StudentPage()">Student</button> 
+       
+       <div class="notif-cont">
+         <button onclick="notif()"><img src="../../asset/image/notification.png" ></button>
+       </div>
+       <div class="user-cont">
+         <button class="User" onclick="toggleDropdown()"><img src="../../asset/image/user.png" alt="" srcset=""></button>
+       </div>
+       
+       <div class="dropdown-menu" id="dropdownMenu">
+       <span class="username">Hi <?php echo  $sRow['G_Name']?></span><br>
+            <a href="./StupersonalDetail.php">Personal Details</a><br>
+            <a href="change-password">Change Password</a><br>
+            <a href="#"  onclick="confirmLogout(event)">Logout</a><br>
+        </div>
+    </div>
     </div>
 
 <?php
@@ -44,17 +71,13 @@ if (mysqli_num_rows($stuRes) > 0) {
     while ($stuRow = mysqli_fetch_assoc($stuRes)) {
         echo '<div class="inner-prj-cont">';
         echo $stuRow['Prj_Name']; 
-        
+
         echo '<button class="blue-btn" onclick="viewPrj(' . $stuRow['Prj_Id'] . ')">View</button>';
         echo '</div>';
     }
 } else {
     echo 'No projects found.';
 }
-
-
- 
- 
 ?>
   </div>
  
@@ -62,6 +85,9 @@ if (mysqli_num_rows($stuRes) > 0) {
     function viewPrj(prjId) {
         console.log('Clicked on View button. Project ID:', prjId);
         window.open('../../../../../prjhub/project-prjhub/Backend/staff/viewPrj.php?prjId=' + prjId, '_blank');
+    }
+    function notif(){
+        window.location.href="./staffNotif.php";
     }
 </script>
 

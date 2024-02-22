@@ -15,7 +15,22 @@ $prjId = $_GET['prjId'];
     <link rel="stylesheet" href="../../style/dashboard/stdashboard.css">
     <link rel="stylesheet" href="../../style/dashboard/markDisp.css">
     <script src="../../script/student/dashboard/dashboard.js"></script>
+    <script src="../../script/global.js"></script>
     <title>dashboard</title>
+    <style>
+        #container {
+            margin: 20px;
+            width: 200px;
+            height: 100px;
+        }
+        #fillText {
+            font-family: 'Raleway', Helvetica, sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+    <script src="../../dependancies/progressbar.min.js"></script>
 </head>
 
 <body>
@@ -68,7 +83,12 @@ if ($ReviewRow) {
             
           
         } else {
-            echo 'Review 1 Marks: ' . $ReviewRow['Review1_Mark'];
+            
+            // Assuming you have PHP logic to determine the fill amount, let's say it's stored in a variable called $fillAmount
+            $fillAmount =  $ReviewRow['Review1_Mark'];
+            $maxLimit = 30; // Maximum limit
+            ?><div id="container"></div>
+            <?php
         }
         ?>
     </div>
@@ -188,7 +208,49 @@ if ($ReviewRow) {
 }
 ?>
 
+<script>
+    // PHP Variables
+    var fillAmount = <?php echo json_encode($fillAmount); ?>;
+    
+    var maxLimit = <?php echo json_encode($maxLimit); ?>;
+    console.log(maxLimit);
+    // ProgressBar.js initialization
+    var bar = new ProgressBar.SemiCircle(container, {
+        strokeWidth: 6,
+        color: '#FFEA82',
+        trailColor: '#eee',
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1400,
+        svgStyle: null,
+        text: {
+            value: '',
+            alignToBottom: false
+        },
+        from: {color: '#FFEA82'},
+        to: {color: '#ED6A5A'},
+        // Set default step function for all animate calls
+        step: function (state, bar) {
+            bar.path.setAttribute('stroke', state.color);
+            var value = fillAmount + '/' + 30;
+
+
+            if (value === 0) {
+                bar.setText('');
+            } else {
+                bar.setText(value);
+            }
+            bar.text.style.color = state.color;
+        }
+    });
+
+    bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    bar.text.style.fontSize = '2rem';
+
+    // Animate the progress bar
+    bar.animate(fillAmount / maxLimit);
 </script>
+
 
 </body>
 </html>

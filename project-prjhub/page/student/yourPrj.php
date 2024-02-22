@@ -61,6 +61,7 @@ $Stu_Id = $sRow['Dept_No'];
     <link rel="stylesheet" href="../../style/dashboard/prjviewpage.css">
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/student/dashboard/dashboard.js"></script>
+    <script src="../../script/global.js"></script>
     <title>Login</title>
 </head>
 <body>

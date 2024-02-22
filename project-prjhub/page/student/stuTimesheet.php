@@ -46,6 +46,7 @@
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/student/dashboard/dashboard.js"></script>
     <link rel="stylesheet" href="../../style/dashboard/timsheet.css">
+    <script src="../../script/global.js"></script>
     <title>Login</title>
 </head>
 <body>

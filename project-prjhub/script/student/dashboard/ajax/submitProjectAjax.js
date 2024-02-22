@@ -8,16 +8,29 @@ function submitProject() {
     xhr.onload = function () {
         if (xhr.status === 200) {
             // Handle successful response here
-            alert(xhr.responseText);
-            window.location.reload();
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: xhr.responseText,
+            }).then(() => {
+                window.location.reload();
+            });
         } else {
             // Handle errors here
-            alert('Error: ' + xhr.status);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Error: ' + xhr.status,
+            });
         }
     };
     xhr.onerror = function () {
         // Handle network errors here
-        alert('Network Error');
+        Swal.fire({
+            icon: 'error',
+            title: 'Network Error!',
+            text: 'There was a network error. Please try again later.',
+        });
     };
     xhr.send(formData);
 }

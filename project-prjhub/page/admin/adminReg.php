@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
     <link rel="stylesheet" href="../../style/global.css">
     <link rel="stylesheet" href="../../style/form.css">
-    <link rel="stylesheet" href="../../style/reg.css">
+    <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
+    <script src="../../script/student/dashboard/dashboard.js"></script>
     <script src="../../dependancies/jquery.js"></script>
+    <script src="../../script/student/dashboard/ajax/selectingGuideajax.js"></script>
+    <script src="../../script/student/dashboard/ajax/submitProjectAjax.js"></script>
+    <script src="../../script/global.js"></script>
     <script src="../../dependancies/sweetalert.js"></script>
-    <title>Student Registration</title>
     <script>
           function validateForm() {
             var email = document.getElementById("emailId").value;
             var fullName = document.getElementById("FlName").value;
             var dob = document.getElementById("dob").value;
-            var departmentNumber = document.getElementById("deptNo").value;
             var password = document.getElementById("pwd").value;
             var confirmPassword = document.getElementById("cpwd").value;
 
@@ -49,15 +52,7 @@
                 return false;
             }
 
-            // Department Number validation
-            if (departmentNumber.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing department number!',
-                    text: 'Please enter your department number.'
-                });
-                return false;
-            }
+            
 
             // Password validation
             if (password.trim() === "") {
@@ -93,7 +88,7 @@
     </script>
 </head>
 <body>
-   <div class="logo-cont">
+<div class="logo-cont">
         <img src="../../asset/image/Logo.png" alt="logo" srcset="">
         <h1>Academic Project Tracker</h1>
     </div>
@@ -101,7 +96,7 @@
     <div class="form" id="stdreg">
         <form action="#" method="post" onsubmit="return validateForm()">
             <div class="form-title">
-                <h1>Student Registration Form</h1>
+                <h1>Admin Registration Form</h1>
             </div>
             <div class="form-cont">
                 <label for="FlName">Full Name</label><br>
@@ -113,33 +108,7 @@
                 <label for="dob">Date of Birth</label><br>
                 <input type="date" name="dob" id="dob"><br>
 
-                <label for="deptName">Department Name</label><br>
-                <select name="deptName" id="deptName" >
-                   <option value="Computer Science">Computer Science</option>
-                   <option value="Computer Application">Computer Application</option>  
-                </select><br>
-                <label for="deptNo">Department Number</label><br>
-                <input type="text" name="deptNo" id="deptNo" ><br>
-
-                <label for="curYear">Current Year</label><br>
-                <select id="curYear" name="curYear" >
-                    <option value="1">I</option>
-                    <option value="2">II</option>
-                    <option value="3">III</option>
-                </select><br>
-
-                <label for="degree">Degree</label><br>
-                <select id="degree" name="degree" >
-                    <option value="Bsc">Bsc</option>
-                    <option value="Bca">Bca</option>
-                    <option value="Msc">Msc</option>
-                </select><br>
-
-                <label for="section">Section</label><br>
-                <select id="section" name="section" >
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                </select><br>
+              
 
                 <label for="gender" >Gender</label><br>
                 <select name="gender" id="gender" >
@@ -162,6 +131,7 @@
     </div>
     
 </body>
+
 </html>
 <?php
 require_once('../config.php');
@@ -174,16 +144,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['emailId']);
     $fullName = mysqli_real_escape_string($conn, $_POST['FlName']);
     $date = $_POST['dob'];
-    $departmentName = mysqli_real_escape_string($conn, $_POST['deptName']);
-    $departmentNumber = mysqli_real_escape_string($conn, $_POST['deptNo']);
-    $currentYear = mysqli_real_escape_string($conn, $_POST['curYear']);
-    $degree = mysqli_real_escape_string($conn, $_POST['degree']);
-    $section = mysqli_real_escape_string($conn, $_POST['section']);
     $gender = mysqli_real_escape_string($conn,$_POST['gender']);
     $password = mysqli_real_escape_string($conn, $_POST['pwd']);
     $confirmPassword = mysqli_real_escape_string($conn, $_POST['cpwd']);
     
-    $emailQuery = "SELECT * FROM user_credentials WHERE Email = '$email' and User_Type='Student'";
+    $emailQuery = "SELECT * FROM user_credentials WHERE Email = '$email' and User_Type='Admin'";
     $emailResult = mysqli_query($conn, $emailQuery);
     if (mysqli_num_rows($emailResult) > 0) {
         echo"<script>Swal.fire({
@@ -203,12 +168,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $insrtQry = "INSERT INTO user_credentials (Email, Password, User_Type, `D.O.B`) VALUES ('$email', '$hashedPassword', 'student', '$date')";
+    $insrtQry = "INSERT INTO user_credentials (Email, Password, User_Type, `D.O.B`) VALUES ('$email', '$hashedPassword', 'Admin';, '$date')";
 
     if (mysqli_query($conn, $insrtQry)) {
       $user_id = mysqli_insert_id($conn);
-      $sql = "INSERT INTO student (U_Id, Dept_No,Stu_Name,Dept_Name,Cur_Year,Section,Degree,Gender)
-              VALUES ('$user_id','$departmentNumber','$fullName','$departmentName','$currentYear','$section', '$degree','$gender')";
+      $sql = "INSERT INTO Admin (U_Id, AD_Name)
+              VALUES ('$user_id','$fullName')";
 
 if (mysqli_query($conn, $sql)) {
     echo '<script>
@@ -229,4 +194,3 @@ if (mysqli_query($conn, $sql)) {
 
 mysqli_close($conn);
 } 
-?>

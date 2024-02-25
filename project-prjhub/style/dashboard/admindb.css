@@ -1,0 +1,40 @@
+.action-duo,.action-trio{
+    display: flex;
+     margin:10px 0px 0px 0px;
+    
+}
+
+.action img{
+    width:500px;
+    margin: 0px 0px 0px 30px;
+    border-radius: 20px;
+}
+
+.action-cont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form-cont,.searchBar-cont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+form{
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4);
+    padding: 20px;
+}
+
+.example-cont{
+    margin: 10px 0px 10px 300px;
+}
+.det_card{
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4);
+     padding: 20px;
+     border-radius: 10px;
+}

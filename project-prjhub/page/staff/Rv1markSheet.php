@@ -55,24 +55,60 @@ $review_No=$_GET['review_number'];
                 <th>Mark</th>
             </tr>
             <tr>
-                <td>Clarity and Coherence</td>
-                <td>Clear and concise articulation of project objectives and outcomes. Logical flow and organization of the document sections. Effective use of language and terminology.</td>
-                <td>10</td>
-                <td>2 (Poor organization, grammatical errors, lack of clarity)</td>
-                <td><input type="number" name="clarity_mark" min="0" max="10" onchange="updateTotalMarks()" tabindex="1"></td>
+                <td>Abstarct</td>
+                <td>Clearly and concisely summarizes the key points of the document.</td>
+                <td><b>1 Marks</b><br>(Briefly mentions key points, but lacks clarity or conciseness)</td>
+                <td><b>4 Marks</b><br>Concisely and accurately summarizes the document's essence, engaging the reader.</td>
+                <td><input type="number" name="abstract_mark" min="0" max="10" onchange="updateTotalMarks()" tabindex="1"></td>
             </tr>
             <tr>
-                 <td>Problem Definition and Justification</td>
-                 <td>Clear definition of the problem statement with justification of its relevance. Understanding of the problem's context.</td>
-                 <td>8</td>
-                <td>2 (Vague problem statement, lack of justification, lack of context)</td>
-                <td><input type="number" name="ProDef_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="2"></td>
+                 <td>Introduction</td>
+                 <td>States the purpose, provides background information, and introduces key concepts.</td>
+                 <td><b>2 Marks</b><br>Briefly states the purpose, but lacks background or key concepts.</td>
+                <td><b>5 Marks</b><br>Clearly states the purpose, provides relevant background, and introduces key concepts with depth.</td>
+                <td><input type="number" name="Introduction_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="2"></td>
             </tr>
             <tr>
-                <td>Proposed Solution</td>
-                <td>Well-defined solution addressing the problem, describing functionality and potential impact, highlighting innovation if applicable.</td>
-                <td>8</td>
-                <td>2 (Lack of detail, failure to address the problem adequately)</td>
+                <td>System Analysis</td>
+                <td>Clearly defines the problem, analyzes the existing system, and proposes a new system that meets the requirements.</td>
+                <td><b>4 Marks</b><br>(Vaguely defines the problem, lacks analysis, and proposes a basic solution with unclear requirements.)</td>
+                <td><b>7 Marks</b><br>(Clearly defines the problem, thoroughly analyzes the existing system, and proposes a well-defined, effective solution that meets all requirements.)</td>
+                <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
+            </tr>
+            <tr>
+                <td>System Design</td>
+                <td>Describes the architecture of the system, including hardware, software, and database design.</td>
+                <td><b>4 Marks</b><br>Basic overview of system architecture, but lacks details or clarity.</td>
+                <td><b>7 Marks</b><br>(Detailed and well-explained system architecture with clear descriptions of hardware, software, and database design choices.
+                               )</td>
+                <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
+            </tr>
+            <tr>
+                <td>Project Description	</td>
+                <td>Clearly describes the implementation of the project, including the GUI design, testing procedures, and expected outcomes</td>
+                <td><b>4 Marks</b><br>Brief overview of implementation, with unclear descriptions of GUI, testing, or outcomes.</td>
+                <td><b>7 Marks</b><br>(Detailed description of implementation, including GUI design rationale, thorough testing procedures, and well-defined expected outcomes.)</td>
+                <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
+            </tr>
+            <tr>
+                <td>Additional Features	</td>
+                <td>Identifies and implements additional features that enhance the project's functionality (e.g., security, scalability, maintainability).</td>
+                <td><b>0 Marks</b><br>No additional features identified or implemented.</td>
+                <td><b>2 Marks</b><br>Identifies and implements several valuable features that significantly enhance the project's functionality and user experience.</td>
+                <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
+            </tr>
+            <tr>
+                <td>Documentation	</td>
+                <td>Clear, concise, and well-organized documentation (e.g., user manual, technical documentation).</td>
+                <td><b>1 Marks</b><br> Minimal documentation, poorly organized, or unclear instructions..</td>
+                <td><b>3 Marks</b><br>Comprehensive, well-organized documentation with clear instructions, examples, and relevant information for users and developers.</td>
+                <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
+            </tr>
+            <tr>
+                <td>Presentation	</td>
+                <td>Compelling and informative presentation of the project (if applicable).</td>
+                <td><b>0 Marks</b><br>No presentation, or poorly delivered presentation lacking clarity or engagement.</td>
+                <td><b>3 Marks</b><br>Engaging and informative presentation that clearly conveys the project's key points, objectives, and impact.</td>
                 <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
         </table>
@@ -83,7 +119,7 @@ $review_No=$_GET['review_number'];
         <input type="text" name="review_id" value="<?php echo $review_Id?>">
         <input type="text" name="review_No" value="<?php echo $review_No?>">
         <input type="text" name="total_marks" id="totalMarksInput" value="0">
-       <textarea name="feedback" id="" cols="30" rows="10"></textarea>
+       <textarea name="feedback" id="" cols="30" rows="10" required></textarea>
         <button type="submit" id="submitButton" >Submit</button>
     </form>
 

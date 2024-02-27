@@ -68,7 +68,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
                 $_SESSION['email'] = $result['Email'];
         ?>
         <?php
-                header("Location: studashboard.php");
+               echo "<script>
+               Swal.fire({
+                   icon: 'success',
+                   title: '',
+                   text: 'Login Sucessful',
+               }).then(() => {
+                   window.location.href = './Studashboard.php'; // Redirect to the same page with the department number
+               });
+           </script>";
                 exit(); // Ensure that subsequent code is not executed after redirection
             } else {
                 echo "Invalid credentials"; // Notify invalid credentials

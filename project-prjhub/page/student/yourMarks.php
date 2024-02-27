@@ -84,6 +84,9 @@ if ($ReviewRow) {
     </div>
     <div class="rv-date">
            <?php
+            $review2Date = $ReviewRow['Review2_Date'];
+            if ($review2Date != NULL) {
+              
             if (mysqli_num_rows($RvdocRes1) == 0) {
                 echo "No document submitted for Review 1";
                 ?>
@@ -97,7 +100,9 @@ if ($ReviewRow) {
                 <?php
             } else {
                 echo "Document submitted for Review 1";
-            }?>
+            }
+        }?>
+            
     </div>
 </div>
 

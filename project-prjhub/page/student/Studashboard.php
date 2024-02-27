@@ -34,7 +34,8 @@
     </div>
     <div class="right">
     <div class="notif-cont">
-        <button ><img src="../../asset/image/notification.png" alt=""></button>
+        
+        <button onclick="notif()"><img src="../../asset/image/notification.png" alt=""></button>
        </div>
        <div class="user-cont">
         <button class="User" onclick="toggleDropdown()"><img src="../../asset/image/user.png" alt="" srcset=""></button>
@@ -109,7 +110,6 @@ if (mysqli_num_rows($slresult1) >0) {
     }
 
 } elseif (mysqli_num_rows($ChkPrjQryRes)>0) {
-    // Display projects for the student
     echo '<h1 class="heading">Your Projects</h1>';
     
     echo '<div class="main-prj-cont">';
@@ -130,7 +130,6 @@ if (mysqli_num_rows($slresult1) >0) {
     echo '</div>';
 
 } else {
-    // Display project submission form
     echo '<div class="form">';
     echo '<form id="projectForm" action="#" method="post">';
     echo '<div class="form-cont">';

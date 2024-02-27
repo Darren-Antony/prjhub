@@ -20,40 +20,7 @@ $prjId = $_GET['prjId'];
 
     <title>dashboard</title>
     <style>
-        .progress-circle {
-            width: 100px;
-            height: 100px;
-            position: relative;
-            border-radius: 50%;
-            background-color: #f3f3f3;
-            overflow: hidden; 
-        }
-
-.progress {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  clip: rect(0, 50px, 100px, 0);
-  border-radius: 50%;
-  background-color: #007bff;
-  transform-origin: center;
-  animation: fillAnimation 2s ease forwards;
-}
-
-@keyframes fillAnimation {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: Arial, sans-serif;
-  font-size: 18px;
-  color: #333;
-}
+       
 
     </style>
 </head>
@@ -115,22 +82,19 @@ if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) 
 ?>
 <div class="mark-cont">
 <div class="div-review1">
+
     <div class="rv-mark">
         <?php
         if ($ReviewRow['Review1_Mark'] == NULL) {
             if ($ReviewRow['Review1_Date'] == NULL) {
                 echo 'Enter a date for review';
             } else if (mysqli_num_rows($RvdocRes1) == 0) {
-                echo "No document submitted yet";
+                echo "No document submitted yet <br>";
             } else {
                 echo '<button onclick="sendReviewId(' . $Rv_Id . ',1)">Enter Marks</button>';            }
         } else {
-            // echo'Review 1 Mark:'." ".$ReviewRow['Review1_Mark'].'/30';
             ?>
-           <div class="progress-circle">
-                <div class="progress" style="transform: rotate(<?php echo ($ReviewRow['Review1_Mark'] / 30 * 360); ?>deg);"></div>
-                <div class="text"><?php echo $ReviewRow['Review1_Mark']; ?>/30</div>
-            </div>
+           
             <?php
         }
         ?>

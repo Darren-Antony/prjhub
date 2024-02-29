@@ -129,24 +129,54 @@ if (mysqli_num_rows($slresult1) >0) {
     }
     echo '</div>';
 
-} else {
-    echo '<div class="form">';
-    echo '<form id="projectForm" action="#" method="post">';
+}  else{   echo '<div class="form">';
+    echo '<form id="projectForm" action="#" >';
     echo '<div class="form-cont">';
     echo '<label for="prjName">Project Name</label><br>';
-    echo '<input type="text" name="prjName" id="prjName"><br>';
+    echo '<input type="text" name="prjName" id="prjName"><span id="charCount">0/50</span><br>';
     echo '<label for="prj-desc">Description</label><br>';
-    echo '<textarea name="prj_Desc" id="prj-desc" cols="40" rows="10"></textarea><br>';
-    echo '<button class="blue-btn" onclick="submitProject()">Submit</button>';
+    echo '<textarea name="prj_Desc" id="prj-desc" cols="40" rows="10"></textarea><span id="descCharCount">0/1500</span><br>';
+    echo '<button class="blue-btn" >Submit</button>';
     echo '</div>';
     echo '</form>';
     echo '</div>';
 }
+
 ?>
+<script>
+    // Function to update character count and disable input if maximum limit is reached
+    function updateCharCount(inputElement, countElement, maxChars) {
+        var charCount = inputElement.value.length;
+        countElement.textContent = charCount + '/' + maxChars;
 
+        // Prevent further input beyond the maximum character limit
+        if (charCount >= maxChars) {
+            inputElement.value = inputElement.value.slice(0, maxChars-1);
+        }
+    }
 
+    // Character counter for project name input
+    var projectNameInput = document.getElementById('prjName');
+    var projectNameCount = document.getElementById('charCount');
+    projectNameInput.addEventListener('input', function() {
+        updateCharCount(projectNameInput, projectNameCount, 50);
+    });
 
-  
+    // Character counter for project description input
+    var projectDescInput = document.getElementById('prj-desc');
+    var projectDescCount = document.getElementById('descCharCount');
+    projectDescInput.addEventListener('input', function() {
+        updateCharCount(projectDescInput, projectDescCount, 1500);
+    });
+
+    document.getElementById('projectForm').addEventListener('submit', function(event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        // Call your custom function to handle the submission
+        submitProject();
+    });
+</script>
 
 
 </script>

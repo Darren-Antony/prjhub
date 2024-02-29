@@ -1,26 +1,57 @@
 function submitProject() {
-    // Get form data
+    var projectName = document.getElementById('prjName').value;
+    var projectDesc = document.getElementById('prj-desc').value;
+
+    // Validate project name and description
+    if (projectName.trim() === '' || projectDesc.trim() === '') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please enter a project name and description!'
+        });
+        return; // Prevent form submission if validation fails
+    }
+
+    // Proceed with form submission if validation passes
     var formData = new FormData(document.getElementById('projectForm'));
 
-    // Make AJAX call
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '../../Backend/student/StudentDashboard/handle_prj_sub.php', true);
     xhr.onload = function () {
         if (xhr.status === 200) {
             // Handle successful response here
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: xhr.responseText,
-            }).then(() => {
-                window.location.reload();
-            });
+            var response = xhr.responseText;
+            if (response.startsWith('Error')) {
+                // Display error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: response
+                });
+            } else {
+                // Display success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response,
+                }).then(() => {
+                    if (!localStorage.getItem('pageRefreshed')) {
+                        // Set the flag in localStorage to indicate the page has been refreshed
+                        localStorage.setItem('pageRefreshed', 'true');
+                        // Refresh the page
+                        location.reload();
+                    } else {
+                        // Clear the flag so that the page behaves normally on subsequent loads
+                        localStorage.removeItem('pageRefreshed');
+                    }
+                });
+            }
         } else {
-            // Handle errors here
+            // Handle server errors
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
-                text: 'Error: ' + xhr.status,
+                text: 'Server error: ' + xhr.status
             });
         }
     };

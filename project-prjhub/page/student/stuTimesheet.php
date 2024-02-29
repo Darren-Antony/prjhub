@@ -47,6 +47,7 @@
     <script src="../../script/student/dashboard/dashboard.js"></script>
     <link rel="stylesheet" href="../../style/dashboard/timsheet.css">
     <script src="../../script/global.js"></script>
+    <script src="../../dependancies/sweetalert.js"></script>
     <title>Login</title>
 </head>
 <body>
@@ -198,78 +199,56 @@ echo'<div class="main-tms-cont">';
 
 
 
-// Function to get the starting date of the current week (Monday)
 function getStartOfWeek(date) {
-    const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-    return new Date(date.setDate(diff));
-}
-
-window.addEventListener('DOMContentLoaded', function() {
-    const datePicker = document.getElementById('weekStartDatePicker');
-    const today = new Date();
-    const startOfWeek = getStartOfWeek(today);
-    datePicker.valueAsDate = startOfWeek;
-
-    // Display timesheet data for the current date by default
-    const formattedCurrentDate = today.toISOString().split('T')[0];
-    displayTimesheetData(formattedCurrentDate, prjId);
-
-    datePicker.addEventListener('change', function() {
-        const selectedDate = new Date(this.value);
-        const formattedDate = selectedDate.toISOString().split('T')[0];
-        displayTimesheetData(formattedDate, prjId);
-        console.log('test2',prjId)
-    });
-
-    datePicker.addEventListener('keydown', function(e) {
-        // Prevent manual input
-        e.preventDefault();
-    });
-
-    datePicker.addEventListener('click', function(e) {
-        // Prevent manual input via calendar
-        this.blur();
-    });
-
-    datePicker.addEventListener('focus', function() {
-        // Prevent manual input via calendar
-        this.blur();
-    });
-});
-        
- // Function to validate the input year
-function validateYear(year) {
-    // Check if the input is not null or empty
-    if (year.trim() === '') {
-        return false;
+        const day = date.getDay();
+        const diff = date.getDate() - day + (day === 1 ? 0 : (day === 0 ? -6 : 1)); // Adjust when day is Sunday
+        return new Date(date.setDate(diff));
     }
-    // Check if the input is a valid year (e.g., between 1900 and the current year)
-    const currentYear = new Date().getFullYear();
-    const inputYear = parseInt(year);
-    if (isNaN(inputYear) || inputYear < 1900 || inputYear > currentYear) {
-        return false;
-    }
-    return true;
-}
 
-// Function to submit the form
-function submitForm() {
-    // Get the input value
-    const yearInput = document.getElementById('yearInput').value;
+    window.addEventListener('DOMContentLoaded', function() {
+        const datePicker = document.getElementById('weekStartDatePicker');
+        const today = new Date();
+        const startOfWeek = getStartOfWeek(today);
+        datePicker.valueAsDate = startOfWeek;
 
-    // Validate the input
-    if (!validateYear(yearInput)) {
-        // If the input is invalid, display a SweetAlert
-        Swal.fire({
-            icon: 'error',
-            title: 'Invalid Year',
-            text: 'Please enter a valid year between 1900 and the current year.',
+        // Display timesheet data for the current date by default
+        const formattedCurrentDate = today.toISOString().split('T')[0];
+        displayTimesheetData(formattedCurrentDate, prjId);
+
+        datePicker.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const formattedDate = selectedDate.toISOString().split('T')[0];
+            displayTimesheetData(formattedDate, prjId);
         });
-        return false; // Prevent form submission
-    }
-    return true; // Allow form submission
-}
+
+        datePicker.addEventListener('keydown', function(e) {
+            // Prevent manual input
+            e.preventDefault();
+        });
+
+        datePicker.addEventListener('click', function(e) {
+            // Prevent manual input via calendar
+            this.blur();
+        });
+
+        datePicker.addEventListener('focus', function() {
+            // Prevent manual input via calendar
+            this.blur();
+        });
+
+        // Disable dates other than Mondays
+        datePicker.addEventListener('input', function() {
+            const selectedDate = new Date(this.value);
+            if (selectedDate.getDay() !== 1) { // Monday is 1
+                this.value = ''; // Clear non-Monday selections
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please select a Monday to view the entire week\'s timesheet!',
+                });
+            }
+        });
+    });
 
 </script>
   </body>

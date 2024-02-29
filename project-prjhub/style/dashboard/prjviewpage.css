@@ -8,11 +8,20 @@
     box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4);
 
 }
-.prj-cont-left-bottom{
+.prj-cont-left-bottom {
     margin: 20px 0px 0px 0px;
     font-size: 1.1em;
-    height: 200px;
+    max-height: 200px; /* Set the maximum height of the container */
+    overflow-y: scroll; /* Enable vertical scrollbar when content overflows */
 }
+
+.prj-cont-left-bottom * {
+    /* Apply styles to all nested elements */
+    max-width: 100%; /* Ensure nested elements do not exceed the width of the container */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
 
 .prj-cont-left-top,.prj-cont-left-bottom{
     width:900px;

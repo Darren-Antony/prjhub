@@ -50,14 +50,17 @@
             }
 
             // Department Number validation
-            if (departmentNumber.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing department number!',
-                    text: 'Please enter your department number.'
-                });
-                return false;
-            }
+            // Department Number validation
+var departmentNumberPattern = /^\d{2}-[a-zA-Z]{3}-\d{3}$/;
+if (!departmentNumberPattern.test(departmentNumber.trim())) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Invalid department number!',
+        text: 'Please enter a valid department number in the format 21-ucs-108.'
+    });
+    return false;
+}
+
 
             // Password validation
             if (password.trim() === "") {
@@ -94,8 +97,11 @@
 </head>
 <body>
    <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="logo" srcset="">
+    <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="logo" srcset="">
         <h1>Academic Project Tracker</h1>
+    </div>
+        
     </div>
     
     <div class="form" id="stdreg">

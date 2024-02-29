@@ -46,6 +46,7 @@ if ($getStuDetailsRes) {
     <link rel="stylesheet" href="../../style/dashboard/prjviewpage.css">
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../script/staff/dashboard/dashboard.js"></script>
+    <script src="../../dependancies/sweetalert.js"></script>
     <title>Login</title>
 </head>
 <body>
@@ -266,42 +267,79 @@ while ($commentRow = mysqli_fetch_assoc($getCommentsResult)) {
         
     function acceptProject() {
        
+        if (!localStorage.getItem('pageRefreshed')) {
         $.ajax({
             url: 'update_status.php',
             method: 'POST',
             data: { project_id: <?php echo $project['Prj_Id']; ?>, status: 'In-Progress' },
             success: function(response) {
-                // Handle success response
-                console.log(response);
+                Swal.fire({
+                    icon: 'success',
+                    title: '',
+                    text: 'Project Approved ',
+                }).then(() => {
+                    // Set the flag in localStorage to indicate the page has been refreshed
+                    localStorage.setItem('pageRefreshed', 'true');
+                    // Refresh the page
+                    location.reload();
+                });
             },
             error: function(xhr, status, error) {
                 // Handle error
                 console.error(error);
             }
         });
+    } else {
+        // If the page has already been refreshed, do nothing
+        console.log('Page already refreshed');
+    }
     }
 
     function rejectProject() {
-        var reason = prompt("Please enter a valid reason for rejecting the project:");
-        if (reason != null && reason.trim() != "") {
-            console.log(reason);
+    Swal.fire({
+        title: 'Enter Reason for Rejection',
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: 'Reject',
+        cancelButtonText: 'Cancel',
+        inputValidator: (value) => {
+            if (!value.trim()) {
+                return 'Please enter a valid reason';
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User confirmed the rejection with a reason
+            const reason = result.value.trim();
             $.ajax({
                 url: 'update_status.php',
                 method: 'POST',
                 data: { project_id: <?php echo $project['Prj_Id']; ?>, status: 'rejected', reason: reason },
                 success: function(response) {
-                   
                     console.log(response);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '',
+                        text: 'Project Rejected',
+                    }).then(() => {
+                        // Refresh the page after rejection
+                        location.reload();
+                    });
                 },
                 error: function(xhr, status, error) {
-                    
                     console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while rejecting the project',
+                    });
                 }
             });
-        } else {
-            alert("Please provide a valid reason for rejecting the project.");
         }
-    }
+    });
+}
+x`
+
 </script>
 </body>
 </html>

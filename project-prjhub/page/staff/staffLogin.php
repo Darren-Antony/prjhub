@@ -49,17 +49,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
         $result = mysqli_query($conn, $lgnQry);
 
         if (!$result) {
-            throw new Exception(mysqli_error($conn)); // Throw exception if query execution fails
+            throw new Exception(mysqli_error($conn)); 
         }
 
-        $result = mysqli_fetch_assoc($result); // Fetching the row directly
+        $result = mysqli_fetch_assoc($result); 
         if (!$result) {
-            // echo "User doesn't exist"; // Notify if user doesn't exist
+            
         } else {
-            $pwd = $result['Password']; // Corrected variable name
+            $pwd = $result['Password']; 
         
             if (password_verify($Pwd, $pwd)) {
-                // Start a session
+                
                 session_start();
         
                 // Store user information in session variables

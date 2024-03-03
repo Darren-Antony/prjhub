@@ -14,3 +14,7 @@ function Mark(prjId){
     window.location.href ='../student/yourMarks.php?prjId=' + prjId;
 }
 
+function notif(){
+    window.location.href ='./studentnotif.php';
+
+}

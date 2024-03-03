@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once('../config.php');
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['suser_id'];
 $prjId = $_GET['prjId'];
 ?>
 <!DOCTYPE html>
@@ -11,17 +11,28 @@ $prjId = $_GET['prjId'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style/global.css">
-    <link rel="stylesheet" href="../../style/form.css">
+   
     <link rel="stylesheet" href="../../style/dashboard/dashboard.css">
     <link rel="stylesheet" href="../../style/dashboard/stdashboard.css">
     <script src="../../dependancies/jquery.js"></script>
-     <script src="../../script/staff/marks/setreviewdoc.js"></script>
      <link rel="stylesheet" href="../../style/dashboard/markDisp.css">
-
+    <script src="../../dependancies/progressbar.min.js"></script>
     <title>dashboard</title>
     <style>
        
-
+       #container {
+          margin: 20px;
+          width: 200px;
+          height: 200px;
+          position: relative;
+        }
+       
+        .containerc {
+            margin: 20px;
+            width: 200px;
+            height: 100px;
+            
+        }   
     </style>
 </head>
 
@@ -63,10 +74,7 @@ if (!$RvdocRes3) {
     exit; 
 }
 
-$oneMonthAfterReview1 = null;
-$currentDate = null;
-$oneMonthAfterReview2 = null;
-$oneMonthAfterReview2 = null;   
+  
 if ($ReviewRow['Review1_Mark'] !== NULL && $ReviewRow['Review1_Date'] !== NULL) {
     $review1Date = strtotime($ReviewRow['Review1_Date']);
     $oneMonthAfterReview1 = strtotime('+1 month', $review1Date);
@@ -79,31 +87,114 @@ if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) 
     $currentDate = time();
     
 }
+$ReviewQuery = "SELECT * FROM review WHERE Prj_id= $prjId";
+$ReviewRes = mysqli_query($conn, $ReviewQuery);
+$ReviewRow = mysqli_fetch_assoc($ReviewRes);
+
+if ($ReviewRow) {
+    $Rv_Id = $ReviewRow['Review_Id'];
+    $RvdocQuery1 = "SELECT * FROM review_doc WHERE rv_Id=$Rv_Id and review_no=1";
+    $RvdocRes1 = mysqli_query($conn, $RvdocQuery1);
+   
+    $RvdocQuery2 = "SELECT * FROM review_doc WHERE rv_Id=$Rv_Id and review_no=2";
+    $RvdocRes2 = mysqli_query($conn, $RvdocQuery2);
+
+    $RvdocQuery3 = "SELECT * FROM review_doc WHERE rv_Id=$Rv_Id and review_no=3";
+    $RvdocRes3 = mysqli_query($conn, $RvdocQuery3);
+
+    $currentDate = date("Y-m-d");
+}
 ?>
+<div class="metadata">
+    <div class="data-left">
+        <?php
+           $sql = "SELECT 
+           SUM(CASE WHEN Review1_Date IS NOT NULL AND Review1_Mark IS NOT NULL THEN 1 ELSE 0 END) AS review1_completed,
+           SUM(CASE WHEN Review2_Date IS NOT NULL AND Review2_Mark IS NOT NULL THEN 1 ELSE 0 END) AS review2_completed,
+           SUM(CASE WHEN Review3_Date IS NOT NULL AND Review3_Mark IS NOT NULL THEN 1 ELSE 0 END) AS review3_completed
+       FROM review WHERE Prj_Id = $prjId";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+   $row = mysqli_fetch_assoc($result);
+
+   $total_completed_reviews = $row['review1_completed'] + $row['review2_completed'] + $row['review3_completed'];
+
+} else {
+   echo "Error executing the query: " . mysqli_error($conn);
+}
+$sql = "SELECT COUNT(*) AS document_count FROM review_doc WHERE Prj_Id= $prjId";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+
+    $total_submitted_doc=$row['document_count'];
+} else {
+    echo "Error executing the query: " . mysqli_error($conn);
+}
+
+
+        ?>
+
+        <div class="top">
+        <h1>Mark Details</h1>
+        </div>
+        <div class="bottom">
+        <h3>No of review completed:<?php echo $total_completed_reviews."/3"?></h3>
+        <h3>No of Documents Submitted<?php echo $total_submitted_doc."/3"?></h3>
+        
+        </div>
+       
+    </div>
+    <div class="data-right">
+    <?php
+$sql = "SELECT COALESCE(Review1_Mark, 0) + COALESCE(Review2_Mark, 0) + COALESCE(Review3_Mark, 0) AS total_marks FROM review WHERE Prj_Id = $prjId";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $marks = $row['total_marks'];
+} else {
+    echo "Error executing the query: " . mysqli_error($conn);
+}
+?>
+
+     <div id="container"></div>
+    </div>
+</div>
 <div class="mark-cont">
 <div class="div-review1">
-
+     <div class="inner-rv">
     <div class="rv-mark">
         <?php
         if ($ReviewRow['Review1_Mark'] == NULL) {
+            $fillAmount1= 0;
+            $maxLimit1 = 30;
+            ?><div class="containerc" id="container1"></div><?php
             if ($ReviewRow['Review1_Date'] == NULL) {
-                echo 'Enter a date for review';
+                echo 'Enter a date for review1';
             } else if (mysqli_num_rows($RvdocRes1) == 0) {
-                echo "No document submitted yet <br>";
+                echo '<span class="nodoc" >No document submitted yet</span><br>';
             } else {
-                echo '<button onclick="sendReviewId(' . $Rv_Id . ',1)">Enter Marks</button>';            }
+                echo '<button onclick="sendReviewId(' . $Rv_Id . ',1)">Enter Marks</button>';
+            }
+            
         } else {
-            ?>
-           
-            <?php
-        }
-        ?>
+            $fillAmount1 =   $ReviewRow['Review1_Mark'];
+            $maxLimit1 = 30;
+            ?><div class="containerc" id="container1"></div>       <?php }?>
+    
+    
     </div>
     <div class="rv-date">
         <?php
         if ($ReviewRow['Review1_Date'] == NULL) {
          
-            echo '<input type="date">';
+            echo '<input type="date"><br>';
             ?>
             <button onclick="confirmDate(1)">Confirm Date</button>
             <?php
@@ -114,26 +205,30 @@ if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) 
         }
         ?>
     </div>
+    </div>
 </div>
 
 <div class="div-review2">
     <div class="rv-mark">
         <?php
-        if ($ReviewRow['Review1_Mark'] !== NULL && $ReviewRow['Review1_Date'] !== NULL) {
-            if ($oneMonthAfterReview1 !== null && $currentDate !== null) {
-                if ($currentDate >= $oneMonthAfterReview1) {
+        
                   
                     if ($ReviewRow['Review2_Mark'] == NULL) {
+                        $fillAmount2 = 0;
+                        $maxLimit2 = 30;
+                        ?><div class="containerc" id="container2"></div><?php
                         if ($ReviewRow['Review2_Date'] == NULL) {
                             echo 'Enter a date for review';
                         } else if (mysqli_num_rows($RvdocRes2) == 0) {
                             echo "No document submitted yet";
                         } else {
-                            echo '<button onclick="sendReviewId(' . $Rv_Id . ',2)">Enter Marks</button>';            }
+                            echo '<button onclick="sendReviewId(' . $Rv_Id . ',2)">Enter Marks</button>';           
+                         }
                     } else {
-                        echo $ReviewRow['Review2_Mark'];
-                    }
-                    ?><div class="rv-date">
+                        $fillAmount2 =   $ReviewRow['Review2_Mark'];
+                        $maxLimit2 = 30;
+                        ?><div class="containerc" id="container2"></div>       <?php }?>                    
+                    <div class="rv-date">
                     <?php
                     if ($ReviewRow['Review2_Date'] == NULL && $oneMonthAfterReview1 !== null && $currentDate !== null && $currentDate >= $oneMonthAfterReview1) {
                         echo '<input type="date">';
@@ -147,14 +242,9 @@ if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) 
                     }
                  ?>
                 </div><?php
-                } else {
-                    echo "Review 2 cannot be scheduled yet";
-                }
-            }
-        }
-        else {
-            echo "Review 1 needs to be completed first";
-        }
+            
+        
+      
         ?>
 
    
@@ -163,10 +253,12 @@ if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) 
 <div class="div-review3">
     <div class="rv-mark">
         <?php
-        if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) {
-            if ($oneMonthAfterReview2 !== null && $currentDate !== null) {
-                if ($currentDate >= $oneMonthAfterReview2) {
+        
+         
                     if ($ReviewRow['Review3_Mark'] == NULL) {
+                        $fillAmount3 =  0;
+                        $maxLimit3 = 40;
+                        ?><div class="containerc" id="container3"></div><?php
                         if ($ReviewRow['Review3_Date'] == NULL) {
                             echo 'Enter a date for review';
                         } else if (mysqli_num_rows($RvdocRes3) == 0) {
@@ -174,11 +266,11 @@ if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) 
                         } else {
                             echo '<button onclick="sendReviewId(' . $Rv_Id . ',3)">Enter Marks</button>';            }
                     } else {
-                        echo $ReviewRow['Review3_Mark'];
-                    }
-                    ?><div class="rv-date">
+                        $fillAmount3 =  $ReviewRow['Review3_Mark'];
+                        $maxLimit3 = 30;
+                        ?><div class="containerc" id="container3"></div>       <?php }?>                    
                     <?php
-                    if ($ReviewRow['Review3_Date'] == NULL && $oneMonthAfterReview2 !== null && $currentDate !== null && $currentDate >= $oneMonthAfterReview2) {
+                    if ($ReviewRow['Review3_Date'] == NULL ) {
                         echo '<input type="date">';
                         ?>
                         <button onclick="confirmDate(3)">Confirm Date</button>
@@ -191,22 +283,49 @@ if ($ReviewRow['Review2_Mark'] !== NULL && $ReviewRow['Review2_Date'] !== NULL) 
                  ?>
                 </div><?php
               
-                } else {
-                    echo "Review 3 cannot be scheduled yet";
-                }
-            }
-        } else {
-            echo "Review 2 needs to be completed first";
-        }
+             
         ?>
     </div>
    
 </div>
 </div>
 <script>
+var totalMarks = 100; 
+var obtainedMarks = <?php echo $marks; ?>;  
+console.log(obtainedMarks);
+var progressValue = obtainedMarks / totalMarks;
+
+var bar = new ProgressBar.Circle(container, {
+  color: '#aaa',
+  strokeWidth: 4,
+  trailWidth: 1,
+  easing: 'easeInOut',
+  duration: 1400,
+  text: {
+    autoStyleContainer: false
+  },
+  from: { color: '#aaa', width: 1 },
+  to: { color: '#333', width: 4 },
+  step: function(state, circle) {
+    circle.path.setAttribute('stroke', state.color);
+    circle.path.setAttribute('stroke-width', state.width);
+
+    var value = obtainedMarks + '/' + totalMarks;;
+   
+      circle.setText(value);
+  
+  }
+});
+
+bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+bar.text.style.fontSize = '2rem';
+
+bar.animate(progressValue);
+
      function sendReviewId(reviewId, reviewNumber) {
         window.location.href = '../staff/markInstruction.php?review_id=' + reviewId + '&review_number=' + reviewNumber;
     }
+
 function confirmDate(reviewNumber) {
     var reviewID = <?php echo $ReviewRow['Review_Id']; ?>;
     var Prj_ID = <?php echo $prjId?>;
@@ -232,8 +351,119 @@ function confirmDate(reviewNumber) {
     });
 }
 
+   var fillAmount1 = <?php echo json_encode($fillAmount1); ?>;
+    
+    var maxLimit1 = <?php echo json_encode($maxLimit1); ?>;
+    
+    var bar = new ProgressBar.SemiCircle(container1, {
+        strokeWidth: 6,
+        color: '#FFEA82',
+        trailColor: '#eee',
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1400,
+        svgStyle: null,
+        text: {
+            value: '',
+            alignToBottom: false
+        },
+        from: {color: '#FFEA82'},
+        to: {color: '#ED6A5A'},
+        step: function (state, bar) {
+            bar.path.setAttribute('stroke', state.color);
+            var value = fillAmount1 + '/' + 30;
 
 
+            if (value === 0) {
+                bar.setText('');
+            } else {
+                bar.setText(value);
+            }
+            bar.text.style.color = state.color;
+        }
+    });
+
+    bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    bar.text.style.fontSize = '2rem';
+
+    bar.animate(fillAmount1 / maxLimit1);
+  
+    var fillAmount2 = <?php echo json_encode($fillAmount2); ?>;
+    
+    var maxLimit2= <?php echo json_encode($maxLimit2); ?>;
+    
+    var bar = new ProgressBar.SemiCircle(container2, {
+        strokeWidth: 6,
+        color: '#FFEA82',
+        trailColor: '#eee',
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1400,
+        svgStyle: null,
+        text: {
+            value: '',
+            alignToBottom: false
+        },
+        from: {color: '#FFEA82'},
+        to: {color: '#ED6A5A'},
+        step: function (state, bar) {
+            bar.path.setAttribute('stroke', state.color);
+            var value = fillAmount2 + '/' + 30;
+
+
+            if (value === 0) {
+                bar.setText('');
+            } else {
+                bar.setText(value);
+            }
+            bar.text.style.color = state.color;
+        }
+    });
+
+    bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    bar.text.style.fontSize = '2rem';
+
+    bar.animate(fillAmount2 / maxLimit2);
+  
+    var fillAmount3 = <?php echo json_encode($fillAmount3); ?>;
+    
+    var maxLimit3 = <?php echo json_encode($maxLimit3); ?>;
+    
+    var bar = new ProgressBar.SemiCircle(container3, {
+        strokeWidth: 6,
+        color: '#FFEA82',
+        trailColor: '#eee',
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1400,
+        svgStyle: null,
+        text: {
+            value: '',
+            alignToBottom: false
+        },
+        from: {color: '#FFEA82'},
+        to: {color: '#ED6A5A'},
+        step: function (state, bar) {
+            bar.path.setAttribute('stroke', state.color);
+            var value = fillAmount3 + '/' + 30;
+
+
+            if (value === 0) {
+                bar.setText('');
+            } else {
+                bar.setText(value);
+            }
+            bar.text.style.color = state.color;
+        }
+    });
+
+    bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    bar.text.style.fontSize = '2rem';
+
+    bar.animate(fillAmount3 / maxLimit3);
+  
+  
+    
 </script>
 
 </body>

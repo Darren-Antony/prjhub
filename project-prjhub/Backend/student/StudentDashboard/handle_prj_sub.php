@@ -8,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Row = mysqli_fetch_assoc($sresult);
     $guide_Id = $Row['Guide_Id'];
     $Stu_Id = $Row['Dept_No'];
-    $projectName = mysqli_real_escape_string($conn, $_POST['prjName']); // Escape project name
-    $projectDescription = mysqli_real_escape_string($conn, $_POST['prj_Desc']); // Escape project description
+    $projectName = mysqli_real_escape_string($conn, $_POST['prjName']); 
+    $projectDescription = mysqli_real_escape_string($conn, $_POST['prj_Desc']); 
     $currentDate = date('Y-m-d');
     $currentTime = date('H:i:s');
     $getGuideUid = "SELECT U_Id FROM guide WHERE Guide_Id = '$guide_Id' ";

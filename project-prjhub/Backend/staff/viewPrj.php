@@ -2,7 +2,7 @@
 require_once('../../page/config.php');
 session_start();
 $prjId = $_GET['prjId'];
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['suser_id'];
 
 
 $query = "SELECT * FROM project WHERE Prj_Id = $prjId";
@@ -101,7 +101,7 @@ if ($project['Prj_Status'] == 'In-Progress') {
              ?> 
                     </div>
     </div>
-    <di<h1>Events and Marks</h1>
+    
     <form id="markForm" method="post">
 <?php
 
@@ -238,7 +238,10 @@ while ($commentRow = mysqli_fetch_assoc($getCommentsResult)) {
 
 </div>
 
-    <script>
+    
+
+<script>
+   
     document.getElementById("commentForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent default form submission
 
@@ -265,14 +268,20 @@ while ($commentRow = mysqli_fetch_assoc($getCommentsResult)) {
 
 
         
-    function acceptProject() {
-       
-        if (!localStorage.getItem('pageRefreshed')) {
+function acceptProject() {
+    // Check if the project status is already 'In-Progress'
+    if ('<?php echo $project['Prj_Status']; ?>' === 'In-Progress') {
+        console.log('Project is already in progress');
+        return;
+    }
+
+    
+        // If not refreshed, update the project status and set the flag
         $.ajax({
             url: 'update_status.php',
             method: 'POST',
             data: { project_id: <?php echo $project['Prj_Id']; ?>, status: 'In-Progress' },
-            success: function(response) {
+            success: function (response) {
                 Swal.fire({
                     icon: 'success',
                     title: '',
@@ -284,16 +293,14 @@ while ($commentRow = mysqli_fetch_assoc($getCommentsResult)) {
                     location.reload();
                 });
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // Handle error
                 console.error(error);
             }
         });
-    } else {
-        // If the page has already been refreshed, do nothing
-        console.log('Page already refreshed');
-    }
-    }
+    
+}
+
 
     function rejectProject() {
     Swal.fire({
@@ -338,7 +345,6 @@ while ($commentRow = mysqli_fetch_assoc($getCommentsResult)) {
         }
     });
 }
-x`
 
 </script>
 </body>

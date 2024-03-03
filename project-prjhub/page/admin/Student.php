@@ -20,8 +20,8 @@
     </div>
     <div class="searchBar-cont">
         <div class="search-top">
-        <input type="text" id="searchInput" placeholder="Search...">
-    <button id="searchButton">Search</button>
+        <input type="text" id="searchInput" placeholder="Enter Dept No">
+    <button class="blue-btn"id="searchButton">Search</button>
         </div>
 
     <div id="searchResults"></div>

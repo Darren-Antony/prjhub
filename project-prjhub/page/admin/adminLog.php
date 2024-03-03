@@ -63,13 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
                 // Start a session
                 session_start();
         
-                // Store user information in session variables
                 $_SESSION['user_id'] = $result['U_Id'];
                 $_SESSION['email'] = $result['Email'];
         ?>
         <?php
                 header("Location: adminDashboard.php");
-                exit(); // Ensure that subsequent code is not executed after redirection
+                exit(); 
             } else {
                 echo "Invalid credentials"; // Notify invalid credentials
             }
@@ -79,6 +78,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
         echo "Error finding student: " . $e->getMessage(); // Echo instead of return
     }
 } else {
-    // echo "Email and password are required fields"; // Handling case where email or password is not provided
 }
 ?>

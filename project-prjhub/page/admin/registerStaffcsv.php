@@ -23,7 +23,7 @@
     <img src="../../asset/image/excsv.png" alt="" srcset="">
 </div>
 <div class="form-cont">
-    <form action="#" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <form action="#" method="post" enctype="multipart/form-data" >
         <input type="file" name="csv_file" id="csv_file" accept=".csv">
         <input type="submit" name="submit" value="submit">
     </form>

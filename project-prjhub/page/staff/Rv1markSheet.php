@@ -2,6 +2,17 @@
 require_once('../config.php');
 $review_Id=$_GET['review_id'];
 $review_No=$_GET['review_number'];
+$getPrjId = "SELECT Prj_id FROM review WHERE Review_Id=$review_Id";
+$getPrjIdRes = mysqli_query($conn,$getPrjId) or die(mysqli_error($getPrjIdRes));
+$getPrjIdResRow = mysqli_fetch_assoc($getPrjIdRes);
+$prjId = $getPrjIdResRow['Prj_id'];
+
+$getStuid = "SELECT Stu_Id,Prj_Name FROM project WHERE Prj_Id = $prjId";
+$getStuidRes =mysqli_query($conn,$getStuid) or die(mysqli_error($getStuidRes));
+$getStuidRow = mysqli_fetch_assoc($getStuidRes);
+$stuId = $getStuidRow['Stu_Id'];
+$prj_Name = $getStuidRow['Prj_Name'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,33 +90,26 @@ $review_No=$_GET['review_number'];
                 <td>System Design</td>
                 <td>Describes the architecture of the system, including hardware, software, and database design.</td>
                 <td><b>4 Marks</b><br>Basic overview of system architecture, but lacks details or clarity.</td>
-                <td><b>7 Marks</b><br>(Detailed and well-explained system architecture with clear descriptions of hardware, software, and database design choices.
-                               )</td>
+                <td><b>7 Marks</b><br>(Detailed and well-explained system architecture with clear descriptions of hardware, software, and database design choices)</td>
                 <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
             <tr>
                 <td>Project Description	</td>
                 <td>Clearly describes the implementation of the project, including the GUI design, testing procedures, and expected outcomes</td>
                 <td><b>4 Marks</b><br>Brief overview of implementation, with unclear descriptions of GUI, testing, or outcomes.</td>
-                <td><b>7 Marks</b><br>(Detailed description of implementation, including GUI design rationale, thorough testing procedures, and well-defined expected outcomes.)</td>
+                <td><b>3 Marks</b><br>(Detailed description of implementation, including GUI design rationale, thorough testing procedures, and well-defined expected outcomes.)</td>
                 <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
+            
             <tr>
-                <td>Additional Features	</td>
-                <td>Identifies and implements additional features that enhance the project's functionality (e.g., security, scalability, maintainability).</td>
-                <td><b>0 Marks</b><br>No additional features identified or implemented.</td>
-                <td><b>2 Marks</b><br>Identifies and implements several valuable features that significantly enhance the project's functionality and user experience.</td>
-                <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
-            </tr>
-            <tr>
-                <td>Documentation	</td>
+                <td>Documentation</td>
                 <td>Clear, concise, and well-organized documentation (e.g., user manual, technical documentation).</td>
                 <td><b>1 Marks</b><br> Minimal documentation, poorly organized, or unclear instructions..</td>
                 <td><b>3 Marks</b><br>Comprehensive, well-organized documentation with clear instructions, examples, and relevant information for users and developers.</td>
                 <td><input type="number" name="ProSys_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
             <tr>
-                <td>Presentation	</td>
+                <td>Presentation</td>
                 <td>Compelling and informative presentation of the project (if applicable).</td>
                 <td><b>0 Marks</b><br>No presentation, or poorly delivered presentation lacking clarity or engagement.</td>
                 <td><b>3 Marks</b><br>Engaging and informative presentation that clearly conveys the project's key points, objectives, and impact.</td>
@@ -115,7 +119,6 @@ $review_No=$_GET['review_number'];
 
         <p>Total Marks: <span id="totalMarks">0</span></p>
 
-        <!-- Hidden input for review ID -->
         <input type="text" name="review_id" value="<?php echo $review_Id?>">
         <input type="text" name="review_No" value="<?php echo $review_No?>">
         <input type="text" name="total_marks" id="totalMarksInput" value="0">
@@ -131,7 +134,7 @@ $review_No=$_GET['review_number'];
             totalMarks += parseInt(input.value) || 0;
         });
         document.getElementById('totalMarks').textContent = totalMarks;
-        document.getElementById('totalMarksInput').value = totalMarks; // Update hidden input value
+        document.getElementById('totalMarksInput').value = totalMarks; 
     }
 </script>
 

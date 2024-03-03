@@ -1,13 +1,29 @@
 <?php
 require_once('../config.php');
 session_start();
-$user_id = $_SESSION['user_id'];
-$getNot = "SELECT * FROM notification WHERE receiver_Id = $user_id ORDER BY Date DESC, Time DESC"; // Order notifications by date and time
+$user_id = $_SESSION['suser_id'];
+$getNot = "SELECT * FROM notification WHERE receiver_Id = $user_id ORDER BY Date DESC, Time DESC"; 
 $result = mysqli_query($conn, $getNot);
-
-// Update all unread messages to 1
 $updateQuery = "UPDATE notification SET unreadMsg = 1 WHERE receiver_Id = $user_id AND unreadMsg = 0";
 mysqli_query($conn, $updateQuery);
+
+function getTimeElapsed($timestamp) {
+    $currentTime = time();
+    $notificationTime = strtotime($timestamp);
+    $timeDiff = $currentTime - $notificationTime;
+
+    if ($timeDiff < 60) {
+        return "Just now";
+    } elseif ($timeDiff < 3600) {
+        $minutes = floor($timeDiff / 60);
+        return "$minutes minute(s) ago";
+    } elseif ($timeDiff < 86400) {
+        $hours = floor($timeDiff / 3600);
+        return "$hours hour(s) ago";
+    } else {
+        return date('M j, Y', $notificationTime);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +40,17 @@ mysqli_query($conn, $updateQuery);
     <script src="../../script/global.js"></script>
     <title>Notification</title>
     <style>
-        
+        .message {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+        .message-text {
+            font-weight: bold;
+        }
+        .time {
+            color: gray;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -40,9 +66,12 @@ mysqli_query($conn, $updateQuery);
             <ul>
                 <?php
                 while ($row = mysqli_fetch_assoc($result)) {
-                    // Check if the notification is read or unread
                     $isRead = $row['unreadMsg'] == 1 ? "unread" : "read";
-                    echo "<li class='message $isRead'>{$row['Message']}</li>";
+                    $timeElapsed = getTimeElapsed($row['Date'] . ' ' . $row['Time']);
+                    echo "<li class='message $isRead'>";
+                    echo "<div class='message-text'>{$row['Message']}</div>";
+                    echo "<div class='time'>$timeElapsed</div>";
+                    echo "</li>";
                 }
                 ?>
             </ul>

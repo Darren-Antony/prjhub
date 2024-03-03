@@ -24,6 +24,13 @@
             width: 200px;
             height: 100px;
         }   
+        #containerp {
+          margin: 20px;
+          width: 200px;
+          height: 200px;
+          position: relative;
+        }
+       
     </style>
     <script src="../../dependancies/progressbar.min.js"></script>
 </head>
@@ -37,7 +44,7 @@
     
 </div>
 <div class="goback-cont">
-        <button onclick="goBack()">&lt Go Back</button>
+        <button onclick="goBack()">&ltGoBack</button>
     </div>
 <?php
 
@@ -58,7 +65,71 @@ if ($ReviewRow) {
 
     $currentDate = date("Y-m-d");
     ?>
+    <div class="metadata">
+    <div class="data-left">
+        <?php
+           $sql = "SELECT 
+           SUM(CASE WHEN Review1_Date IS NOT NULL AND Review1_Mark IS NOT NULL THEN 1 ELSE 0 END) AS review1_completed,
+           SUM(CASE WHEN Review2_Date IS NOT NULL AND Review2_Mark IS NOT NULL THEN 1 ELSE 0 END) AS review2_completed,
+           SUM(CASE WHEN Review3_Date IS NOT NULL AND Review3_Mark IS NOT NULL THEN 1 ELSE 0 END) AS review3_completed
+       FROM review WHERE Prj_Id = $prjId";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+   $row = mysqli_fetch_assoc($result);
+
+   $total_completed_reviews = $row['review1_completed'] + $row['review2_completed'] + $row['review3_completed'];
+
+} else {
+   echo "Error executing the query: " . mysqli_error($conn);
+}
+$sql = "SELECT COUNT(*) AS document_count FROM review_doc WHERE Prj_Id= $prjId";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+
+    $total_submitted_doc=$row['document_count'];
+} else {
+    echo "Error executing the query: " . mysqli_error($conn);
+}
+
+
+        ?>
+
+        <div class="top">
+        <h1>Mark Details</h1>
+        </div>
+        <div class="bottom">
+        <h3>No of review completed:<?php echo $total_completed_reviews."/3"?></h3>
+        <h3>No of Documents Submitted<?php echo $total_submitted_doc."/3"?></h3>
+        
+        </div>
+       
+    </div>
+    <div class="data-right">
+    <?php
+$sql = "SELECT COALESCE(Review1_Mark, 0) + COALESCE(Review2_Mark, 0) + COALESCE(Review3_Mark, 0) AS total_marks FROM review WHERE Prj_Id = $prjId";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $marks = $row['total_marks'];
+} else {
+    echo "Error executing the query: " . mysqli_error($conn);
+}
+?>
+
+     <div id="containerp"></div>
+    </div>
+</div>
+<div class="mark-cont">
+
 <div class="div-review1">
+<div class="rv-header">Review 1</div>
     <div class="rv-mark">
         <?php
         if ($ReviewRow['Review1_Mark'] == NULL) {
@@ -84,8 +155,8 @@ if ($ReviewRow) {
     </div>
     <div class="rv-date">
            <?php
-            $review2Date = $ReviewRow['Review2_Date'];
-            if ($review2Date != NULL) {
+            $review1Date = $ReviewRow['Review1_Date'];
+           
               
             if (mysqli_num_rows($RvdocRes1) == 0) {
                 echo "No document submitted for Review 1";
@@ -101,7 +172,7 @@ if ($ReviewRow) {
             } else {
                 echo "Document submitted for Review 1";
             }
-        }?>
+        ?>
             
     </div>
 </div>
@@ -131,8 +202,7 @@ if ($ReviewRow) {
         $review2Date = $ReviewRow['Review2_Date'];
         if ($review2Date != NULL) {
           
-            $allowSubmissionDate = date("Y-m-d", strtotime('-1 day', strtotime($review2Date)));
-            if ($currentDate >= $allowSubmissionDate) {
+           
                
                 if (mysqli_num_rows($RvdocRes2) == 0) {
                     echo "No document submitted for Review 2";
@@ -148,10 +218,8 @@ if ($ReviewRow) {
                 } else {
                     echo "Document submitted for Review 2";
                 }
-        } else {
-            echo "Review 2 date not available";
-        }
-    }
+        } 
+    
         ?>
     </div>
 </div>
@@ -164,7 +232,7 @@ if ($ReviewRow) {
          
         if ($ReviewRow['Review3_Mark'] == NULL) {
             $fillAmount3 =  0;
-            $maxLimit3 = 30;
+            $maxLimit3 = 40;
             ?><div class="container" id="container3"></div><?php
    
             if ($ReviewRow['Review3_Date'] == NULL) {
@@ -174,7 +242,7 @@ if ($ReviewRow) {
             }
         } else {
             $fillAmount3 =  $ReviewRow['Review3_Mark'];
-            $maxLimit3 = 30; // Maximum limit
+            $maxLimit3 = 40; 
             ?><div class="container" id="container3"></div>
             <?php        }
         ?>
@@ -183,8 +251,7 @@ if ($ReviewRow) {
         <?php
         $review3Date = $ReviewRow['Review3_Date'];
         if ($review3Date != NULL) {
-            $allowSubmissionDate = date("Y-m-d", strtotime('-1 day', strtotime($review3Date)));
-            if ($currentDate >= $allowSubmissionDate) {
+           
                
                 if (mysqli_num_rows($RvdocRes3) == 0) {
                     echo "No document submitted for Review 3";
@@ -200,10 +267,8 @@ if ($ReviewRow) {
                 } else {
                     echo "Document submitted for Review 3";
                 }
-        } else {
-            echo "Review 3 date not available";
-        }
-    }
+        } 
+    
         ?>
     </div>
 </div>
@@ -212,14 +277,44 @@ if ($ReviewRow) {
     echo "Review details not available for this project";
 }
 ?>
-
+</div>
 <script>
-    // PHP Variables
+    var totalMarks = 100; 
+    var obtainedMarks = <?php echo $marks; ?>;  
+    console.log(obtainedMarks);
+    var progressValue = obtainedMarks / totalMarks;
+
+var bar = new ProgressBar.Circle(containerp, {
+  color: '#aaa',
+  strokeWidth: 4,
+  trailWidth: 1,
+  easing: 'easeInOut',
+  duration: 1400,
+  text: {
+    autoStyleContainer: false
+  },
+  from: { color: '#aaa', width: 1 },
+  to: { color: '#333', width: 4 },
+  step: function(state, circle) {
+    circle.path.setAttribute('stroke', state.color);
+    circle.path.setAttribute('stroke-width', state.width);
+
+    var value = obtainedMarks + '/' + totalMarks;;
+   
+      circle.setText(value);
+  
+  }
+});
+
+bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+bar.text.style.fontSize = '2rem';
+
+bar.animate(progressValue);
     var fillAmount = <?php echo json_encode($fillAmount); ?>;
     
     var maxLimit = <?php echo json_encode($maxLimit); ?>;
     console.log(maxLimit);
-    // ProgressBar.js initialization
+    
     var bar = new ProgressBar.SemiCircle(container, {
         strokeWidth: 6,
         color: '#FFEA82',
@@ -234,7 +329,6 @@ if ($ReviewRow) {
         },
         from: {color: '#FFEA82'},
         to: {color: '#ED6A5A'},
-        // Set default step function for all animate calls
         step: function (state, bar) {
             bar.path.setAttribute('stroke', state.color);
             var value = fillAmount + '/' + 30;
@@ -252,7 +346,6 @@ if ($ReviewRow) {
     bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
     bar.text.style.fontSize = '2rem';
 
-    // Animate the progress bar
     bar.animate(fillAmount / maxLimit);
 
     var fillAmount2 = <?php echo json_encode($fillAmount2); ?>;
@@ -315,7 +408,7 @@ if ($ReviewRow) {
         to: {color: '#ED6A5A'},
         step: function (state, bar) {
             bar.path.setAttribute('stroke', state.color);
-            var value = fillAmount + '/' + 30;
+            var value = fillAmount3 + '/' + 40;
 
 
             if (value === 0) {

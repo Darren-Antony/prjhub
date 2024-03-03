@@ -55,6 +55,11 @@ $prj_Name = $getStuidRow['Prj_Name'];
 <body>
 
     <h2>Project Evaluation Rubric</h2>
+    <div class="rv-details">
+     <h1><?php echo  $review_No?>rd Review Mark Evaluation</h1>
+     <h3>Project Name:<?php echo $prj_Name?></h3>
+     <h3>Dept NO :<?php echo $stuId?> </h3>
+    </div>
 
     <form id="evaluationForm" action="../../Backend/staff/submit_evaluation.php" method="post">
         <table>
@@ -66,46 +71,46 @@ $prj_Name = $getStuidRow['Prj_Name'];
                 <th>Mark</th>
             </tr>
             <tr>
-                <td> Language / Tool</td>
-                <td>Evaluates the appropriateness and effectiveness of the chosen programming language or development tool.</td>
-                <td><b>1 Mark</b><br>(Unsuitable language/tool, hindering project development.)</td>
-                <td><b>2 Mark</b><br>(Well-suited language/tool, effectively meeting project requirements.)</td>
+                <td>User Manual</td>
+                <td> Details the process of deploying the system in a production environment.</td>
+                <td><b>1 Mark</b><br>( Incomplete or poorly organized user manual, lacking clarity or relevant instructions.)</td>
+                <td><b>2 Mark</b><br>(Well-structured user manual, offering clear instructions and comprehensive guidance for users.)</td>
                 <td><input type="number" name="Language_Tool_mark" min="0" max="6" onchange="updateTotalMarks()" tabindex="1"></td>
             </tr>
             <tr>
-                <td>Pseudo code</td>
-                <td>States the purpose, provides background information, and introduces key concepts.</td>
-                <td><b>1 Mark</b><br>(Unclear pseudo code, lacking necessary information and clarity.)</td>
-                <td><b>2-3 Marks</b><br>(Clear pseudo code, effectively communicates purpose and concepts.)</td>
+                <td>System Deployment</td>
+                <td>Details the process of deploying the system in a production environment.</td>
+                <td><b>1 Mark</b><br>(Inadequately documented deployment process, lacking essential steps or configurations.)</td>
+                <td><b>2-3 Marks</b><br>(Comprehensive documentation of the deployment process, ensuring successful system implementation)</td>
                 <td><input type="number" name="Introduction_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="2"></td>
             </tr>
             <tr>
-                <td>Unit Testing</td>
+                <td>Conclusion</td>
                 <td>Clearly defines the problem, analyzes the existing system, and proposes a new system that meets the requirements.</td>
-                <td><b>1-2 Marks</b><br> (Incomplete or inaccurate unit tests, failing to adequately cover functionality.)</td>
-                <td><b>3-5 Marks</b><br> (Comprehensive unit tests, accurately verifying functionality of each component.)
+                <td><b>1 Mark</b><br> (Absence of a conclusion or inadequate summarization of project results.)</td>
+                <td><b>2-4 Marks</b><br> ( Well-crafted conclusion, effectively summarizing project achievements and implications.)
 </td>
                 <td><input type="number" name="System_Analysis_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
             <tr>
-                <td>Integration Testing</td>
-                <td>Clearly defines the problem, analyzes the existing system, and proposes a new system that meets the requirements.</td>
-                <td><b>1-2 Marks</b><br> (Incomplete or poorly executed integration tests, failing to identify issues.)</td>
-                <td><b>3-5 Marks</b> <br> (Comprehensive integration tests, ensuring seamless communication and functionality.)</td>
+                <td>Future Enhancement</td>
+                <td> Identifies potential areas for future improvement or expansion of the system.</td>
+                <td><b>1 Mark</b><br> (Lack of consideration for future enhancements or inadequately defined potential improvements.)</td>
+                <td><b>2 Mark</b> <br> (Comprehensive analysis of future enhancement opportunities, providing insightful recommendations for system development.)</td>
                 <td><input type="number" name="System_Analysis_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
             <tr>
-                <td>Acceptance Testing</td>
-                <td>Clearly defines the problem, analyzes the existing system, and proposes a new system that meets the requirements.</td>
-                <td><b>1-2 Marks</b><br> (Incomplete or insufficient acceptance tests, failing to validate requirements.)</td>
-                <td><b>3-5 Marks</b> <br> (Thorough acceptance tests, accurately simulating real-world scenarios.)</td>
+                <td>Bibliography</td>
+                <td>Well-documented bibliography, accurately citing all sources used in the project.</td>
+                <td><b>1 Mark</b><br> (Incomplete or inaccurate bibliography, missing essential references or containing incorrect citations.)</td>
+                <td><b>2 Mark</b> <br> (Well-documented bibliography, accurately citing all sources used in the project.)</td>
                 <td><input type="number" name="System_Analysis_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
             <tr>
-                <td>Validation Testing</td>
-                <td>Clearly defines the problem, analyzes the existing system, and proposes a new system that meets the requirements.</td>
-                <td><b>1-2 Marks</b> <br>( Lack of defined or inadequate validation tests.)</td>
-                <td> <b>3-4 Marks</b> <br> (Effective validation tests, ensuring system functionality.)</td>
+                <td>Project Completion</td>
+                <td>A fully completed project</td>
+                <td> <b>1-6 Marks</b> <br>(Incomplete or some of the requirements have not been completed yet.)</td>
+                <td> <b>7-10 Marks</b> <br> (A project that has been completed and a satisfied and implemented all the requirements mentioned)</td>
                 <td><input type="number" name="System_Analysis_mark" min="0" max="8" onchange="updateTotalMarks()" tabindex="3"></td>
             </tr>
             <tr>
@@ -126,9 +131,9 @@ $prj_Name = $getStuidRow['Prj_Name'];
 
         <p>Total Marks: <span id="totalMarks">0</span></p>
 
-        <input type="text" name="review_id" value="<?php echo $review_Id?>">
-        <input type="text" name="review_No" value="<?php echo $review_No?>">
-        <input type="text" name="total_marks" id="totalMarksInput" value="0">
+        <input type="hidden" name="review_id" value="<?php echo $review_Id?>">
+        <input type="hidden" name="review_No" value="<?php echo $review_No?>">
+        <input type="hidden" name="total_marks" id="totalMarksInput" value="0">
         <textarea name="feedback" id="" cols="30" rows="10" required></textarea>
         <button type="submit" id="submitButton" >Submit</button>
     </form>

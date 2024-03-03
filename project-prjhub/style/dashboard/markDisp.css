@@ -1,16 +1,20 @@
 .mark-cont{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     flex-direction: row;
+   
 }
+
 .div-review1,.div-review2,.div-review3{
-    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4);
+    box-shadow: 5px 10px 18px rgba(240, 212, 212, 0.4);
     padding: 10px;
     border-radius: 5px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
 }
 button{
@@ -20,4 +24,39 @@ button{
     width:100px;
     border:none;
     border-radius: 10px;
+    margin: 5px 0px 0px 0px;
+}
+.metadata{
+    box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.4);
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+
+}
+.data-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.bottom{
+  margin: 0px 0px 30px 0px;
+    
+}
+.nodoc{
+    color: red;
+  
+}
+input[type="date"]{
+    width:100%;
+    border-radius: 10%;
+    padding: 2px;
+    margin: 5px 0px 0px 0px;
+
+}
+.inner-rv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
+    flex-direction: column;
 }

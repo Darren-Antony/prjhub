@@ -9,91 +9,7 @@
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../dependancies/sweetalert.js"></script>
     <title>Student Registration</title>
-    <script>
-          function validateForm() {
-            var email = document.getElementById("emailId").value;
-            var fullName = document.getElementById("FlName").value;
-            var dob = document.getElementById("dob").value;
-            var departmentNumber = document.getElementById("deptNo").value;
-            var password = document.getElementById("pwd").value;
-            var confirmPassword = document.getElementById("cpwd").value;
-
-            // Email validation
-            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid email address!',
-                    text: 'Please enter a valid email address.'
-                });
-                return false;
-            }
-
-            // Full name validation
-            if (fullName.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing full name!',
-                    text: 'Please enter your full name.'
-                });
-                return false;
-            }
-
-            // Date of Birth validation
-            if (dob.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing date of birth!',
-                    text: 'Please enter your date of birth.'
-                });
-                return false;
-            }
-
-            // Department Number validation
-            // Department Number validation
-var departmentNumberPattern = /^\d{2}-[a-zA-Z]{3}-\d{3}$/;
-if (!departmentNumberPattern.test(departmentNumber.trim())) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Invalid department number!',
-        text: 'Please enter a valid department number in the format 21-ucs-108.'
-    });
-    return false;
-}
-
-
-            // Password validation
-            if (password.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing password!',
-                    text: 'Please enter a password.'
-                });
-                return false;
-            }
-
-            // Confirm Password validation
-            if (confirmPassword.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing confirmation password!',
-                    text: 'Please confirm your password.'
-                });
-                return false;
-            }
-
-            if (password !== confirmPassword) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Passwords do not match!',
-                    text: 'Please make sure your passwords match.'
-                });
-                return false;
-            }
-
-            return true; // Form is valid
-        }
-    </script>
+  
 </head>
 <body>
    <div class="logo-cont">
@@ -105,70 +21,142 @@ if (!departmentNumberPattern.test(departmentNumber.trim())) {
     </div>
     
     <div class="form" id="stdreg">
-        <form action="#" method="post" onsubmit="return validateForm()">
+        <form action="#" method="post" >
             <div class="form-title">
                 <h1>Student Registration Form</h1>
             </div>
             <div class="form-cont">
-                <label for="FlName">Full Name</label><br>
-                <input type="text" name="FlName" id="FlName" ><br>
-        
-                <label for="emailId">Email Address</label><br>
-                <input type="email" name="emailId" id="emailId" ><br>
-                 
-                <label for="dob">Date of Birth</label><br>
-                <input type="date" name="dob" id="dob"><br>
-
-                <label for="deptName">Department Name</label><br>
-                <select name="deptName" id="deptName" >
-                   <option value="Computer Science">Computer Science</option>
-                   <option value="Computer Application">Computer Application</option>  
-                </select><br>
-                <label for="deptNo">Department Number</label><br>
-                <input type="text" name="deptNo" id="deptNo" ><br>
-
-                <label for="curYear">Current Year</label><br>
-                <select id="curYear" name="curYear" >
+            <table>
+                <tr><span class="title">Personal Details </span></tr>
+                <tr>
+                    <td> <label for="FlName">Full Name</label></td>
+                    <td> <input type="text" name="FlName" id="FlName" onchange="validateForm()"></td>
+                    <td> <label for="emailId">Email Address</label></td>
+                    <td> <input type="email" name="emailId" id="emailId" ></td>
+                </tr>
+                <tr>
+                    <td><label for="dob">Date of Birth</label></td>
+                    <td> <input type="date" name="dob" id="dob" onchange="validateForm()"></td>
+                    <td><label for="gender" >Gender</label><br></td>
+                    <td><select name="gender" id="gender" >
+                   <option value="Male">Male</option>
+                   <option value="Female">Female</option>  
+                </select><br></td>
+                </tr>
+                
+                <tr><td><span class="title">College Details </span></td></tr>
+             
+                    <tr>
+                    <td><label for="deptName">Department Name</label></td>
+                    <td> <select name="deptName" id="deptName" >
+                          <option value="Computer Science">Computer Science</option>
+                          <option value="Computer Application">Computer Application</option>  
+                       </select>
+                   </td>
+                   <td> <label for="deptNo">Department Number</label></td>
+                   <td><input type="text" name="deptNo" id="deptNo" onchange="validateForm()"><br></td>
+                   </tr>
+                   <tr>
+                    <td><label for="curYear">Current Year</label></td>
+                    <td><select id="curYear" name="curYear" >
                     <option value="1">I</option>
                     <option value="2">II</option>
                     <option value="3">III</option>
-                </select><br>
-
-                <label for="degree">Degree</label><br>
-                <select id="degree" name="degree" >
+                </select></td>
+                    <td> <label for="degree">Degree</label></td>
+                    <td><select id="degree" name="degree" >
                     <option value="Bsc">Bsc</option>
                     <option value="Bca">Bca</option>
                     <option value="Msc">Msc</option>
                 </select><br>
-
-                <label for="section">Section</label><br>
-                <select id="section" name="section" >
+                    </td>
+                   </tr>
+                <tr>
+                    <td> <label for="section">Section</label></td>
+                    <td><select id="section" name="section" >
                     <option value="A">A</option>
                     <option value="B">B</option>
-                </select><br>
-
-                <label for="gender" >Gender</label><br>
-                <select name="gender" id="gender" >
-                   <option value="Male">Male</option>
-                   <option value="Female">Female</option>  
-                </select><br>
+                </select><br></td>
+                    
+                </tr>
                 
-
-                <label for="pwd">Password</label><br>
-                <input type="password" name="pwd" id="pwd" ><br>
-
-                <label for="cpwd">Confirm Password</label><br>
-                <input type="password" name="cpwd" id="cpwd" ><br>
-                
-            </div> 
+                    <tr>
+                        <td><label for="pwd">Password</label></td>
+                    <td><input type="password" name="pwd" id="pwd" ></td>
+                    
+               <td> <label for="cpwd">Confirm Password</label></td>
+                    <td> <input type="password" name="cpwd" id="cpwd" ></td>
+                </tr>
+                </table>
+                </div>
             <center>
-                <input class="blue-btn" type="submit" value="Submit">
+                <input class="blue-btn" type="submit" value="Submit" onclick="validateForm()">
             </center>
-</form>
+            <div id="validationSummary" style="margin-top: 20px;"></div>
     </div>
+</form>
+
     
 </body>
 </html>
+
+    <script>
+
+
+    function validateForm() {
+        var errors = [];
+        var fullName = document.getElementById('FlName').value;
+        var dob = document.getElementById('dob').value;
+        var email = document.getElementById('emailId').value;
+        var departmentNumber = document.getElementById('deptNo').value;
+
+        // Validate Full Name
+        if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+            errors.push("Full Name should only consist of alphabets.");
+        }
+
+        // Validate Date of Birth
+        var dobDate = new Date(dob);
+        var currentDate = new Date();
+        var minDobDate = new Date();
+        minDobDate.setFullYear(currentDate.getFullYear() - 17);
+        if (dob === "" || dobDate > currentDate || dobDate > minDobDate) {
+            errors.push("Invalid Date of Birth.");
+        }
+
+        // Validate Email Address
+        if (email === "") {
+            errors.push("Email Address cannot be empty.");
+        }
+
+        var departmentNumberPattern = /^\d{2}-[a-zA-Z]{3}-\d{3}$/;
+        if (!departmentNumberPattern.test(departmentNumber.trim())) {
+            errors.push("Invalid department number format. Correct format is: 21-ucs-108");
+        }
+
+        var validationSummary = document.getElementById('validationSummary');
+        if (errors.length > 0) {
+            validationSummary.innerHTML = "<div class='error'><ul>";
+            for (var i = 0; i < errors.length; i++) {
+                validationSummary.innerHTML += "<li>" + errors[i] + "</li>";
+            }
+            validationSummary.innerHTML += "</ul></div>";
+            return false; 
+        } else {
+            validationSummary.innerHTML = ""; 
+            return true; 
+        }
+    }
+
+
+  var inputs = document.querySelectorAll('input, select');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener('change', function() {
+                validateForm();
+            });
+        }
+</script>
+
 <?php
 require_once('../config.php');
 

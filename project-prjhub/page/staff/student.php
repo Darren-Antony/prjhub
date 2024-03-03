@@ -1,7 +1,7 @@
 <?php
 require_once('../config.php');
 session_start();
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['suser_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@ $user_id = $_SESSION['user_id'];
 </head>
 
 <body >
-<div class="logo-cont">
+    <div class="logo-cont">
         <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
     </div>
@@ -48,7 +48,7 @@ if (mysqli_num_rows($stuRes) > 0) {
     while ($stuRow = mysqli_fetch_assoc($stuRes)) {
         
         
-// Assuming $stuRow is an associative array containing student data
+
 echo "<tr>";
 echo "<td>" . $stuRow['Dept_No'] . "</td>";
 echo "<td>" . $stuRow['Stu_Name'] . "</td>";

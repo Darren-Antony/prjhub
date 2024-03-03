@@ -86,10 +86,8 @@ echo'<div class="main-tms-cont">';
                 <th>Activity</th>
             </tr>
             <?php
-            // Define days of the week
             $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
-            // Loop through each day
             foreach ($days as $day) {
                 echo "<tr><td>$day</td><td><input type='text' name='" . strtolower($day) . "_activity' required></td></tr>";
             }
@@ -107,13 +105,11 @@ echo'<div class="main-tms-cont">';
                 <th>Activity</th>
             </tr>
             <?php
-            // Define days of the week
             $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
-            // Loop through each day
             foreach ($days as $day) {
                 $activity_field_name = strtolower($day) . "Activity";
-                $activity_value = $row[$activity_field_name]; // Get value from the database
+                $activity_value = $row[$activity_field_name]; 
                 echo "<tr><td>$day</td><td><input type='text' name='$activity_field_name' value='$activity_value' required></td></tr>";
             }
             ?>
@@ -135,7 +131,6 @@ echo'<div class="main-tms-cont">';
 <script>
     const prjId =" <?php echo $prjId?>";
     console.log(prjId)
-    // Function to fetch and display timesheet data for the selected date
     function displayTimesheetData(selectedDate, prjId) {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -144,10 +139,9 @@ echo'<div class="main-tms-cont">';
             if (responseData.exists) {
                 const timesheetData = responseData.data;
                 const table = document.createElement('table');
-                const thead = document.createElement('thead'); // Create thead element
+                const thead = document.createElement('thead'); 
                 const tbody = document.createElement('tbody');
 
-                // Create headers for "Days" and "Activities"
                 const daysHeader = document.createElement('th');
                 daysHeader.textContent = 'Days';
                 const activitiesHeader = document.createElement('th');
@@ -158,10 +152,8 @@ echo'<div class="main-tms-cont">';
                 thead.appendChild(headerRow);
                 table.appendChild(thead);
 
-                // Custom keys for Monday to Saturday
                 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-                // Loop through each day and display its corresponding activity
                 for (let i = 0; i < days.length; i++) {
                     const day = days[i];
                     const activityKey = day.toLowerCase() + 'Activity';
@@ -170,11 +162,9 @@ echo'<div class="main-tms-cont">';
                     const cell2 = document.createElement('td');
                     cell1.textContent = day;
 
-                    // Display text content only for indices 2 to 8
                     if (i >= 0 && i <= 8) {
                         cell2.textContent = timesheetData[activityKey];
                     } else {
-                        // For other indices, display a custom key
                         cell2.textContent = "Custom Key";
                     }
                     
@@ -201,7 +191,7 @@ echo'<div class="main-tms-cont">';
 
 function getStartOfWeek(date) {
         const day = date.getDay();
-        const diff = date.getDate() - day + (day === 1 ? 0 : (day === 0 ? -6 : 1)); // Adjust when day is Sunday
+        const diff = date.getDate() - day + (day === 1 ? 0 : (day === 0 ? -6 : 1)); 
         return new Date(date.setDate(diff));
     }
 
@@ -211,7 +201,6 @@ function getStartOfWeek(date) {
         const startOfWeek = getStartOfWeek(today);
         datePicker.valueAsDate = startOfWeek;
 
-        // Display timesheet data for the current date by default
         const formattedCurrentDate = today.toISOString().split('T')[0];
         displayTimesheetData(formattedCurrentDate, prjId);
 
@@ -222,25 +211,21 @@ function getStartOfWeek(date) {
         });
 
         datePicker.addEventListener('keydown', function(e) {
-            // Prevent manual input
             e.preventDefault();
         });
 
         datePicker.addEventListener('click', function(e) {
-            // Prevent manual input via calendar
             this.blur();
         });
 
         datePicker.addEventListener('focus', function() {
-            // Prevent manual input via calendar
             this.blur();
         });
 
-        // Disable dates other than Mondays
         datePicker.addEventListener('input', function() {
             const selectedDate = new Date(this.value);
-            if (selectedDate.getDay() !== 1) { // Monday is 1
-                this.value = ''; // Clear non-Monday selections
+            if (selectedDate.getDay() !== 1) {
+                this.value = ''; 
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',

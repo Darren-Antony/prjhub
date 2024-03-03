@@ -3,7 +3,7 @@ require_once('../../page/config.php');
 session_start();
 $prjId = $_GET['prjId'];
 $user_id = $_SESSION['user_id'];
-
+$prjId=$_GET['prjId'];
 // Query the database to get the project details based on the project ID
 // Assuming you have a database connection established
 $query = "SELECT * FROM project WHERE Prj_Id = $prjId";
@@ -95,7 +95,9 @@ if (mysqli_num_rows($res1) > 0 && $row['STATUS'] != 'approved') {
         <table border="1">
             <input type="hidden" name="prj_Id" value="<?php echo $prjId?>">
             <input type="hidden" name="start_date" value="<?php echo $start_date?>">
-            <tr>
+
+            <input type="hidden" name="prj_Id" value="<?php echo $prjId?>">    
+                    <tr>
                 <th>Day</th>
                 <th>Activity</th>
             </tr>

@@ -1,11 +1,14 @@
 <?php
 require_once('../config.php');
 session_start();
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['suser_id'];
  
 $slQry2 = "SELECT * FROM guide WHERE U_Id = $user_id";
 $slresult2 = mysqli_query($conn, $slQry2) or die(mysqli_error($conn));
-
+$unreadQuery = "SELECT COUNT(*) AS unreadCount FROM notification WHERE receiver_Id = $user_id AND unreadMsg = 0";
+$unreadResult = mysqli_query($conn, $unreadQuery);
+$unreadRow = mysqli_fetch_assoc($unreadResult);
+$unreadCount = $unreadRow['unreadCount'];
 $sRow = mysqli_fetch_assoc($slresult2);
 $G_Name = $sRow['G_Name'];
 ?>
@@ -39,8 +42,9 @@ $G_Name = $sRow['G_Name'];
        <button class='blue-btn' onclick="StudentPage()">Student</button> 
        
        <div class="notif-cont">
-         <button onclick="notif()"><img src="../../asset/image/notification.png" ></button>
+         <button onclick="notif()"><img src="<?php echo $unreadCount > 0 ? '../../asset/image/notification (1).png' : '../../asset/image/notification.png' ?>"></button>
        </div>
+       
        <div class="user-cont">
          <button class="User" onclick="toggleDropdown()"><img src="../../asset/image/user.png" alt="" srcset=""></button>
        </div>

@@ -50,32 +50,85 @@
     <div class="cont">
         <div class="per-det-cont">
             <form  id="studentForm" method="POST">
-                Personal Details
-                <label for="name">Name:</label><br>
-                <input type="text" name="name" id="name" value="<?php echo $sRow['Stu_Name'] ?>" disabled><br>
-                <label for="dob">Date of Birth:</label><br>
-                <input type="text" name="dob" id="dob" value="<?php echo $urow['D.O.B'] ?>" disabled><br>
-                <label for="deptNo">Department No:</label><br>
-                <input type="text" name="deptno" id="deptNo" value="<?php echo $sRow['Dept_No'] ?>" disabled><br>
-                <label for="deptName">Department Name:</label><br>
-                <input type="text" name="deptName" id="deptName" value="<?php echo $sRow['Dept_Name'] ?>" disabled><br>
-                <label for="Cur_Year">Year:</label><br>
-                <input type="text" name="Cur_Year" id="Cur_Year" value="<?php echo $sRow['Cur_Year'] ?>" disabled><br>
-                <label for="Section">Section:</label><br>
-                <input type="text" name="Section" id="Section" value="<?php echo $sRow['Section'] ?>" disabled><br>
-                <label for="Degree">Degree:</label><br>
-                <input type="text" name="Degree" id="Degree" value="<?php echo $sRow['Degree'] ?>" disabled><br>
-                <label for="email">Email:</label><br>
-                <input type="text" name="email" id="email" value="<?php echo  $urow['Email'] ?>" disabled><br>        
-                <label for="Pname">Project Name</label><br>
-                <input type="text" name="Pname" id="Pname" value ="<?php echo $prjRow['Prj_Name']?>" disabled><br>
-                <label for="desc">Description</label><br>
-                <textarea name="desc" id="desc" cols="30" rows="10" disabled>
+              <div class="heading">Student details</div>  
+                <table>
+                    <tr class="row-mrg">
+                        <td><label for="name">Name:</label></td>
+                        <td><input type="text" name="name" id="FlName" value="<?php echo $sRow['Stu_Name'] ?>" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><label for="dob">Date of Birth:</label></td>
+                        <td><input type="date" name="dob" id="dob" value="<?php echo $urow['D.O.B'] ?>" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><label for="deptNo">Department No:</label></td>
+                        <td><input type="text" name="deptno" id="deptNo" value="<?php echo $sRow['Dept_No'] ?>" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><label for="deptName">Department Name:</label></td>
+                        <td><input type="text" name="deptName" id="deptName" value="<?php echo $sRow['Dept_Name'] ?>" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><label for="Cur_Year">Year:</label></td>
+                        <td><input type="text" name="Cur_Year" id="Cur_Year" value="<?php echo $sRow['Cur_Year'] ?>" disabled></td>
+                    </tr>
+                   
+                     <tr>
+                        <td><label for="Section">Section:</label></td>
+                        <td><input type="text" name="Section" id="Section" value="<?php echo $sRow['Section'] ?>" disabled></td>
+                     </tr>
+                     <tr>
+                        <td><label for="Degree">Degree:</label></td>
+                        <td><input type="text" name="Degree" id="Degree" value="<?php echo $sRow['Degree'] ?>" disabled></td>
+                     </tr>
+                     <tr>
+                        <td><label for="email">Email:</label></td>
+                        <td><input type="text" name="email" id="emailId" value="<?php echo  $urow['Email'] ?>" disabled></td>
+                        
+                     </tr>
+                     <tr>
+                        <tr>
+                            <td class="heading">Project Detail</td>
+                        </tr><?php
+                        if($prjRow['Prj_Name']){
+                        ?>
+                     <td><label for="Pname">Project Name</label></td>
+                        <td><input type="text" name="Pname" id="Pname" value ="<?php echo $prjRow['Prj_Name']?>" disabled></td>
+                        
+        
+                     </tr>
+                     <tr>
+                        <td><label for="desc">Description</label></td>
+                        <td><textarea name="desc" id="desc" cols="30" rows="10" disabled>
                     <?php echo $prjRow['Prj_Desc']?>
-                </textarea><br>
-                <button type="button" id="editBtn">Edit</button>
-                <button type="button" id="cancelBtn" style="display:none;">Cancel</button>
-                <button type="submit" id="saveBtn" style="display:none;">Save</button>
+                </textarea></td>
+                     </tr>
+                     <?php }else{
+                        echo"no prj";
+                     }?>
+
+                </table>
+                
+                
+                
+                
+                
+                
+                
+                
+             
+                
+                
+                
+                    
+                
+               
+                            <div id="validationSummary" style="margin-top: 20px;"></div>
+
+                
+                <button class="blue-btn" type="button" id="editBtn">Edit</button>
+                <button class="blue-btn" type="button" id="cancelBtn" style="display:none;">Cancel</button>
+                <button  class="blue-btn"type="submit" id="saveBtn" style="display:none;">Save</button>
             </form>
         </div>
     </div> 
@@ -103,9 +156,60 @@ document.getElementById('cancelBtn').addEventListener('click', function() {
     document.getElementById('editBtn').style.display = 'inline-block';
     document.getElementById('saveBtn').style.display = 'none';
     document.getElementById('cancelBtn').style.display = 'none';
-});
+});function validateForm() {
+        var errors = [];
+        var fullName = document.getElementById('FlName').value;
+        var dob = document.getElementById('dob').value;
+        var email = document.getElementById('emailId').value;
+        var departmentNumber = document.getElementById('deptNo').value;
 
+        // Validate Full Name
+        if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+            errors.push("Full Name should only consist of alphabets.");
+        }
+
+        // Validate Date of Birth
+        var dobDate = new Date(dob);
+        var currentDate = new Date();
+        var minDobDate = new Date();
+        minDobDate.setFullYear(currentDate.getFullYear() - 17);
+        if (dob === "" || dobDate > currentDate || dobDate > minDobDate) {
+            errors.push("Invalid Date of Birth.");
+        }
+
+        // Validate Email Address
+        if (email === "") {
+            errors.push("Email Address cannot be empty.");
+        }
+
+        var departmentNumberPattern = /^\d{2}-[a-zA-Z]{3}-\d{3}$/;
+        if (!departmentNumberPattern.test(departmentNumber.trim())) {
+            errors.push("Invalid department number format. Correct format is: 21-ucs-108");
+        }
+
+        var validationSummary = document.getElementById('validationSummary');
+        if (errors.length > 0) {
+            validationSummary.innerHTML = "<div class='error'><ul>";
+            for (var i = 0; i < errors.length; i++) {
+                validationSummary.innerHTML += "<li>" + errors[i] + "</li>";
+            }
+            validationSummary.innerHTML += "</ul></div>";
+            return false; 
+        } else {
+            validationSummary.innerHTML = ""; 
+            return true; 
+        }
+    }
+
+
+  var inputs = document.querySelectorAll('input, select');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener('change', function() {
+                validateForm();
+            });
+        }
 </script>
+
 <?php
 require_once('../config.php');
 

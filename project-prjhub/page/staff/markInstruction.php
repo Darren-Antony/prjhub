@@ -84,10 +84,10 @@ $Rv_Path = "../../uploads/".$Rv_Row['Doc_Path'];echo $Rv_Path;
             evaluationPageUrl = '../staff/Rv1markSheet.php?review_id=' + reviewId + '&review_number=' + reviewNumber;
             break;
         case 2:
-            evaluationPageUrl = '../staff/Rv2markSheet2.php?review_id=' + reviewId + '&review_number=' + reviewNumber;
+            evaluationPageUrl = '../staff/Rv2markSheet.php?review_id=' + reviewId + '&review_number=' + reviewNumber;
             break;
         case 3:
-            evaluationPageUrl = '../staff/Rv3markSheet3.php?review_id=' + reviewId + '&review_number=' + reviewNumber;
+            evaluationPageUrl = '../staff/Rv3markSheet.php?review_id=' + reviewId + '&review_number=' + reviewNumber;
             break;
         default:
             console.error('Invalid review number');

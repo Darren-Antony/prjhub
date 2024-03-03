@@ -1,9 +1,19 @@
 <?php
 require_once('../../page/config.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Assuming the form fields are sanitized before processing
-    $start_date = $_POST["start_date"];
+  session_start();
+    $project_id= $_POST['prj_Id'];
+    $user_id = $_SESSION['suser_id'];
     
+    $getstu = "SELECT student.U_Id 
+    FROM student 
+    JOIN project ON student.Dept_No = project.Stu_Id
+    WHERE project.Prj_Id = $project_id"; 
+    $getStuRes = mysqli_query($conn, $getstu);    $start_date = $_POST["start_date"];
+    $getStuRow = mysqli_fetch_assoc($getStuRes);
+    $Stu_uid = $getStuRow['U_Id'];
+    $currentDate = date('Y-m-d');
+    $currentTime = date('H:i:s');
 
     // Check connection
     if (!$conn) {
@@ -21,6 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!mysqli_query($conn, $sql)) {
             echo "Error updating record: " . mysqli_error($conn);
         }
+        $message = "This weeks timesheet has been approved";
+        $notif = "INSERT INTO notification (Sender_Id,Receiver_Id,Message,Date,Time) VALUES ($user_id,$Stu_uid,'$message','$currentDate','$currentTime')";
+        $notiRes = mysqli_query($conn, $notif);
     }
     
     // Close connection

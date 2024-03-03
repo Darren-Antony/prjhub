@@ -1,7 +1,7 @@
 <?php
 // Include the database configuration file
 require_once('../../../page/config.php');
-
+session_start();
 // Check if the form is submitted
 if(isset($_POST["submit"])) {
     // Get the review ID and project ID from the form
@@ -9,13 +9,30 @@ if(isset($_POST["submit"])) {
     $prjId = $_POST['prjId'];
     $reviewNumber = $_POST['reviewNumber'];
 
-    // Define the directory where uploaded files will be stored
-    $targetDir = "../../../uploads/";
+    $user_id = $_SESSION['user_id'];
+    $selectQry = "SELECT * FROM student WHERE U_Id=$user_id";
+    $sresult= mysqli_query($conn,$selectQry);
+    $Row = mysqli_fetch_assoc($sresult);
+    $guide_Id = $Row['Guide_Id'];
+    $Stu_Id = $Row['Dept_No'];
+    $currentDate = date('Y-m-d');
+    $currentTime = date('H:i:s');
+    $getGuideUid = "SELECT U_Id FROM guide WHERE Guide_Id = '$guide_Id' ";
+    $getGuideUidRes = mysqli_query($conn, $getGuideUid);
+            $guideUidRow = mysqli_fetch_assoc($getGuideUidRes);
+            $guideUid = $guideUidRow['U_Id'];
 
-    // Get the file name
+            $StuName = "SELECT Stu_Name from student WHERE U_Id = $user_id";
+            $StuNameRes = mysqli_query($conn, $StuName);
+            $Sname = mysqli_fetch_assoc($StuNameRes)['Stu_Name'];
+
+            $message = $Sname.' Added '.$reviewNumber."document";   
+            $targetDir = "../../../uploads/";
+
+    
     $fileName = basename($_FILES["review".$reviewNumber."_file"]["name"]);
 
-    // Define the target file path
+    
     $targetFilePath = $targetDir . $fileName;
 
     // Check if file is selected
@@ -30,6 +47,9 @@ if(isset($_POST["submit"])) {
                 // Insert file information into the database
                 $insert = "INSERT INTO review_doc (rv_Id, Prj_Id, Doc_Name, Doc_Path,review_no) VALUES ('$reviewID', '$prjId', '$targetFilePath', '$fileName',$reviewNumber)";
                 if(mysqli_query($conn, $insert)){
+                    $message =
+                    $notif = "INSERT INTO notification (Sender_Id,Receiver_Id,Message,Date,Time) VALUES ($user_id,$guideUid,'$message','$currentDate','$currentTime')";
+                    $notiRes = mysqli_query($conn, $notif);
                     echo "The file ".$fileName. " has been uploaded successfully.";
                 } else{
                     echo "Error inserting file data into the database.";

@@ -4,6 +4,7 @@ function StudentPage(){
 
 function viewtmsht(prjId){
     console.log('Clicked on time button. Project ID:', prjId);
+    window.location.href=
     window.open('viewPrjTmsht.php?prjId=' + prjId, '_blank');
 }
 

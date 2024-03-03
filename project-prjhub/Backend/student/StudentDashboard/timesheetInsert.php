@@ -58,23 +58,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo "Data inserted successfully!";
         $notif = "INSERT INTO notification (Sender_Id,Receiver_Id,Message,Date,Time) VALUES ($user_id,$guideUid,'$message','$currentDate','$currentTime')";
                 $notiRes = mysqli_query($conn, $notif);
-                echo "Project added successfully.";
+                echo "Timesheet Added Sucessfully";
 
     } else {
         echo "Error inserting data: " . $stmt->error;
     }
 
-    // Close the statement
     $stmt->close();
 
-    // Close the connection
     mysqli_close($conn);
 
-    // Redirect after processing
     echo "<script>window.history.back();</script>";
     exit();
 } else {
-    // Handle invalid request
     echo "Invalid request method.";
 }
 ?>

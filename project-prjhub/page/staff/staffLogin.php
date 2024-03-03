@@ -14,8 +14,11 @@
 </head>
 <body>
    <div class="logo-cont">
-        <img src="../../asset/image/Logo.png" alt="" srcset="">
+    <div class="logo">
+    <img src="../../asset/image/Logo.png" alt="" srcset="">
         <h1>Academic Project Tracker</h1>
+    </div>
+        
     </div>
     
     <div class="form">
@@ -40,12 +43,12 @@
 </html>
 <?php
 include_once('../config.php');
-if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and password are set
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
     $Email = $_POST['emailId'];
-    $Pwd = $_POST['pwd']; // Added a semicolon here
+    $Pwd = $_POST['pwd']; 
 
     try {
-        $lgnQry = "SELECT * FROM user_credentials WHERE Email ='$Email' and User_Type='Guide'"; // Corrected the variable usage in the query
+        $lgnQry = "SELECT * FROM user_credentials WHERE Email ='$Email' and User_Type='Guide'"; 
         $result = mysqli_query($conn, $lgnQry);
 
         if (!$result) {
@@ -62,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
                 
                 session_start();
         
-                // Store user information in session variables
-                $_SESSION['user_id'] = $result['U_Id'];
+                
+                $_SESSION['suser_id'] = $result['U_Id'];
                 $_SESSION['email'] = $result['Email'];
         
                
@@ -76,16 +79,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // Checking if both email and passwo
                     window.location.href = './staffdashboard.php'; // Redirect to the same page with the department number
                 });
             </script>";
-                exit(); // Ensure that subsequent code is not executed after redirection
+                exit();
             } else {
-                echo "Invalid credentials"; // Notify invalid credentials
+                echo "Invalid credentials"; 
             }
         }
         
     } catch (Exception $e) {
-        echo "Error finding student: " . $e->getMessage(); // Echo instead of return
+        echo "Error finding student: " . $e->getMessage(); 
     }
 } else {
-    // echo "Email and password are required fields"; // Handling case where email or password is not provided
 }
 ?>

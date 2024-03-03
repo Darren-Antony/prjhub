@@ -3,7 +3,6 @@ require_once('../config.php');
 session_start();
 $userId = $_SESSION['user_id'];
 
-// Get user credentials
 $getUserData = "SELECT * FROM user_credentials WHERE U_Id = $userId";
 $getUserDataRes = mysqli_query($conn, $getUserData);
 
@@ -14,7 +13,6 @@ if (!$getUserDataRes) {
 $UserRow = mysqli_fetch_assoc($getUserDataRes);
 $UserType = $UserRow['User_Type'];
 
-// Get student details
 $UserData = "SELECT * FROM student WHERE U_Id = $userId"; 
 $UserDataRes = mysqli_query($conn, $UserData);
 

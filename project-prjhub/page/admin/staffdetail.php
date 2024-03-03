@@ -38,6 +38,33 @@
     <script src="../../dependancies/jquery.js"></script>
     <script src="../../dependancies/sweetalert.js"></script>
     <title>Student details</title>
+    <style>
+         
+         table {
+           width:100%;
+            border-collapse: collapse;
+            margin-top: 20px; 
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color:#1C91F2;
+            color:white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .student-details{
+            width:100%;
+        }
+
+    </style>
 </head>
 <body>
    <div class="logo-cont">
@@ -47,25 +74,53 @@
         </div>
     </div>
     <div class="cont">
+        
         <div class="per-det-cont">
+      
             <form  id="studentForm" method="POST">
-                Personal Details <br>
-                <label for="name">Name:</label><br>
-                <input type="text" name="name" id="name" value="<?php echo $sRow['G_Name'] ?>" disabled><br>
-                <label for="dob">Date of Birth:</label><br>
-                <input type="text" name="dob" id="dob" value="<?php echo $urow['D.O.B'] ?>" disabled><br>
-                <label for="deptNo">Department No:</label><br>
-                <input type="text" name="deptno" id="deptNo" value="<?php echo $sRow['Guide_Id'] ?>" disabled><br>
+            <span class="heading">Staff Details</span>
+                <table>
+                    
+                    <tr>
+                        <td><label for="name">Name:</label></td>
+                        <td><input type="text" name="name" id="name" value="<?php echo $sRow['G_Name'] ?>" disabled></td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <label for="dob">Date of Birth:</label>
+                        </td>
+                        <td><input type="date" name="dob" id="dob" value="<?php echo $urow['D.O.B'] ?>" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><label for="StId">Staff Id:</label></td>
+                        <td><input type="text" name="StId" id="StId" value="<?php echo $sRow['Guide_Id'] ?>" disabled></td>
+                    </tr>
+                    <tr>
+                        <td><label for="Email">Email:</label></td>
+                        <td><input type="email" name="Email" id="Email" value="<?php echo $urow['Email'] ?>" disabled></td>
+                    </tr>
+                </table>
                
                 
-                <button type="button" id="editBtn">Edit</button>
-                <button type="button" id="cancelBtn" style="display:none;">Cancel</button>
-                <button type="submit" id="saveBtn" style="display:none;">Save</button>
+                
+                
+                
+                
+                
+               
+                
+                <button class="blue-btn" type="button" id="editBtn">Edit</button>
+                <button class="blue-btn"type="button" id="cancelBtn" style="display:none;">Cancel</button>
+                <button  type="submit" id="saveBtn" style="display:none;">Save</button>
             </form>
         </div>
+       
         <div class="student">
 <?php
 if (mysqli_num_rows($prjres) > 0) {
+    ?>
+    <span class="heading">Assigned Students</span>
+    <?php
     echo '<div class="student-details">';
    
     echo'<table class="student-tbl">';
@@ -89,7 +144,7 @@ echo "</tr>";
 }
 ?>
         </div>
-    </div> 
+        </div> 
 </body>
 <script>
    document.getElementById('editBtn').addEventListener('click', function() {

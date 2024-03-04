@@ -100,15 +100,6 @@
                         <td><input type="email" name="Email" id="Email" value="<?php echo $urow['Email'] ?>" disabled></td>
                     </tr>
                 </table>
-               
-                
-                
-                
-                
-                
-                
-               
-                
                 <button class="blue-btn" type="button" id="editBtn">Edit</button>
                 <button class="blue-btn"type="button" id="cancelBtn" style="display:none;">Cancel</button>
                 <button  type="submit" id="saveBtn" style="display:none;">Save</button>
@@ -177,7 +168,6 @@ require_once('../config.php');
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Assuming the form fields are sanitized before processing
     $name = $_POST["name"];
     $dob = $_POST["dob"];
     $deptNo = $_POST["deptno"];
@@ -189,15 +179,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $prj_Name = $_POST["Pname"];
     $Prj_Desc = $_POST['desc'];
     // Update student table
-    $updateStudentQuery = "UPDATE student SET Stu_Name='$name', Dept_No='$deptNo', Dept_Name='$deptName', Cur_Year='$curYear', Section='$section', Degree='$degree' WHERE U_Id=
-    $StyUid";
+    $updateStudentQuery = "UPDATE Guide SET G_Name='$name'";
 
     // Update user_credentials table
     $updateUserCredQuery = "UPDATE user_credentials SET Email='$email',`D.O.B`='$dob'WHERE U_Id= $StyUid";
  
-    $updatePrj ="UPDATE project SET Prj_Name = '$prj_Name',Prj_Desc='$Prj_Desc' WHERE Stu_Id = '$dept'";
-    $updatePrjRes = mysqli_query($conn,$updatePrj);
-    
+
     // Perform the updates
     $success = true;
     if (!mysqli_query($conn, $updateStudentQuery)) {

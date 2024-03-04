@@ -28,6 +28,7 @@
         <input type="submit" name="submit" value="submit">
     </form>
 </div>
+<div id="validation-summary"></div>
 </body>
 </html>
 
@@ -36,6 +37,11 @@
 require_once('../config.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']))  {
+    // Initialize array to store error messages and rows with errors
+    $errorMessages = array();
+    $rowsWithErrors = array();
+    $validationSummary = "";
+
     // Check if file is uploaded successfully
     if ($_FILES['csv_file']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['csv_file']['tmp_name'];
@@ -44,23 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']))  {
         // Check the file extension
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
         if (strtolower($fileExtension) !== 'csv') {
-         
-            echo"<script>Swal.fire({
+            $errorMessages[] = "Invalid File Upload Format!";
+            // Stop further execution
+            exit("<script>Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Invalid File Upload Fornat!',
-              });</script>";         
-            exit; // Stop further execution
-        }
-
-        // Check connection
-        if ($conn->connect_error) {
-            echo"<script>Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'something went wrong',
-              });</script>"; 
-            exit; // Stop further execution
+                text: 'Invalid File Upload Format!'
+            });</script>");
         }
 
         // Open the CSV file for reading
@@ -70,28 +66,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']))  {
         fgetcsv($file);
 
         $insertedRecords = 0; // Initialize counter for inserted records
+        $existingEmails = array(); // Initialize array to store existing emails
+
+        // Fetch existing emails from the database
+        $result = $conn->query("SELECT Email FROM user_credentials");
+        while ($row = $result->fetch_assoc()) {
+            $existingEmails[] = $row['Email'];
+        }
 
         while (($data = fgetcsv($file)) !== FALSE) {
             $col1 = $data[0];
             $col2 = $data[1];
             $col3 = $data[2];
+            $dob = $data[3];
+            $guideName = $data[5];
 
-            // Convert date format from "29-08-2003" to "2003-08-29"
-            $dob = date('Y-m-d', strtotime($data[3]));
+            // Validate Email format
+            if (!filter_var($col1, FILTER_VALIDATE_EMAIL)) {
+                $errorMessages[] = "Invalid Email format in row " . ($insertedRecords + 1);
+                $rowsWithErrors[] = $data;
+                continue; // Skip this row and move to the next one
+            }
 
+            // Check if email already exists
+            if (in_array($col1, $existingEmails)) {
+                $errorMessages[] = "Duplicate email '$col1' found in row " . ($insertedRecords + 1);
+                $rowsWithErrors[] = $data;
+                continue; // Skip this row and move to the next one
+            }
+
+            // Validate Date of Birth format and age greater than 17 years
+            if (!strtotime($dob) || strtotime($dob) > strtotime('-17 years')) {
+                $errorMessages[] = "Invalid Date of Birth or age less than 17 years in row " . ($insertedRecords + 1);
+                $rowsWithErrors[] = $data;
+                continue; // Skip this row and move to the next one
+            }
+
+            // Validate Guide name consists of only alphabets
+            if (!ctype_alpha($guideName)) {
+                $errorMessages[] = "Invalid Guide Name format in row " . ($insertedRecords + 1);
+                $rowsWithErrors[] = $data;
+                continue; // Skip this row and move to the next one
+            }
+
+            // Insert valid records into the database
             $sql = "INSERT INTO user_credentials (Email, Password, User_Type, `D.O.B`) VALUES ('$col1', '$col2', '$col3', '$dob')";
-
             if ($conn->query($sql) === TRUE) {
                 $user_id = mysqli_insert_id($conn);
-                $sql = "INSERT INTO guide (U_Id,Guide_Id,G_Name,No_of_Students,Gender) VALUES ($user_id,'$data[4]','$data[5]',0,'$data[6]')";
+                $sql = "INSERT INTO guide (U_Id,Guide_Id,G_Name,No_of_Students,Gender) VALUES ($user_id,'$data[4]','$guideName',0,'$data[6]')";
                 $res = mysqli_query($conn, $sql);
                 $insertedRecords++; // Increment counter for inserted records
             } else {
-                echo"<script>Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'something went wrong',
-                  });</script>"; 
+                $errorMessages[] = "Database insertion error in row " . ($insertedRecords + 1) . ": " . $conn->error;
+                $rowsWithErrors[] = $data;
             }
         }
 
@@ -101,23 +128,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']))  {
         // Close the database connection
         $conn->close();
 
-      
-        echo "<script>";
-        echo "Swal.fire({
-                icon: 'Success',
-                title: 'Oops...',
-                text: 'Inserted records: " . $insertedRecords . "'
-            });";
-        echo "</script>";
+        // Display error messages for invalid rows
+        if (!empty($errorMessages)) {
+            $validationSummary .= "<h2>Validation Errors:</h2>";
+            $validationSummary .= "<ul>";
+            foreach ($errorMessages as $errorMessage) {
+                // Escape single quotes in the error message
+                $escapedErrorMessage = addslashes($errorMessage);
+                $validationSummary .= "<li>$escapedErrorMessage</li>";
+            }
+            $validationSummary .= "</ul>";
+        }
         
-    } else {
-        echo "<script>";
-        echo "Swal.fire({
+        // Display error message for rows that failed validation
+        if (!empty($rowsWithErrors)) {
+            $validationSummary .= "<h2>Rows with Validation Errors:</h2>";
+            $validationSummary .= "<ul>";
+            foreach ($rowsWithErrors as $rowData) {
+                // Escape single quotes in the row data
+                $escapedRowData = array_map('addslashes', $rowData);
+                $validationSummary .= "<li>" . implode(",", $escapedRowData) . "</li>";
+            }
+            $validationSummary .= "</ul>";
+        }
+
+        // If there are no errors, display success message with inserted records count
+        if (empty($errorMessages) && empty($rowsWithErrors)) {
+            echo "<script>Swal.fire({
                 icon: 'success',
-                title: 'Oops...',
+                title: 'Success',
                 text: 'Inserted records: " . $insertedRecords . "'
-            });";
-        echo "</script>";
+            });</script>";
+        } else {
+            // Display validation summary in the HTML container
+            echo "<script>document.getElementById('validation-summary').innerHTML = '$validationSummary';</script>";
+        }
+    } else {
+        echo "<script>Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'File upload failed!'
+        });</script>";
     }
 }
 ?>
+

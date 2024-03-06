@@ -194,9 +194,12 @@ if ($result) {
         <?php
         if ($ReviewRow['Review1_Date'] == NULL) {
          
-            echo '<input type="date"><br>';
+            echo '<input id="dateVal" type="date" onchange="validateForm(\'dateVal\', \'confirmDateBtn1\',\'validationSummary1\')"><br>';
+
             ?>
-            <button onclick="confirmDate(1)">Confirm Date</button>
+              
+                <button id="confirmDateBtn1" onclick="confirmDate(1)" disabled>Confirm Date</button>
+              
             <?php
         } else {
             echo"Review Date:";
@@ -204,6 +207,7 @@ if ($result) {
             
         }
         ?>
+        <div class="error" id="validationSummary1" style="margin-top: 20px;"></div>
     </div>
     </div>
 </div>
@@ -218,7 +222,7 @@ if ($result) {
                         $maxLimit2 = 30;
                         ?><div class="containerc" id="container2"></div><?php
                         if ($ReviewRow['Review2_Date'] == NULL) {
-                            echo 'Enter a date for review';
+                            
                         } else if (mysqli_num_rows($RvdocRes2) == 0) {
                             echo "No document submitted yet";
                         } else {
@@ -230,15 +234,16 @@ if ($result) {
                         ?><div class="containerc" id="container2"></div>       <?php }?>                    
                     <div class="rv-date">
                     <?php
-                    if ($ReviewRow['Review2_Date'] == NULL && $oneMonthAfterReview1 !== null && $currentDate !== null && $currentDate >= $oneMonthAfterReview1) {
-                        echo '<input type="date">';
+                    if ($ReviewRow['Review2_Date'] == NULL && $ReviewRow['Review1_Date'] !== NULL) {
+                        echo 'Enter a date for review';
+                        echo '<input id="dateVal" type="date" onchange="validateForm(\'dateVal\', \'confirmDateBtn2\',\'validationSummary2\')"><br>';
                         ?>
-                        <button onclick="confirmDate(2)">Confirm Date</button>
+                        <button id="confirmDateBtn2" onclick="confirmDate(2)">Confirm Date</button>
                         <?php
                     } elseif ($ReviewRow['Review2_Date'] !== NULL) {
                         echo '<input type="date" value="' . $ReviewRow['Review2_Date'] . '" disabled>';
                     } else {
-                        echo '<input type="date" disabled>';
+                        echo 'Review 1 need to be completed';
                     }
                  ?>
                 </div><?php
@@ -246,7 +251,7 @@ if ($result) {
         
       
         ?>
-
+<div class="error" id="validationSummary2" style="margin-top: 20px;"></div>
    
 </div>
     </div>
@@ -260,7 +265,7 @@ if ($result) {
                         $maxLimit3 = 40;
                         ?><div class="containerc" id="container3"></div><?php
                         if ($ReviewRow['Review3_Date'] == NULL) {
-                            echo 'Enter a date for review';
+                           
                         } else if (mysqli_num_rows($RvdocRes3) == 0) {
                             echo "No document submitted yet";
                         } else {
@@ -270,26 +275,64 @@ if ($result) {
                         $maxLimit3 = 30;
                         ?><div class="containerc" id="container3"></div>       <?php }?>                    
                     <?php
-                    if ($ReviewRow['Review3_Date'] == NULL ) {
-                        echo '<input type="date">';
+                    if ($ReviewRow['Review3_Date'] == NULL && $ReviewRow['Review2_Date'] !== NULL ) {
+                        echo 'Enter a date for review';
+                        echo '<input id="dateVal" type="date" onchange="validateForm(\'dateVal\', \'confirmDateBtn3\',\'validationSummary3\')"><br>';
                         ?>
-                        <button onclick="confirmDate(3)">Confirm Date</button>
+                        <button id="confirmDateBtn3" onclick="confirmDate(3)">Confirm Date</button>
                         <?php
                     } elseif ($ReviewRow['Review3_Date'] !== NULL) {
                         echo '<input type="date" value="' . $ReviewRow['Review3_Date'] . '" disabled>';
                     } else {
-                        echo '<input type="date" disabled>';
+                        echo 'Review 3 needs to be completed';
                     }
                  ?>
                 </div><?php
               
              
         ?>
+        <div class="error" id="validationSummary3" style="margin-top: 20px;"></div>
     </div>
    
 </div>
 </div>
 <script>
+    function validateForm(inputId, buttonId,summaryid) {
+    var errors = [];
+    var dateVal = document.getElementById(inputId).value;
+    var inputDate1 = new Date(dateVal);
+    var currentDate = new Date();
+
+    if (inputDate1 <= currentDate) {
+        errors.push("Date should be in the future.");
+    }
+
+    var validationSummary = document.getElementById(summaryid);
+    if (errors.length > 0) {
+    var htmlContent = "<div class='error'><ul>";
+    for (var i = 0; i < errors.length; i++) {
+        htmlContent += "<li>" + errors[i] + "</li>";
+    }
+    htmlContent += "</ul></div>";
+    validationSummary.innerHTML = htmlContent;
+    document.getElementById(buttonId).disabled = true; // Disable the button
+    return false;
+} else {
+    validationSummary.innerHTML = "";
+    document.getElementById(buttonId).disabled = false; // Enable the button
+    return true;
+}
+
+}
+
+
+//   var inputs = document.querySelectorAll('input, select');
+//         for (var i = 0; i < inputs.length; i++) {
+//             inputs[i].addEventListener('change', function() {
+//                 validateForm();
+//             });
+//         }
+    
 var totalMarks = 100; 
 var obtainedMarks = <?php echo $marks; ?>;  
 console.log(obtainedMarks);

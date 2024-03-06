@@ -83,7 +83,7 @@
                     
                     <tr>
                         <td><label for="name">Name:</label></td>
-                        <td><input type="text" name="name" id="name" value="<?php echo $sRow['G_Name'] ?>" disabled></td>
+                        <td><input type="text" name="name" id="FlName" value="<?php echo $sRow['G_Name'] ?>" disabled></td>
                     </tr>
                     <tr>
                         <td>
@@ -104,6 +104,8 @@
                 <button class="blue-btn"type="button" id="cancelBtn" style="display:none;">Cancel</button>
                 <button  type="submit" id="saveBtn" style="display:none;">Save</button>
             </form>
+            <div id="validationSummary" style="margin-top: 20px;"></div>
+
         </div>
        
         <div class="student">
@@ -139,8 +141,8 @@ echo "</tr>";
 </body>
 <script>
    document.getElementById('editBtn').addEventListener('click', function() {
-    // Enable form fields
-    document.querySelectorAll('#studentForm input, #studentForm textarea').forEach(function(input) {
+    // Enable form fields except for department name
+    document.querySelectorAll('#studentForm input:not(#StId), #studentForm textarea').forEach(function(input) {
         input.disabled = false;
     });
     
@@ -151,17 +153,66 @@ echo "</tr>";
 });
 
 document.getElementById('cancelBtn').addEventListener('click', function() {
-    // Disable form fields
-    document.querySelectorAll('#studentForm input, #studentForm textarea').forEach(function(input) {
+    document.querySelectorAll('#studentForm input:not(#deptName), #studentForm textarea').forEach(function(input) {
         input.disabled = true;
     });
     
-    // Hide save and cancel buttons, show edit button
+    
     document.getElementById('editBtn').style.display = 'inline-block';
     document.getElementById('saveBtn').style.display = 'none';
     document.getElementById('cancelBtn').style.display = 'none';
 });
+function validateForm(){
+     var errors = [];
+        var fullName = document.getElementById('FlName').value;
+        var dob = document.getElementById('dob').value;
+        var email = document.getElementById('Email').value;
 
+        if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+            errors.push("Full Name should only consist of alphabets.");
+        }
+
+        var dobDate = new Date(dob);
+        var currentDate = new Date();
+        var minDobDate = new Date();
+        minDobDate.setFullYear(currentDate.getFullYear() - 17);
+        if (dob === "" || dobDate > currentDate || dobDate > minDobDate) {
+            errors.push("Invalid Date of Birth.");
+        }
+
+        if (email === "") {
+            errors.push("Email Address cannot be empty.");
+        }
+
+       
+        var validationSummary = document.getElementById('validationSummary');
+        if (errors.length > 0) {
+            validationSummary.innerHTML = "<div class='error'><ul>";
+            for (var i = 0; i < errors.length; i++) {
+                validationSummary.innerHTML += "<li class='error'>" + errors[i] + "</li>";
+            }
+            validationSummary.innerHTML += "</ul></div>";
+            document.getElementById('saveBtn').disabled = true; // Disable the button
+            return false; 
+        } else {
+            validationSummary.innerHTML = ""; 
+            document.getElementById('saveBtn').disabled = false; // Enable the button
+            return true; 
+        }
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        if (!validateForm()) {
+            return false; // Prevent form submission if there are errors
+        }
+    });
+
+    var inputs = document.querySelectorAll('input, select');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('change', function() {
+            validateForm();
+        });
+    }
 </script>
 <?php
 require_once('../config.php');
@@ -170,14 +221,9 @@ require_once('../config.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];
     $dob = $_POST["dob"];
-    $deptNo = $_POST["deptno"];
-    $deptName = $_POST["deptName"];
-    $curYear = $_POST["Cur_Year"];
-    $section = $_POST["Section"];
-    $degree = $_POST["Degree"];
+    
     $email = $_POST["email"];
-    $prj_Name = $_POST["Pname"];
-    $Prj_Desc = $_POST['desc'];
+    
     // Update student table
     $updateStudentQuery = "UPDATE Guide SET G_Name='$name'";
 

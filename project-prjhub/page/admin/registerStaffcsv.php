@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']))  {
             foreach ($errorMessages as $errorMessage) {
                 // Escape single quotes in the error message
                 $escapedErrorMessage = addslashes($errorMessage);
-                $validationSummary .= "<li>$escapedErrorMessage</li>";
+                $validationSummary .= '<li class="error">'.$escapedErrorMessage."</li>";
             }
             $validationSummary .= "</ul>";
         }
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']))  {
             foreach ($rowsWithErrors as $rowData) {
                 // Escape single quotes in the row data
                 $escapedRowData = array_map('addslashes', $rowData);
-                $validationSummary .= "<li>" . implode(",", $escapedRowData) . "</li>";
+                $validationSummary .= '<li class="error">' . implode(",", $escapedRowData) . "</li>";
             }
             $validationSummary .= "</ul>";
         }

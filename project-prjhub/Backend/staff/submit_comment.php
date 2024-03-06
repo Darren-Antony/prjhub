@@ -1,7 +1,7 @@
 <?php
 require_once('../../page/config.php');
 session_start();
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['suser_id'];
 if (isset($_POST['comment']) && isset($_POST['prjid'])) {
     $comment = htmlspecialchars($_POST['comment']);
     $prjid = $_POST['prjid'];

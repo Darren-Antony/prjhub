@@ -162,20 +162,20 @@ function validateForm() {
    
     var validationSummary = document.getElementById('validationSummary');
     if (errors.length > 0) {
-        validationSummary.innerHTML = "<div class='error'><ul>";
-        for (var i = 0; i < errors.length; i++) {
-            validationSummary.innerHTML += "<li>" + errors[i] + "</li>";
+            validationSummary.innerHTML = "<div class='error'><ul>";
+            for (var i = 0; i < errors.length; i++) {
+                validationSummary.innerHTML += "<li>" + errors[i] + "</li>";
+            }
+            validationSummary.innerHTML += "</ul></div>";
+            return false; 
+        } else {
+            validationSummary.innerHTML = ""; 
+            return true; 
         }
-        validationSummary.innerHTML += "</ul></div>";
-        return false; 
-    } else {
-        validationSummary.innerHTML = ""; 
-        return true; 
-    }
-}
+  }
 
 
-var inputs = document.querySelectorAll('input, select');
+  var inputs = document.querySelectorAll('input, select');
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].addEventListener('change', function() {
             validateForm();

@@ -108,24 +108,7 @@
                      }?>
 
                 </table>
-                
-                
-                
-                
-                
-                
-                
-                
-             
-                
-                
-                
-                    
-                
-               
                             <div id="validationSummary" style="margin-top: 20px;"></div>
-
-                
                 <button class="blue-btn" type="button" id="editBtn">Edit</button>
                 <button class="blue-btn" type="button" id="cancelBtn" style="display:none;">Cancel</button>
                 <button  class="blue-btn"type="submit" id="saveBtn" style="display:none;">Save</button>
@@ -134,9 +117,9 @@
     </div> 
 </body>
 <script>
-   document.getElementById('editBtn').addEventListener('click', function() {
-    // Enable form fields
-    document.querySelectorAll('#studentForm input, #studentForm textarea').forEach(function(input) {
+  document.getElementById('editBtn').addEventListener('click', function() {
+    // Enable form fields except for department name
+    document.querySelectorAll('#studentForm input:not(#deptNo), #studentForm textarea').forEach(function(input) {
         input.disabled = false;
     });
     
@@ -147,28 +130,26 @@
 });
 
 document.getElementById('cancelBtn').addEventListener('click', function() {
-    // Disable form fields
-    document.querySelectorAll('#studentForm input, #studentForm textarea').forEach(function(input) {
+    document.querySelectorAll('#studentForm input:not(#deptName), #studentForm textarea').forEach(function(input) {
         input.disabled = true;
     });
     
-    // Hide save and cancel buttons, show edit button
+    
     document.getElementById('editBtn').style.display = 'inline-block';
     document.getElementById('saveBtn').style.display = 'none';
     document.getElementById('cancelBtn').style.display = 'none';
-});function validateForm() {
-        var errors = [];
+});
+function validateForm(){
+     var errors = [];
         var fullName = document.getElementById('FlName').value;
         var dob = document.getElementById('dob').value;
         var email = document.getElementById('emailId').value;
         var departmentNumber = document.getElementById('deptNo').value;
 
-        // Validate Full Name
         if (!/^[a-zA-Z\s]+$/.test(fullName)) {
             errors.push("Full Name should only consist of alphabets.");
         }
 
-        // Validate Date of Birth
         var dobDate = new Date(dob);
         var currentDate = new Date();
         var minDobDate = new Date();
@@ -177,7 +158,6 @@ document.getElementById('cancelBtn').addEventListener('click', function() {
             errors.push("Invalid Date of Birth.");
         }
 
-        // Validate Email Address
         if (email === "") {
             errors.push("Email Address cannot be empty.");
         }
@@ -191,23 +171,30 @@ document.getElementById('cancelBtn').addEventListener('click', function() {
         if (errors.length > 0) {
             validationSummary.innerHTML = "<div class='error'><ul>";
             for (var i = 0; i < errors.length; i++) {
-                validationSummary.innerHTML += "<li>" + errors[i] + "</li>";
+                validationSummary.innerHTML += "<li class='error'>" + errors[i] + "</li>";
             }
             validationSummary.innerHTML += "</ul></div>";
+            document.getElementById('saveBtn').disabled = true; // Disable the button
             return false; 
         } else {
             validationSummary.innerHTML = ""; 
+            document.getElementById('saveBtn').disabled = false; // Enable the button
             return true; 
         }
     }
 
-
-  var inputs = document.querySelectorAll('input, select');
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].addEventListener('change', function() {
-                validateForm();
-            });
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        if (!validateForm()) {
+            return false; // Prevent form submission if there are errors
         }
+    });
+
+    var inputs = document.querySelectorAll('input, select');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('change', function() {
+            validateForm();
+        });
+    }
 </script>
 
 <?php
@@ -215,10 +202,10 @@ require_once('../config.php');
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Assuming the form fields are sanitized before processing
+
     $name = $_POST["name"];
     $dob = $_POST["dob"];
-    $deptNo = $_POST["deptno"];
+
     $deptName = $_POST["deptName"];
     $curYear = $_POST["Cur_Year"];
     $section = $_POST["Section"];
@@ -226,17 +213,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $prj_Name = $_POST["Pname"];
     $Prj_Desc = $_POST['desc'];
-    // Update student table
-    $updateStudentQuery = "UPDATE student SET Stu_Name='$name', Dept_No='$deptNo', Dept_Name='$deptName', Cur_Year='$curYear', Section='$section', Degree='$degree' WHERE U_Id=
+
+    $updateStudentQuery = "UPDATE student SET Stu_Name='$name', Dept_Name='$deptName', Cur_Year='$curYear', Section='$section', Degree='$degree' WHERE U_Id=
     $StyUid";
 
-    // Update user_credentials table
     $updateUserCredQuery = "UPDATE user_credentials SET Email='$email',`D.O.B`='$dob'WHERE U_Id= $StyUid";
  
     $updatePrj ="UPDATE project SET Prj_Name = '$prj_Name',Prj_Desc='$Prj_Desc' WHERE Stu_Id = '$dept'";
     $updatePrjRes = mysqli_query($conn,$updatePrj);
     
-    // Perform the updates
     $success = true;
     if (!mysqli_query($conn, $updateStudentQuery)) {
         $success = false;
@@ -260,11 +245,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 window.location.href = 'studentdetail.php?dept_no=$dept'; // Redirect to the same page with the department number
             });
         </script>";
-        exit; // Stop further execution of the script
+        exit; 
     }
 }
 
-// Fetch the updated data to display in the form
+
 $slQry2 = "SELECT * FROM student WHERE U_Id =$user_id";
 $slresult2 = mysqli_query($conn, $slQry2);
 if (!$slresult2) {

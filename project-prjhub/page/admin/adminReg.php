@@ -13,79 +13,8 @@
     <script src="../../script/student/dashboard/ajax/submitProjectAjax.js"></script>
     <script src="../../script/global.js"></script>
     <script src="../../dependancies/sweetalert.js"></script>
-    <script>
-          function validateForm() {
-            var email = document.getElementById("emailId").value;
-            var fullName = document.getElementById("FlName").value;
-            var dob = document.getElementById("dob").value;
-            var password = document.getElementById("pwd").value;
-            var confirmPassword = document.getElementById("cpwd").value;
-
-            // Email validation
-            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Invalid email address!',
-                    text: 'Please enter a valid email address.'
-                });
-                return false;
-            }
-
-            // Full name validation
-            if (fullName.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing full name!',
-                    text: 'Please enter your full name.'
-                });
-                return false;
-            }
-
-            // Date of Birth validation
-            if (dob.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing date of birth!',
-                    text: 'Please enter your date of birth.'
-                });
-                return false;
-            }
-
-            
-
-            // Password validation
-            if (password.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing password!',
-                    text: 'Please enter a password.'
-                });
-                return false;
-            }
-
-            // Confirm Password validation
-            if (confirmPassword.trim() === "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing confirmation password!',
-                    text: 'Please confirm your password.'
-                });
-                return false;
-            }
-
-            if (password !== confirmPassword) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Passwords do not match!',
-                    text: 'Please make sure your passwords match.'
-                });
-                return false;
-            }
-
-            return true; 
-        }
-    </script>
+    
+          
 </head>
 <body>
 <div class="logo-cont">
@@ -100,13 +29,13 @@
             </div>
             <div class="form-cont">
                 <label for="FlName">Full Name</label><br>
-                <input type="text" name="FlName" id="FlName" ><br>
+                <input type="text" name="FlName" id="FlName" onchange="validateForm()" ><br>
         
                 <label for="emailId">Email Address</label><br>
-                <input type="email" name="emailId" id="emailId" ><br>
+                <input type="email" name="emailId" id="emailId" onchange="validateForm()"><br>
                  
                 <label for="dob">Date of Birth</label><br>
-                <input type="date" name="dob" id="dob"><br>
+                <input type="date" name="dob" id="dob" onchange="validateForm()"><br>
 
               
 
@@ -125,18 +54,71 @@
                 
             </div> 
             <center>
-                <input class="blue-btn" type="submit" value="Submit">
+            <input class="blue-btn" type="submit" name="submit" value="Submit">
             </center>
 </form>
+<div id="validationSummary" style="margin-top: 20px;"></div>
     </div>
     
 </body>
 
 </html>
+<script>
+    
+
+    function validateForm() {
+        var errors = [];
+        var fullName = document.getElementById('FlName').value;
+        var dob = document.getElementById('dob').value;
+        var email = document.getElementById('emailId').value;
+        
+
+        // Validate Full Name
+        if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+            errors.push("Full Name should only consist of alphabets.");
+        }
+
+        // Validate Date of Birth
+        var dobDate = new Date(dob);
+        var currentDate = new Date();
+        var minDobDate = new Date();
+        minDobDate.setFullYear(currentDate.getFullYear() - 17);
+        if (dob === "" || dobDate > currentDate || dobDate > minDobDate) {
+            errors.push("Invalid Date of Birth.");
+        }
+
+        // Validate Email Address
+        if (email === "") {
+            errors.push("Email Address cannot be empty.");
+        }
+
+       
+        var validationSummary = document.getElementById('validationSummary');
+        if (errors.length > 0) {
+            validationSummary.innerHTML = "<div class='error'><ul>";
+            for (var i = 0; i < errors.length; i++) {
+                validationSummary.innerHTML += "<li class='error'>" + errors[i] + "</li>";
+            }
+            validationSummary.innerHTML += "</ul></div>";
+            return false; 
+        } else {
+            validationSummary.innerHTML = ""; 
+            return true; 
+        }
+    }
+
+
+  var inputs = document.querySelectorAll('input, select');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener('change', function() {
+                validateForm();
+            });
+        }
+</script>
 <?php
 require_once('../config.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
@@ -168,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $insrtQry = "INSERT INTO user_credentials (Email, Password, User_Type, `D.O.B`) VALUES ('$email', '$hashedPassword', 'Admin';, '$date')";
+    $insrtQry = "INSERT INTO user_credentials (Email, Password, User_Type, `D.O.B`) VALUES ('$email', '$hashedPassword', 'Admin', '$date')";
 
     if (mysqli_query($conn, $insrtQry)) {
       $user_id = mysqli_insert_id($conn);

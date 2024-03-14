@@ -38,17 +38,20 @@
                     <td><label for="dob">Date of Birth</label></td>
                     <td> <input type="date" name="dob" id="dob" onchange="validateForm()"></td>
                     <td><label for="gender" >Gender</label><br></td>
-                    <td><select name="gender" id="gender" >
-                   <option value="Male">Male</option>
-                   <option value="Female">Female</option>  
-                </select><br></td>
+                    <td><select name="gender" id="gender">
+    <option value="" disabled selected>Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+</select>
+<br></td>
                 </tr>
                 
                 <tr><td><span class="title">College Details </span></td></tr>
              
                     <tr>
                     <td><label for="deptName">Department Name</label></td>
-                    <td> <select name="deptName" id="deptName" >
+                    <td> <select name="deptName" id="deptName" required >
+                    <option value="" disabled selected>Select Department </option>
                           <option value="Computer Science">Computer Science</option>
                           <option value="Computer Application">Computer Application</option>  
                        </select>
@@ -58,22 +61,25 @@
                    </tr>
                    <tr>
                     <td><label for="curYear">Current Year</label></td>
-                    <td><select id="curYear" name="curYear" >
-                    <option value="1">I</option>
-                    <option value="2">II</option>
-                    <option value="3">III</option>
-                </select></td>
+                    <td><select id="curYear" name="curYear" required>
+    <option value="" disabled selected>Select Year</option>
+    <option value="1">I</option>
+    <option value="2">II</option>
+    <option value="3">III</option>
+</select></td>
                     <td> <label for="degree">Degree</label></td>
-                    <td><select id="degree" name="degree" >
-                    <option value="Bsc">Bsc</option>
-                    <option value="Bca">Bca</option>
-                    <option value="Msc">Msc</option>
-                </select><br>
+                    <td><select id="degree" name="degree" required>
+    <option value="" disabled selected>Select Degree</option>
+    <option value="Bsc">Bsc</option>
+    <option value="Bca">Bca</option>
+    <option value="Msc">Msc</option>
+</select><br>
                     </td>
                    </tr>
                 <tr>
                     <td> <label for="section">Section</label></td>
-                    <td><select id="section" name="section" >
+                    <td><select id="section" name="section" required>
+                    <option value="" disabled selected>Select Section</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                 </select><br></td>
@@ -107,7 +113,7 @@
         var errors = [];
         var fullName = document.getElementById('FlName').value;
         var dob = document.getElementById('dob').value;
-        var email = document.getElementById('emailId').value;
+    
         var departmentNumber = document.getElementById('deptNo').value;
 
         // Validate Full Name

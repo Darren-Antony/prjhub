@@ -2,6 +2,7 @@
 // Include the database configuration file
 require_once('../../../page/config.php');
 session_start();
+
 // Check if the form is submitted
 if(isset($_POST["submit"])) {
     // Get the review ID and project ID from the form
@@ -19,20 +20,17 @@ if(isset($_POST["submit"])) {
     $currentTime = date('H:i:s');
     $getGuideUid = "SELECT U_Id FROM guide WHERE Guide_Id = '$guide_Id' ";
     $getGuideUidRes = mysqli_query($conn, $getGuideUid);
-            $guideUidRow = mysqli_fetch_assoc($getGuideUidRes);
-            $guideUid = $guideUidRow['U_Id'];
+    $guideUidRow = mysqli_fetch_assoc($getGuideUidRes);
+    $guideUid = $guideUidRow['U_Id'];
 
-            $StuName = "SELECT Stu_Name from student WHERE U_Id = $user_id";
-            $StuNameRes = mysqli_query($conn, $StuName);
-            $Sname = mysqli_fetch_assoc($StuNameRes)['Stu_Name'];
+    $StuName = "SELECT Stu_Name from student WHERE U_Id = $user_id";
+    $StuNameRes = mysqli_query($conn, $StuName);
+    $Sname = mysqli_fetch_assoc($StuNameRes)['Stu_Name'];
 
-            $message = $Sname.' Added '.$reviewNumber."document";   
-            $targetDir = "../../../uploads/";
+    $message = $Sname.' Added '.$reviewNumber."document";   
+    $targetDir = "../../../uploads/";
 
-    
     $fileName = basename($_FILES["review".$reviewNumber."_file"]["name"]);
-
-    
     $targetFilePath = $targetDir . $fileName;
 
     // Check if file is selected
@@ -47,21 +45,32 @@ if(isset($_POST["submit"])) {
                 // Insert file information into the database
                 $insert = "INSERT INTO review_doc (rv_Id, Prj_Id, Doc_Name, Doc_Path,review_no) VALUES ('$reviewID', '$prjId', '$targetFilePath', '$fileName',$reviewNumber)";
                 if(mysqli_query($conn, $insert)){
-                    $message =
                     $notif = "INSERT INTO notification (Sender_Id,Receiver_Id,Message,Date,Time) VALUES ($user_id,$guideUid,'$message','$currentDate','$currentTime')";
                     $notiRes = mysqli_query($conn, $notif);
-                    echo "The file ".$fileName. " has been uploaded successfully.";
+                    // Redirect back to the page upon successful file upload
+                    header("Location:http://localhost/prjhub/project-prjhub/page/student/yourMarks.php?prjId=$prjId");
+                    exit();
+                 
                 } else{
-                    echo "Error inserting file data into the database.";
+                
+                    // Redirect back to the page if an error occurs
+                    header("Location: javascript://history.go(-1)");
+                    exit();
                 } 
             } else{
-                echo "Error uploading file.";
+                // Redirect back to the page if an error occurs
+                header("Location: javascript://history.go(-1)");
+                exit();
             }
         } else{
-            echo "Only PDF files are allowed.";
+            // Redirect back to the page if an error occurs
+            header("Location: javascript://history.go(-1)");
+            exit();
         }
     } else{
-        echo "Please select a file to upload.";
+        // Redirect back to the page if an error occurs
+        header("Location: javascript://history.go(-1)");
+        exit();
     }
 }
 ?>
